@@ -1,4 +1,4 @@
-package edu.monash.kmhc.data.model;
+package edu.monash.kmhc.model;
 
 /**
  * Class used to store patient's address

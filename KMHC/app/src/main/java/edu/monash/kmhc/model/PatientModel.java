@@ -1,4 +1,4 @@
-package edu.monash.kmhc.data.model;
+package edu.monash.kmhc.model;
 
 import org.hl7.fhir.r4.model.Enumerations;
 

@@ -37,7 +37,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'ca.uhn.hapi.fhir:hapi-fhir-android:4.2.0'
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu2:4.2.0'
     implementation 'ca.uhn.hapi.fhir:hapi-fhir-structures-r4:4.2.0'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
