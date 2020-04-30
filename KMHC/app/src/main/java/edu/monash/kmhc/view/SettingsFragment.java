@@ -1,4 +1,4 @@
-package edu.monash.kmhc.view.settings;
+package edu.monash.kmhc.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import edu.monash.kmhc.R;
+import edu.monash.kmhc.viewModel.SettingsViewModel;
 
 /**
  * This fragment is used to allow users to configure the frequency to update the server.

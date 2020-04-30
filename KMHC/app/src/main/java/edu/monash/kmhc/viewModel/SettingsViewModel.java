@@ -1,4 +1,4 @@
-package edu.monash.kmhc.view.settings;
+package edu.monash.kmhc.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

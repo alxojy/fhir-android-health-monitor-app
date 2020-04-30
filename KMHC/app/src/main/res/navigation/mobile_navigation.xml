@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="edu.monash.kmhc.view.home.HomeFragment"
+        android:name="edu.monash.kmhc.view.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="edu.monash.kmhc.view.settings.SettingsFragment"
+        android:name="edu.monash.kmhc.view.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 

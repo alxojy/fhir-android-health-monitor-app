@@ -1,4 +1,4 @@
-package edu.monash.kmhc.view.patientInfo;
+package edu.monash.kmhc.view;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.monash.kmhc.R;
+import edu.monash.kmhc.viewModel.PatientInfoViewModel;
 
 /**
  * This fragment is used to display extra information about the patient.

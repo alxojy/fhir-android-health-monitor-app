@@ -1,4 +1,4 @@
-package edu.monash.kmhc.view.patientInfo;
+package edu.monash.kmhc.viewModel;
 
 import androidx.lifecycle.ViewModel;
 

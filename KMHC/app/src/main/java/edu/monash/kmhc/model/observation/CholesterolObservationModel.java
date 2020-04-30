@@ -7,13 +7,15 @@ import org.hl7.fhir.r4.model.Observation;
  */
 public class CholesterolObservationModel extends ObservationModel {
 
-    public CholesterolObservationModel(Observation resource) {
-        super(resource);
+    private Observation observation;
+
+    public CholesterolObservationModel(Observation observation) {
+        this.observation = observation;
     }
 
     @Override
-    public double getValue() {
-        return observation.getValueQuantity().getValue().doubleValue();
+    public String getValue() {
+        return observation.getValueQuantity().getValue().toString();
     }
 
     @Override

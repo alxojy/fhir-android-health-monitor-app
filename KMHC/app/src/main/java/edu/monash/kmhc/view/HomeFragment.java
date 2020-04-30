@@ -1,4 +1,4 @@
-package edu.monash.kmhc.view.home;
+package edu.monash.kmhc.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +12,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
+import edu.monash.kmhc.model.observation.ObservationModel;
+import edu.monash.kmhc.model.observation.ObservationType;
+import edu.monash.kmhc.viewModel.HomeViewModel;
+import io.reactivex.Observable;
 
 /**
  * This fragment is used to display the main home screen upon login.
@@ -24,22 +30,25 @@ import edu.monash.kmhc.model.PatientModel;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getAllPatients().observe(getViewLifecycleOwner(), new Observer<ArrayList<PatientModel>>() {
+        textView = root.findViewById(R.id.text_home);
+
+        homeViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), new Observer<HashMap<PatientModel, ObservationModel>>() {
             @Override
-            public void onChanged(ArrayList<PatientModel> patientModels) {
-                for (PatientModel patient: patientModels) {
-                    System.out.println(patient.getName());
-                    textView.setText(patient.getName());
-                }
+            public void onChanged(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
+                patientObservationHashMap.forEach((p,o) -> {
+                    System.out.println("another");
+                    textView.setText(p.getName() + " " + o.getValue() + " " + o.getUnit());
+                });
             }
         });
-        return root;
+            return root;
     }
+
 }
