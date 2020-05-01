@@ -3,10 +3,13 @@ package edu.monash.kmhc.service.repository;
 import androidx.lifecycle.MutableLiveData;
 
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.codesystems.CareTeamStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,15 +49,15 @@ public class PatientRepository extends FhirService {
         ArrayList<PatientModel> patientModels = new ArrayList<>();
 
         // search for all encounters with the practitioner id
-        Bundle bundle = client.search().forResource(Encounter.class)
-                .where(new ReferenceClientParam("participant")
-                        .hasId("Practitioner/" + practitionerId))
+        Bundle bundle = client.search().forResource(CareTeam.class)
+                .where(CareTeam.STATUS.exactly().identifier(CareTeamStatus.ACTIVE.toCode()))
+                .where(CareTeam.PARTICIPANT.hasId(practitionerId))
                 .returnBundle(Bundle.class)
                 .execute();
 
         // get all patient references
         bundle.getEntry().forEach((entry) -> patientReferences.add(
-                (((Encounter) entry.getResource()).getSubject()).getReference()));
+                (((CareTeam) entry.getResource()).getSubject()).getReference()));
 
         Bundle patientBundle;
 

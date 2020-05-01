@@ -24,13 +24,16 @@ import io.reactivex.Observable;
 public class HomeViewModel extends ViewModel implements Poll {
 
     private PatientRepository patientRepository;
+    private ObservationRepositoryFactory observationRepositoryFactory;
     public MutableLiveData<HashMap<PatientModel, ObservationModel>> patientObservations = new MutableLiveData<>();
     private int frequency;
 
     public HomeViewModel() {
         //TODO: Change practitioner
-        patientRepository = new PatientRepository("1381208");
-        frequency = 20; // default frequency
+        patientRepository = new PatientRepository("3656083");
+        observationRepositoryFactory = new ObservationRepositoryFactory();
+        frequency = 20000; // default frequency
+        polling(frequency);
     }
 
     /**
@@ -38,17 +41,16 @@ public class HomeViewModel extends ViewModel implements Poll {
      * @return LiveData HashMap of patient and their observations
      */
     public LiveData<HashMap<PatientModel, ObservationModel>> getAllPatientObservations() {
-        polling(frequency);
         return patientObservations;
     }
 
     public void polling(int frequency) {
-        Observable.interval(0, frequency, TimeUnit.SECONDS)
+        Observable.interval(0, frequency, TimeUnit.MILLISECONDS)
                 .map(tick -> {
                             HashMap<PatientModel, ObservationModel> poHashMap = new HashMap<>();
                             for (PatientModel patient : getAllPatients()) {
                                 for (ObservationType observationType : ObservationType.values()) {
-                                    System.out.println(patient.getName());
+                                    System.out.println(getObservation(patient.getPatientID(), observationType));
                                     poHashMap.put(patient, getObservation(patient.getPatientID(), observationType));
                                 }
                             }
@@ -62,6 +64,6 @@ public class HomeViewModel extends ViewModel implements Poll {
     }
 
     private ObservationModel getObservation(String id, ObservationType observationType) {
-        return new ObservationRepositoryFactory().getObservationModel(id, observationType);
+        return observationRepositoryFactory.getObservationModel(id, observationType);
     }
 }

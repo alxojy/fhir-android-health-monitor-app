@@ -42,8 +42,8 @@ public class HomeFragment extends Fragment {
         homeViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), new Observer<HashMap<PatientModel, ObservationModel>>() {
             @Override
             public void onChanged(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
+                System.out.println("another");
                 patientObservationHashMap.forEach((p,o) -> {
-                    System.out.println("another");
                     textView.setText(p.getName() + " " + o.getValue() + " " + o.getUnit());
                 });
             }
