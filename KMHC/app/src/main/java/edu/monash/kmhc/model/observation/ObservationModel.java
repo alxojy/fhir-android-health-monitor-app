@@ -15,4 +15,10 @@ public abstract class ObservationModel {
      * Get the unit type for the Observation
      */
     public abstract String getUnit();
+
+    /**
+     * Get the effective DateTime
+     * @return
+     */
+    public abstract String getDateTime();
 }

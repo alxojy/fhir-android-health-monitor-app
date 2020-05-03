@@ -18,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
-import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.viewModel.HomeViewModel;
-import io.reactivex.Observable;
 
 /**
  * This fragment is used to display the main home screen upon login.
@@ -44,7 +42,7 @@ public class HomeFragment extends Fragment {
             public void onChanged(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
                 System.out.println("another");
                 patientObservationHashMap.forEach((p,o) -> {
-                    textView.setText(p.getName() + " " + o.getValue() + " " + o.getUnit());
+                    textView.setText(p.getName() + " " + o.getValue() + " " + o.getDateTime());
                 });
             }
         });

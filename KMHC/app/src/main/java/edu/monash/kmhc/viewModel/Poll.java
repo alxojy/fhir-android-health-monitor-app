@@ -1,6 +1,9 @@
 package edu.monash.kmhc.viewModel;
 
+/**
+ * Classes that implement this class must provide their own implementation of the polling method.
+ */
 public interface Poll {
 
-    public void polling(int seconds);
+    void polling(int seconds);
 }

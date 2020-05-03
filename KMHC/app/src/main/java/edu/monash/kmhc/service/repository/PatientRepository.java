@@ -1,21 +1,16 @@
 package edu.monash.kmhc.service.repository;
 
-import androidx.lifecycle.MutableLiveData;
-
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CareTeam;
-import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.codesystems.CareTeamStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import edu.monash.kmhc.model.PatientAddressModel;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.service.FhirService;

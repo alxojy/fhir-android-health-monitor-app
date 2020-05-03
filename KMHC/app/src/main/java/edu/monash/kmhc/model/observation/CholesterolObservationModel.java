@@ -1,5 +1,6 @@
 package edu.monash.kmhc.model.observation;
 
+import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.Observation;
 
 /**
@@ -22,4 +23,7 @@ public class CholesterolObservationModel extends ObservationModel {
     public String getUnit() {
         return observation.getValueQuantity().getUnit();
     }
+
+    @Override
+    public String getDateTime() { return observation.getEffectiveDateTimeType().asStringValue(); }
 }
