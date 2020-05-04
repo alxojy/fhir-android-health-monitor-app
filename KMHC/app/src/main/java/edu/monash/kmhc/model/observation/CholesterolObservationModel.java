@@ -22,4 +22,12 @@ public class CholesterolObservationModel extends ObservationModel {
     public String getUnit() {
         return observation.getValueQuantity().getUnit();
     }
+
+    //debug purpose to be removed later
+    @Override
+    public String toString() {
+        return "CholesterolObservationModel{" +
+                "observation=" + observation +
+                '}';
+    }
 }
