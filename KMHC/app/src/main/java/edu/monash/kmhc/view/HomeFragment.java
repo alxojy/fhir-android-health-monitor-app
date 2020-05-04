@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
-import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.viewModel.HomeViewModel;
 

@@ -5,7 +5,6 @@ import org.hl7.fhir.r4.model.Enumerations;
 import java.util.Date;
 import java.util.HashMap;
 
-import edu.monash.kmhc.model.observation.CholesterolObservationModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 
@@ -19,6 +18,8 @@ public class PatientModel {
     private Date birthDate;
     private Enumerations.AdministrativeGender gender;
     private PatientAddressModel address;
+    // a patient can have more than one type of observation type. use HashMap to store the observation
+    // based on their type
     private HashMap<ObservationType, ObservationModel> observationReadings;
 
     /**
