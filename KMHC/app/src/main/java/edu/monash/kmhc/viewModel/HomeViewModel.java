@@ -19,8 +19,8 @@ import io.reactivex.Observable;
  * This class is responsible for providing data that is displayed in the HomeFragment.
  *
  * The class also acts as a Subject in the Observer pattern whereby it updates the patientObservations
- * LiveData by polling the server every N seconds. It implements the Poll class and provides its own
- * implementation for polling the server.
+ * LiveData by polling the server every N seconds with RxJava. It implements the Poll class and
+ * provides its own implementation for polling the server.
  */
 public class HomeViewModel extends ViewModel implements Poll {
 
