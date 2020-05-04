@@ -25,7 +25,7 @@ public class HomeViewModel extends ViewModel implements Poll {
 
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
-    public MutableLiveData<HashMap<PatientModel, ObservationModel>> patientObservations = new MutableLiveData<>();
+    private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
     private int frequency;
 
     public HomeViewModel() {
@@ -40,20 +40,20 @@ public class HomeViewModel extends ViewModel implements Poll {
      * Store patients and their observations in LiveData so that UI will be notified when there are changes.
      * @return LiveData HashMap of patient and their observations
      */
-    public LiveData<HashMap<PatientModel, ObservationModel>> getAllPatientObservations() {
+    public LiveData<HashMap<String, PatientModel>> getAllPatientObservations() {
         return patientObservations;
     }
 
     public void polling(int frequency) {
         Observable.interval(0, frequency, TimeUnit.MILLISECONDS)
                 .map(tick -> {
-                            HashMap<PatientModel, ObservationModel> poHashMap = new HashMap<>();
+                            HashMap<String, PatientModel> poHashMap = new HashMap<>();
                             for (PatientModel patient : getAllPatients()) {
-                                for (ObservationType observationType : ObservationType.values()) {
-                                    System.out.println(getObservation(patient.getPatientID(), observationType));
-                                    poHashMap.put(patient, getObservation(patient.getPatientID(), observationType));
-                                }
+                                patient.setObservation(ObservationType.CHOLESTEROL,
+                                        getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                                poHashMap.put(patient.getPatientID(), patient);
                             }
+
                             patientObservations.postValue(poHashMap);
                             return patientObservations;
                         }).subscribe();

@@ -1,6 +1,5 @@
 package edu.monash.kmhc.model.observation;
 
-import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.Observation;
 
 /**

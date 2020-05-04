@@ -5,7 +5,6 @@ import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.codesystems.CareTeamStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +17,6 @@ import edu.monash.kmhc.service.FhirService;
 /**
  * This class is responsible for returning all patients that are associated to the practitioner from
  * the FHIR server.
- * MutableLiveData is used whereby it is responsible for the Subject role in the Observer pattern.
  */
 public class PatientRepository extends FhirService {
 
@@ -43,11 +41,12 @@ public class PatientRepository extends FhirService {
         // store patients
         ArrayList<PatientModel> patientModels = new ArrayList<>();
 
-        // search for all encounters with the practitioner id
+        // search for all encounters (active careteam cases) with the practitioner id
         Bundle bundle = client.search().forResource(CareTeam.class)
-                .where(CareTeam.STATUS.exactly().identifier(CareTeamStatus.ACTIVE.toCode()))
                 .where(CareTeam.PARTICIPANT.hasId(practitionerId))
+                .where(CareTeam.STATUS.exactly().identifier(CareTeam.CareTeamStatus.ACTIVE.toCode()))
                 .returnBundle(Bundle.class)
+                .count(1000) // not too many requests
                 .execute();
 
         // get all patient references
@@ -81,7 +80,7 @@ public class PatientRepository extends FhirService {
             // get address
             PatientAddressModel patientAddress = new PatientAddressModel(patient.getAddress().get(0).getCity(),
                     patient.getAddress().get(0).getState(), patient.getAddress().get(0).getCountry());
-
+            
             patientModels.add(new PatientModel(id, patientName, birthDate, gender, patientAddress));
         }
 
