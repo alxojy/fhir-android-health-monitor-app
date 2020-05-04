@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.HomeFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/home_gl_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="65dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/home_gl_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="71dp" />
-
     <TextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
@@ -30,11 +16,11 @@
         android:textAlignment="textStart"
         android:textColor="#8C8C8C"
         android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/home_gl_top"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,7 +31,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/home_gl_bottom"
+        app:layout_constraintBottom_toBottomOf ="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

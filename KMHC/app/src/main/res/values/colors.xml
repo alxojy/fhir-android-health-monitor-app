@@ -5,4 +5,5 @@
     <color name="colorReading">#8700D6</color>
     <color name="colorRed">#D1322B</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorAccentText">#35375A</color>
 </resources>
