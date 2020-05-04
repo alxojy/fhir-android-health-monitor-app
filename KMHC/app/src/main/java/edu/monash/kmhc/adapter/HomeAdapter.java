@@ -9,21 +9,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
-import edu.monash.kmhc.viewModel.HomeViewModel;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
     private HashMap<PatientModel, ObservationModel> patientObservationHashMap ;
+    private ArrayList<PatientModel> patients = new ArrayList<>();
+    private ArrayList<ObservationModel> observations = new ArrayList<>();
 
     public HomeAdapter(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
         this.patientObservationHashMap = patientObservationHashMap;
+        patientObservationHashMap.forEach((p,o) -> {
+            patients.add(p);
+            observations.add(o);
+        });
+        //System.out.println(patients.toString());
+        //System.out.println(observations.toString());
         Log.i("HomeAdapter","HomeAdapter - Constructor Called");
 
     }
@@ -40,17 +47,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         Log.i("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
-        //temporary solution
-        if (patientObservationHashMap != null) {
-
-            // how to get key ???????
-
-            String cholVal = patientObservationHashMap.get(position).getValue();
-            String cholUnit = patientObservationHashMap.get(position).getUnit();
-
-            holder.cholesterolValue.setText(cholVal + " " + cholUnit);
+        String cholStat = observations.get(position).getValue() + " " + observations.get(position).getUnit();
+        holder.patientName.setText(patients.get(position).getName());
+        holder.cholesterolValue.setText(cholStat);
         }
-    }
+
 
     @Override
     public int getItemCount() {

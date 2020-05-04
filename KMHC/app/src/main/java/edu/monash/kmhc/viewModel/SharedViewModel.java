@@ -21,18 +21,34 @@ import io.reactivex.Observable;
  * LiveData by polling the server every N seconds. It implements the Poll class and provides its own
  * implementation for polling the server.
  */
-public class HomeViewModel extends ViewModel implements Poll {
+public class SharedViewModel extends ViewModel implements Poll {
 
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
     public MutableLiveData<HashMap<PatientModel, ObservationModel>> patientObservations = new MutableLiveData<>();
     private int frequency;
+    private MutableLiveData<String> currentSelected = new MutableLiveData<>() ;
 
-    public HomeViewModel() {
+    public LiveData<String> getCurrentSelected() {
+        return currentSelected;
+    }
+
+    public void updateCurrentSelected(String currentSelected) {
+        this.currentSelected.setValue(currentSelected);
+        frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
+        System.out.println(frequency);
+        System.out.println(currentSelected);
+    }
+
+    public SharedViewModel() {
         //TODO: Change practitioner
-        patientRepository = new PatientRepository("3656083");
+        patientRepository = new PatientRepository("606732");
         observationRepositoryFactory = new ObservationRepositoryFactory();
-        frequency = 20000; // default frequency
+
+        if (currentSelected.getValue() == null){
+            currentSelected.setValue("20 seconds");
+            frequency = 20000; //default frequency
+        }
         polling(frequency);
     }
 
@@ -40,7 +56,7 @@ public class HomeViewModel extends ViewModel implements Poll {
      * Store patients and their observations in LiveData so that UI will be notified when there are changes.
      * @return LiveData HashMap of patient and their observations
      */
-    public LiveData<HashMap<PatientModel, ObservationModel>> getAllPatientObservations() {
+    public LiveData<HashMap<PatientModel, ObservationModel>> getPatientMutableLiveData() {
         return patientObservations;
     }
 
