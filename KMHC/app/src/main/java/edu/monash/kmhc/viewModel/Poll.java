@@ -5,5 +5,5 @@ package edu.monash.kmhc.viewModel;
  */
 public interface Poll {
 
-    void polling(int seconds);
+    void polling();
 }

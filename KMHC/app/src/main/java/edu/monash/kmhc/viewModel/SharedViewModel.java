@@ -1,5 +1,7 @@
 package edu.monash.kmhc.viewModel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,7 +27,7 @@ public class SharedViewModel extends ViewModel implements Poll {
 
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
-    public MutableLiveData<HashMap<PatientModel, ObservationModel>> patientObservations = new MutableLiveData<>();
+    private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
     private int frequency;
     private MutableLiveData<String> currentSelected = new MutableLiveData<>() ;
 
@@ -42,43 +44,69 @@ public class SharedViewModel extends ViewModel implements Poll {
 
     public SharedViewModel() {
         //TODO: Change practitioner
-        patientRepository = new PatientRepository("606732");
+        patientRepository = new PatientRepository("3656083");
         observationRepositoryFactory = new ObservationRepositoryFactory();
 
         if (currentSelected.getValue() == null){
             currentSelected.setValue("20 seconds");
-            frequency = 20000; //default frequency
+            frequency = 5000; //default frequency
+
         }
-        polling(frequency);
+        polling();
     }
 
     /**
      * Store patients and their observations in LiveData so that UI will be notified when there are changes.
      * @return LiveData HashMap of patient and their observations
      */
-    public LiveData<HashMap<PatientModel, ObservationModel>> getPatientMutableLiveData() {
+    public LiveData<HashMap<String, PatientModel>> getAllPatientObservations() {
         return patientObservations;
     }
 
-    public void polling(int frequency) {
+    /**
+     * This method is responsible for polling the server and updating the observers when the data
+     * is updated.
+     */
+    public void polling() {
+        // poll every frequency seconds
         Observable.interval(0, frequency, TimeUnit.MILLISECONDS)
                 .map(tick -> {
-                            HashMap<PatientModel, ObservationModel> poHashMap = new HashMap<>();
-                            for (PatientModel patient : getAllPatients()) {
-                                for (ObservationType observationType : ObservationType.values()) {
-                                    System.out.println(getObservation(patient.getPatientID(), observationType));
-                                    poHashMap.put(patient, getObservation(patient.getPatientID(), observationType));
-                                }
-                            }
-                            patientObservations.postValue(poHashMap);
-                            return patientObservations;
-                        }).subscribe();
+                    HashMap<String, PatientModel> poHashMap = new HashMap<>();
+                    // loop through all patients
+                    for (PatientModel patient : getAllPatients()) {
+                        // set new cholesterol observation reading
+                        patient.setObservation(ObservationType.CHOLESTEROL,
+                                getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                        poHashMap.put(patient.getPatientID(), patient);
+                    }
+
+                    // update LiveData and notify observers
+                    patientObservations.postValue(poHashMap);
+
+
+                    Log.i("SharedViewModel","current polling frequency :" + frequency);
+
+                    return patientObservations;
+                }).subscribe();
     }
 
+    /**
+     * Returns all patients monitored by the practitioner
+     * @return All patients monitored by the practitioner
+     */
     private ArrayList<PatientModel> getAllPatients() {
         return patientRepository.getAllPatients();
     }
 
+    /**
+     * Returns the observation reading based on the observation type.
+     *
+     * This is extensible as different
+     * observations in the future only need to specify the type to get the observation reading.
+     * @param id patient id
+     * @param observationType type of observation. ie. cholesterol
+     * @return observation reading for the patient
+     */
     private ObservationModel getObservation(String id, ObservationType observationType) {
         return observationRepositoryFactory.getObservationModel(id, observationType);
     }

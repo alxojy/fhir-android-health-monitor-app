@@ -16,21 +16,22 @@ import java.util.HashMap;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
+import edu.monash.kmhc.model.observation.ObservationType;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
-    private HashMap<PatientModel, ObservationModel> patientObservationHashMap ;
+    private HashMap<String, PatientModel> patientObservationHashMap ;
     private ArrayList<PatientModel> patients = new ArrayList<>();
-    private ArrayList<ObservationModel> observations = new ArrayList<>();
+    private ArrayList<String> patientIDs = new ArrayList<>();
 
-    public HomeAdapter(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
+    public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap) {
         this.patientObservationHashMap = patientObservationHashMap;
-        patientObservationHashMap.forEach((p,o) -> {
-            patients.add(p);
-            observations.add(o);
+        patientObservationHashMap.forEach((patientID,patientModel) -> {
+            patientIDs.add(patientID);
+            patients.add(patientModel);
         });
         System.out.println(patients.toString());
-        System.out.println(observations.toString());
+        System.out.println(patientIDs.toString());
         Log.i("HomeAdapter","HomeAdapter - Constructor Called");
 
     }
@@ -47,10 +48,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         Log.i("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
-        String cholStat = observations.get(position).getValue() + " " + observations.get(position).getUnit();
+        ObservationModel observationModel= patients.get(position).getObservationReading(ObservationType.CHOLESTEROL);
+        String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
+        String date = observationModel.getDateTime();
         holder.patientName.setText(patients.get(position).getName());
         holder.cholesterolValue.setText(cholStat);
-        }
+        holder.time.setText(date);
+
+        System.out.println(observationModel.toString());
+
+
+    }
 
 
     @Override

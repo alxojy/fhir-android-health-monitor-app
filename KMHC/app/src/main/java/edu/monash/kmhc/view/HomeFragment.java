@@ -43,14 +43,14 @@ public class HomeFragment extends Fragment {
 
         recyclerView = root.findViewById(R.id.home_recycler_view);
 
-        sharedViewModel.getPatientMutableLiveData().observe(getViewLifecycleOwner(), patientUpdatedObserver);
+        sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
 
         return root;
     }
 
-        Observer<HashMap<PatientModel, ObservationModel>> patientUpdatedObserver = new Observer<HashMap<PatientModel, ObservationModel>>() {
+        Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override
-            public void onChanged(HashMap<PatientModel, ObservationModel> patientObservationHashMap) {
+            public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 //System.out.println("another");
                 homeAdapter = new HomeAdapter(patientObservationHashMap);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
