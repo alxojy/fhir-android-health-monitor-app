@@ -11,6 +11,12 @@ import edu.monash.kmhc.service.FhirService;
 
 /**
  * This class is responsible for instantiating other Observation models using the Factory design pattern.
+ *
+ * The ObservationRepositoryFactory creates different types of ObservationModel objects.
+ * Currently there is only cholesterol but it can be made extensible whereby in the future when more
+ * observation models have to be added, only the create[ObservationTypeModel] method have to be
+ * create and getObservationModel method have to be modified to instantiate the different observation
+ * types.
  */
 public class ObservationRepositoryFactory extends FhirService {
 

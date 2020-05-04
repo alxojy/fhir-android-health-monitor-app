@@ -29,8 +29,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             patients.add(p);
             observations.add(o);
         });
-        //System.out.println(patients.toString());
-        //System.out.println(observations.toString());
+        System.out.println(patients.toString());
+        System.out.println(observations.toString());
         Log.i("HomeAdapter","HomeAdapter - Constructor Called");
 
     }
