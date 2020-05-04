@@ -1,19 +1,22 @@
 package edu.monash.kmhc.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import edu.monash.kmhc.R;
-import edu.monash.kmhc.viewModel.SettingsViewModel;
+import edu.monash.kmhc.viewModel.SharedViewModel;
 
 /**
  * This fragment is used to allow users to configure the frequency to update the server.
@@ -21,20 +24,55 @@ import edu.monash.kmhc.viewModel.SettingsViewModel;
  */
 public class SettingsFragment extends Fragment {
 
-    private SettingsViewModel settingsViewModel;
+    private SharedViewModel sharedViewModel;
+    private Spinner mySpinner;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //setting up the viewmodel
+        sharedViewModel =
+                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getCurrentSelected().getValue()));
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        settingsViewModel =
-                ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        settingsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        //set up spinner
+        mySpinner = (Spinner) root.findViewById(R.id.settings_polling_frequency);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(),R.array.polling_frequency,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(adapter);
+
+        //debug purpose
+        //System.out.println(((ArrayAdapter) mySpinner.getAdapter()).getPosition(settingsViewModel.getCurrentSelected()));
+        //System.out.println(settingsViewModel.getCurrentSelected());
+
+        mySpinner.setOnItemSelectedListener(spinnerListener);
+
+        System.out.println("Created new view.");
+
         return root;
     }
+
+    AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String selected = parent.getItemAtPosition(position).toString();
+            sharedViewModel.updateCurrentSelected(selected);
+            Context context = parent.getContext();
+            String message = "Server will now update in every " + selected;
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
 }
