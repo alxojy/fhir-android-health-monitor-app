@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import edu.monash.kmhc.R;
@@ -33,9 +35,7 @@ public class SettingsFragment extends Fragment {
         //setting up the viewmodel
         sharedViewModel =
                 ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
         mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getCurrentSelected().getValue()));
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -54,12 +54,10 @@ public class SettingsFragment extends Fragment {
 
         mySpinner.setOnItemSelectedListener(spinnerListener);
 
-        System.out.println("Created new view.");
-
         return root;
     }
 
-    AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selected = parent.getItemAtPosition(position).toString();

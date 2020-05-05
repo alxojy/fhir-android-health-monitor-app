@@ -30,16 +30,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             patientIDs.add(patientID);
             patients.add(patientModel);
         });
-        System.out.println(patients.toString());
-        System.out.println(patientIDs.toString());
-        Log.i("HomeAdapter","HomeAdapter - Constructor Called");
 
     }
 
     @NonNull
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i("HomeAdapter","HomeAdapter - OnCreateViewHolder Called");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview,parent,false);
         HomeViewHolder viewHolder = new HomeViewHolder(v);
         return viewHolder;
@@ -47,17 +43,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-        Log.i("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
         ObservationModel observationModel= patients.get(position).getObservationReading(ObservationType.CHOLESTEROL);
         String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
         String date = observationModel.getDateTime();
         holder.patientName.setText(patients.get(position).getName());
         holder.cholesterolValue.setText(cholStat);
         holder.time.setText(date);
-
-        System.out.println(observationModel.toString());
-
-
     }
 
 

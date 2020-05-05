@@ -1,5 +1,7 @@
 package edu.monash.kmhc.viewModel;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,14 +10,12 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.service.repository.ObservationRepositoryFactory;
 import edu.monash.kmhc.service.repository.PatientRepository;
-import io.reactivex.Observable;
 
 /**
  * This class is responsible for providing data that is displayed in the HomeFragment.
@@ -28,8 +28,17 @@ public class SharedViewModel extends ViewModel implements Poll {
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
     private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
+    private MutableLiveData<String> currentSelected = new MutableLiveData<>();
     private int frequency;
-    private MutableLiveData<String> currentSelected = new MutableLiveData<>() ;
+
+    public SharedViewModel() {
+        //TODO: Change practitioner
+        patientRepository = new PatientRepository("3656083");
+        observationRepositoryFactory = new ObservationRepositoryFactory();
+
+        frequency = 20000; // default
+        polling();
+    }
 
     public LiveData<String> getCurrentSelected() {
         return currentSelected;
@@ -37,22 +46,9 @@ public class SharedViewModel extends ViewModel implements Poll {
 
     public void updateCurrentSelected(String currentSelected) {
         this.currentSelected.setValue(currentSelected);
-        frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
-        System.out.println(frequency);
-        System.out.println(currentSelected);
-    }
-
-    public SharedViewModel() {
-        //TODO: Change practitioner
-        patientRepository = new PatientRepository("3656083");
-        observationRepositoryFactory = new ObservationRepositoryFactory();
-
-        if (currentSelected.getValue() == null){
-            currentSelected.setValue("20 seconds");
-            frequency = 5000; //default frequency
-
-        }
+        frequency = Integer.parseInt(currentSelected.replace(" seconds", "")) * 1000;
         polling();
+        System.out.println(currentSelected);
     }
 
     /**
@@ -61,33 +57,6 @@ public class SharedViewModel extends ViewModel implements Poll {
      */
     public LiveData<HashMap<String, PatientModel>> getAllPatientObservations() {
         return patientObservations;
-    }
-
-    /**
-     * This method is responsible for polling the server and updating the observers when the data
-     * is updated.
-     */
-    public void polling() {
-        // poll every frequency seconds
-        Observable.interval(0, frequency, TimeUnit.MILLISECONDS)
-                .map(tick -> {
-                    HashMap<String, PatientModel> poHashMap = new HashMap<>();
-                    // loop through all patients
-                    for (PatientModel patient : getAllPatients()) {
-                        // set new cholesterol observation reading
-                        patient.setObservation(ObservationType.CHOLESTEROL,
-                                getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                        poHashMap.put(patient.getPatientID(), patient);
-                    }
-
-                    // update LiveData and notify observers
-                    patientObservations.postValue(poHashMap);
-
-
-                    Log.i("SharedViewModel","current polling frequency :" + frequency);
-
-                    return patientObservations;
-                }).subscribe();
     }
 
     /**
@@ -110,4 +79,35 @@ public class SharedViewModel extends ViewModel implements Poll {
     private ObservationModel getObservation(String id, ObservationType observationType) {
         return observationRepositoryFactory.getObservationModel(id, observationType);
     }
+
+    /**
+     * This method is responsible for polling the server and updating the observers when the data
+     * is updated.
+     */
+    public void polling() {
+        // run asynchronous tasks on background thread to prevent network on main exception
+        HandlerThread backgroundThread = new HandlerThread("Background Thread");
+        backgroundThread.start();
+        Handler timer = new Handler(backgroundThread.getLooper());
+
+        timer.post(new Runnable() {
+            @Override
+            public void run() {
+                HashMap < String, PatientModel > poHashMap = new HashMap<>();
+                // loop through all patients
+                for (PatientModel patient : getAllPatients()) {
+                    // set new cholesterol observation reading
+                    patient.setObservation(ObservationType.CHOLESTEROL,
+                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                    poHashMap.put(patient.getPatientID(), patient);
+                }
+
+                // update LiveData and notify observers
+                patientObservations.postValue(poHashMap);
+
+                Log.i("SharedViewModel", "current polling frequency :" + frequency);
+                timer.postDelayed(this, frequency);
+            }});
+    }
+
 }
