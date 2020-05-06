@@ -6,7 +6,6 @@
     <string name="title_patient_selection">Select Patients</string>
     <string name="prompt_username">User Name / ID</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -20,9 +19,6 @@
     <string name="how_to_use">How to use</string>
     <string name="edit_patient">Edit</string>
     <string name="start_monitoring">Start</string>
-    <string name ="navigation_drawer_open">Open Navigation Drawer</string>
-    <string name ="navigation_drawer_close">Close Navigation Drawer</string>
-
 
     <string-array name="polling_frequency">
         <item>5 seconds</item>
@@ -38,4 +34,5 @@
         <item>55 seconds</item>
         <item>60 seconds</item>
     </string-array>
+
 </resources>

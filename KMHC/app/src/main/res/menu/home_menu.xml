@@ -10,9 +10,5 @@
         android:icon="@drawable/ic_edit_24dp"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/menu_update_server"
-        android:title="Update Server"
-        android:icon="@drawable/ic_update_24dp"
-        app:showAsAction="ifRoom"/>
 </menu>
 
