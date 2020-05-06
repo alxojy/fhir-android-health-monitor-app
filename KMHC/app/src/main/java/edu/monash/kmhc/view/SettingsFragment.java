@@ -30,6 +30,7 @@ public class SettingsFragment extends Fragment {
     private Spinner mySpinner;
     Toolbar toolbar;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -48,14 +49,13 @@ public class SettingsFragment extends Fragment {
         //debug purpose
         //System.out.println(((ArrayAdapter) mySpinner.getAdapter()).getPosition(settingsViewModel.getCurrentSelected()));
         //System.out.println(settingsViewModel.getCurrentSelected());
+        //System.out.println("Created new view.");
 
         mySpinner.setOnItemSelectedListener(spinnerListener);
 
-        System.out.println("Created new view.");
 
         return root;
     }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -67,7 +67,7 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selected = parent.getItemAtPosition(position).toString();
