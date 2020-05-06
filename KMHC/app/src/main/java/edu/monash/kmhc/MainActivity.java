@@ -53,11 +53,12 @@ public class MainActivity extends AppCompatActivity{
 
         //init home fragment
         fragmentManager.beginTransaction().replace(R.id.fragment_container,new SelectPatientsFragment(),"select_patient").commit();
+        //fragmentManager.beginTransaction().replace(R.id.fragment_container,new HomeFragment(),"home fragment").commit();
 
         fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                System.out.println("current system fragment count : " +  fragmentManager.getBackStackEntryCount());
+                System.out.println("Main Activity - current system fragment count : " +  fragmentManager.getBackStackEntryCount());
 
             }
         });

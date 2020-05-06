@@ -24,7 +24,6 @@ import edu.monash.kmhc.viewModel.PatientInfoViewModel;
 /**
  * This fragment is used to display extra information about the patient.
  * Extra information about patient: birth date, gender and address (city, state, country)
- * TODO: Display required information & get info from the model
  */
 public class PatientInfoFragment extends Fragment {
 
@@ -57,7 +56,7 @@ public class PatientInfoFragment extends Fragment {
         View root = inflater.inflate(R.layout.patient_info_fragment, container, false);
 
         //set up toolbar
-        toolbar = root.findViewById(R.id.toolbar);
+        toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
 
 
@@ -85,7 +84,8 @@ public class PatientInfoFragment extends Fragment {
     }
 
     public void setUpToolBar(){
-        toolbar.setTitle("Patient Info");
+        TextView title = toolbar.findViewById(R.id.toolbar_title);
+        title.setText(R.string.title_patient_info);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
     }

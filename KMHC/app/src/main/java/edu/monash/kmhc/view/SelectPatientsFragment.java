@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +45,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel2.class);
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel2.class);
 
         View root = inflater.inflate(R.layout.select_patients_fragment, container, false);
 
@@ -51,7 +54,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         setUpToolBar();
 
         recyclerView = root.findViewById(R.id.select_patients_recycler_view);
-        sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(),patientUpdatedObserver);
+        sharedViewModel.getPatients().observe(getViewLifecycleOwner(),patientUpdatedObserver);
         thisFrag = this;
         return root;
     }
@@ -61,7 +64,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         public void onChanged( HashMap < String, PatientModel > patientHashMap) {
             //System.out.println("another");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag);
+            selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients);
             recyclerView.setAdapter(selectPatientsAdapter);
         }
     };
@@ -72,14 +75,44 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // save list into view model
-                sharedViewModel.setSelectedPatients(selected_patients);
-                System.out.println("in SelectPatientFragment monitoring"+ sharedViewModel.getSelectedPatients().getValue());
+                if (selected_patients.size()>0) {
+                    // save list into view model
+                    sharedViewModel.setSelectedPatients(selected_patients);
+                    Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
+                    Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
 
-                // TODO: implement call to home fragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment(),"home_frag")
-                        .addToBackStack(null)
-                        .commit();
+                    // TODO: implement call to home fragment
+                    // TODO : move call to activity
+
+
+//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment(), "home_frag")
+//                            .addToBackStack(null)
+//                            .commit();
+
+                    String tag = "home_fragment";
+                    Fragment home_frag = getActivity().getSupportFragmentManager().findFragmentByTag(tag);
+                    if ( home_frag == null){
+                        Fragment selectedFragment = new HomeFragment();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_container,selectedFragment,tag)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    else{
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_container,home_frag,tag)
+                                .commit();
+                    }
+                }
+
+                else{
+                    String message = "Please select AT LEAST 1 patient";
+                    Context context = getContext();
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+                    toast.show();
+                }
 
                 return true;
             }
@@ -100,10 +133,11 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
             selected_patients.add(patient);
             }
         }
-        else{
+        else if (!checked){
             selected_patients.remove(patient);
         }
+        Log.d("Select Patient Fragment", "checked : " + checked + "|  patient " + patient);
+        Log.d("Select Patient Fragment", "add/ remove patient"+ selected_patients);
         updateToolbar();
-        System.out.println(selected_patients);
-}
+    }
 }

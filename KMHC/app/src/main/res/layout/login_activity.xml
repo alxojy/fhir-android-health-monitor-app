@@ -104,7 +104,7 @@
         android:paddingTop="20dp"
         android:paddingEnd="50dp"
         android:paddingBottom="20dp"
-        android:text="@string/title_activity_login"
+        android:text="@string/action_sign_in_short"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,9 +5,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -15,24 +20,32 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
+
+import java.sql.SQLOutput;
 import java.util.HashMap;
 
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.adapter.HomeAdapter;
 import edu.monash.kmhc.model.PatientModel;
-import edu.monash.kmhc.viewModel.SharedViewModel;
+import edu.monash.kmhc.viewModel.SharedViewModel2;
 
 /**
  * This fragment is used to display the main home screen upon login.
  * All patients monitored by the health practitioner will be displayed in this screen.
  * TODO: Select, add, remove patient functionality.
  */
-public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
+public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener , NavigationView.OnNavigationItemSelectedListener{
     private HomeFragment thisFrag ;
-    private SharedViewModel sharedViewModel;
+    private SharedViewModel2 sharedViewModel;
     //private TextView textView;
     private RecyclerView recyclerView;
     private HomeAdapter homeAdapter;
+
+    // for navigation drawer
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private ImageButton drawerToggle;
 
     Toolbar toolbar;
 
@@ -40,11 +53,17 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel2.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        toolbar = root.findViewById(R.id.toolbar);
+        //set tool bar
+        toolbar = root.findViewById(R.id.home_toolbar);
+//        drawer = root.findViewById(R.id.home_drawer_layout);
+//        navigationView = root.findViewById(R.id.home_nav_view);
+//        drawerToggle = root.findViewById(R.id.home_menu_option);
         setUpToolBar();
+
+
 
 
         //textView = root.findViewById(R.id.text_home);
@@ -71,6 +90,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     @Override
     public void onPatientClick(int position, PatientModel patient) {
+        // TODO: move fragment call
         PatientInfoFragment patientInfo= new PatientInfoFragment(patient);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, patientInfo, "patientInfoFragment")
@@ -84,17 +104,20 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     public void setUpToolBar(){
         toolbar.setTitle("Home Page");
         toolbar.inflateMenu(R.menu.home_menu);
+
         Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId()== R.id.patient_add){
-                    System.out.println("Add Button CLick");
-
+                // TODO : implement update server click
+                // TODO : move call to activity
+                if (item.getItemId()== R.id.menu_patient_edit){
+                    Fragment select_patient_frag = getActivity().getSupportFragmentManager().findFragmentByTag("select_patient");
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,select_patient_frag,"select_patient")
+                            .commit();
                 }
-                else if (item.getItemId() == R.id.patient_remove){
-                    System.out.println("Remove Button CLick");
 
-
+                else if (item.getItemId() ==R.id.menu_update_server){
+                    System.out.println("update server click");
                 }
                 return true;
             }
@@ -112,9 +135,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             // check back youtube video coding with Mitch
-
         }
     };
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawer.closeDrawer(GravityCompat.END);
+        return false;
+    }
 }
 
 

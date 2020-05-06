@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import edu.monash.kmhc.R;
-import edu.monash.kmhc.viewModel.SharedViewModel;
+import edu.monash.kmhc.viewModel.SharedViewModel2;
 
 /**
  * This fragment is used to allow users to configure the frequency to update the server.
@@ -26,7 +27,7 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
  */
 public class SettingsFragment extends Fragment {
 
-    private SharedViewModel sharedViewModel;
+    private SharedViewModel2 sharedViewModel;
     private Spinner mySpinner;
     Toolbar toolbar;
 
@@ -36,7 +37,7 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //set up tool bar
-        toolbar = root.findViewById(R.id.toolbar);
+        toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
 
 
@@ -61,9 +62,9 @@ public class SettingsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //setting up the viewmodel
         sharedViewModel =
-                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+                ViewModelProviders.of(getActivity()).get(SharedViewModel2.class);
 
-        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getCurrentSelected().getValue()));
+        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
 
     }
 
@@ -84,9 +85,9 @@ public class SettingsFragment extends Fragment {
     };
 
     public void setUpToolBar(){
-        toolbar.setTitle("Settings");
+        TextView title = toolbar.findViewById(R.id.toolbar_title);
+        title.setText(R.string.title_settings);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
     }
 
 }

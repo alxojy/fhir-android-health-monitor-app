@@ -28,7 +28,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
     private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
-    private MutableLiveData<String> currentSelected = new MutableLiveData<>() ;
+    private MutableLiveData<String> selectedFrequency = new MutableLiveData<>() ;
     private int frequency;
 
     public SharedViewModel() {
@@ -39,12 +39,12 @@ public class SharedViewModel extends ViewModel implements Poll {
         frequency = 20000; // default
         polling();
     }
-    public LiveData<String> getCurrentSelected() {
-        return currentSelected;
+    public LiveData<String> getSelectedFrequency() {
+        return selectedFrequency;
     }
 
     public void updateCurrentSelected(String currentSelected) {
-        this.currentSelected.setValue(currentSelected);
+        this.selectedFrequency.setValue(currentSelected);
         frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
         //debug purpose
         System.out.println(frequency);

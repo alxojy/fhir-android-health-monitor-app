@@ -4,8 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -24,8 +22,11 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
     private HashMap<String, PatientModel> patientsHashMap;
     private ArrayList<PatientModel> uniquePatients = new ArrayList<>();
     private OnPatientClickListener onPatientClickListener;
+    private ArrayList<PatientModel> selected_patients = new ArrayList<>();
 
-    public SelectPatientsAdapter(HashMap<String, PatientModel> patientsHashMap, OnPatientClickListener onPatientClickListener) {
+
+    public SelectPatientsAdapter(HashMap<String, PatientModel> patientsHashMap, OnPatientClickListener onPatientClickListener,ArrayList<PatientModel> selected_patients) {
+        this.selected_patients = selected_patients;
         this.onPatientClickListener = onPatientClickListener;
         this.patientsHashMap = patientsHashMap;
         patientsHashMap.forEach((patientID, patientModel) -> {
@@ -41,6 +42,7 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - OnCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_patients_cardview, parent, false);
         SelectPatientsAdapter.ViewHolder viewHolder = new SelectPatientsAdapter.ViewHolder(v, onPatientClickListener);
         return viewHolder;
@@ -48,8 +50,15 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - OnBind");
         holder.patientName.setText(uniquePatients.get(position).getName());
+        if (selected_patients.contains(uniquePatients.get(position))){
+            holder.checkBox.setChecked(true);
+            holder.setCheckboxStatus(true);
+            onPatientClickListener.onPatientClick(holder.checkBox.isChecked(), uniquePatients.get(position));
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -61,6 +70,8 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
         TextView patientName;
         CheckBox checkBox;
         OnPatientClickListener onPatientClickListener;
+        private boolean checkboxStatus = false;
+
 
         public ViewHolder(@NonNull View itemView, OnPatientClickListener onPatientClickListener) {
             super(itemView);
@@ -75,18 +86,34 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
         CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                changeCheckBoxStatus();
                 onPatientClickListener.onPatientClick(checkBox.isChecked(), uniquePatients.get(getAdapterPosition()));
             }
         };
 
+        public boolean getCheckboxStatus() {
+            return checkboxStatus;
+        }
+        public void setCheckboxStatus(boolean checkboxStatus) {
+            this.checkboxStatus = checkboxStatus;
+        }
+
+        private void changeCheckBoxStatus(){
+            if (getCheckboxStatus()) {
+                checkBox.setChecked(false);
+                setCheckboxStatus(false);
+
+                ;
+            } else {
+                checkBox.setChecked(true);
+                setCheckboxStatus(true);
+            }
+        }
+
         //card view listener
         @Override
         public void onClick(View v) {
-            if (checkBox.isChecked()) {
-                checkBox.setChecked(false);
-            } else {
-                checkBox.setChecked(true);
-            }
+            changeCheckBoxStatus();
             onPatientClickListener.onPatientClick(checkBox.isChecked(), uniquePatients.get(getAdapterPosition()));
         }
     }

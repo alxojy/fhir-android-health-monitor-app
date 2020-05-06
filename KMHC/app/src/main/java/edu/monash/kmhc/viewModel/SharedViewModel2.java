@@ -25,10 +25,13 @@ import edu.monash.kmhc.service.repository.PatientRepository;
  * provides its own implementation for polling the server.
  */
 public class SharedViewModel2 extends ViewModel implements Poll {
+    // for polling
+    private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
+    // to get all the patients under practitioner
+    private MutableLiveData<HashMap<String, PatientModel>> patients = new MutableLiveData<>();
 
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
-    private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
     private MutableLiveData<String> selectedFrequency = new MutableLiveData<>() ;
     private MutableLiveData<ArrayList<PatientModel>> selectedPatients = new MutableLiveData<>();
     private int frequency;
@@ -51,8 +54,8 @@ public class SharedViewModel2 extends ViewModel implements Poll {
         this.selectedFrequency.setValue(currentSelected);
         frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
         //debug purpose
-        System.out.println(frequency);
-        System.out.println(currentSelected);
+        System.out.println("Shared View Model 2 - " + frequency);
+        System.out.println("Shared View Model 2 - " + currentSelected);
     }
 
     /**
@@ -71,14 +74,15 @@ public class SharedViewModel2 extends ViewModel implements Poll {
         return selectedPatients;
     }
 
+    public LiveData<HashMap<String, PatientModel>> getPatients() {
+        return patients;
+    }
 
     /**
      * Returns all patients monitored by the practitioner
      * @return All patients monitored by the practitioner
      */
-//    private ArrayList<PatientModel> getAllPatients() {
-//        return patientRepository.getAllPatients();
-//    }
+
     public void getAllPatients() {
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
@@ -92,12 +96,14 @@ public class SharedViewModel2 extends ViewModel implements Poll {
                 HashMap < String, PatientModel > patientHashMap = new HashMap<>();
                 // loop through all patients
                 for (PatientModel patient : patientRepository.getAllPatients()) {
+                    patient.setObservation(ObservationType.CHOLESTEROL,
+                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
                     patientHashMap.put(patient.getPatientID(), patient);
                 }
 
                 // update LiveData and notify observers
                 // used by select patient
-                patientObservations.postValue(patientHashMap);
+                patients.postValue(patientHashMap);
             }
         });
     }
@@ -120,6 +126,8 @@ public class SharedViewModel2 extends ViewModel implements Poll {
      * is updated.
      */
     public void polling() {
+        Log.d("SharedViewModel2", "polling");
+
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
         backgroundThread.start();
@@ -130,7 +138,9 @@ public class SharedViewModel2 extends ViewModel implements Poll {
             public void run() {
                 HashMap < String, PatientModel > poHashMap = new HashMap<>();
                 // loop through all patients
-                for (PatientModel patient : Objects.requireNonNull(getSelectedPatients().getValue())) {
+
+                Log.d("SharedViewModel2"," selectedPatients: " + getSelectedPatients().getValue());
+                for (PatientModel patient : getSelectedPatients().getValue()) {
                     // set new cholesterol observation reading
                     patient.setObservation(ObservationType.CHOLESTEROL,
                             getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
@@ -139,8 +149,11 @@ public class SharedViewModel2 extends ViewModel implements Poll {
 
                 // update LiveData and notify observers
                 patientObservations.postValue(poHashMap);
+                Log.d("SharedViewModel2", "patient hash map :" + patientObservations.getValue());
 
-                Log.i("SharedViewModel", "current polling frequency :" + frequency);
+
+
+                Log.d("SharedViewModel2", "current polling frequency :" + frequency);
                 timer.postDelayed(this, frequency);
             }});
     }
