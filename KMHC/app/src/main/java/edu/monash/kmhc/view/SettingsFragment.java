@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +19,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
-import edu.monash.kmhc.viewModel.SharedViewModel2;
+import edu.monash.kmhc.viewModel.SharedViewModel;
 
 /**
  * This fragment is used to allow users to configure the frequency to update the server.
@@ -27,8 +29,9 @@ import edu.monash.kmhc.viewModel.SharedViewModel2;
  */
 public class SettingsFragment extends Fragment {
 
-    private SharedViewModel2 sharedViewModel;
+    private SharedViewModel sharedViewModel;
     private Spinner mySpinner;
+    private ImageButton backButton;
     Toolbar toolbar;
 
 
@@ -38,22 +41,15 @@ public class SettingsFragment extends Fragment {
 
         //set up tool bar
         toolbar = root.findViewById(R.id.home_toolbar);
+        backButton = root.findViewById(R.id.btn_back);
         setUpToolBar();
-
 
         //set up spinner
         mySpinner = (Spinner) root.findViewById(R.id.settings_polling_frequency);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(),R.array.polling_frequency,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
-
-        //debug purpose
-        //System.out.println(((ArrayAdapter) mySpinner.getAdapter()).getPosition(settingsViewModel.getCurrentSelected()));
-        //System.out.println(settingsViewModel.getCurrentSelected());
-        //System.out.println("Created new view.");
-
         mySpinner.setOnItemSelectedListener(spinnerListener);
-
 
         return root;
     }
@@ -62,7 +58,7 @@ public class SettingsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //setting up the viewmodel
         sharedViewModel =
-                ViewModelProviders.of(getActivity()).get(SharedViewModel2.class);
+                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
 
@@ -88,6 +84,14 @@ public class SettingsFragment extends Fragment {
         TextView title = toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_settings);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity main = (MainActivity) getActivity();
+                main.findFragment(MainActivity.home_fragment);
+            }
+        });
     }
 
 }

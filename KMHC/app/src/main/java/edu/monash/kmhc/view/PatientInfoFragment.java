@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
+import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.viewModel.PatientInfoViewModel;
@@ -27,28 +29,18 @@ import edu.monash.kmhc.viewModel.PatientInfoViewModel;
  */
 public class PatientInfoFragment extends Fragment {
 
-    // is ViewModel necessary ?
-    // since we are already passing the patient model instance here..?
-    // and there is no option for user to update address
-    // + each instance refer to a new patient..
     private PatientInfoViewModel mViewModel;
     private PatientModel patient;
+    private ImageButton backButton;
     private TextView name;
     private TextView birthday;
     private TextView gender;
     private TextView address;
-
     Toolbar toolbar;
-    //private TextView city;
-
 
     public PatientInfoFragment(PatientModel patient) {
         this.patient = patient;
     }
-
-//    public static PatientInfoFragment newInstance() {
-//        return new PatientInfoFragment();
-//    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -57,8 +49,8 @@ public class PatientInfoFragment extends Fragment {
 
         //set up toolbar
         toolbar = root.findViewById(R.id.home_toolbar);
+        backButton = root.findViewById(R.id.btn_back);
         setUpToolBar();
-
 
         //find views
         name = root.findViewById(R.id.info_patientName);
@@ -73,7 +65,6 @@ public class PatientInfoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PatientInfoViewModel.class);
-        // TODO: Use the ViewModel
 
         mViewModel.setPatient(patient);
 
@@ -88,10 +79,13 @@ public class PatientInfoFragment extends Fragment {
         title.setText(R.string.title_patient_info);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity main = (MainActivity) getActivity();
+                main.findFragment(MainActivity.home_fragment);
+            }
+        });
     }
-
-//    public void setCallBackInterface(FragmentActionListener callBackInterface) {
-//        this.callBackInterface = callBackInterface;
-//    }
 
 }
