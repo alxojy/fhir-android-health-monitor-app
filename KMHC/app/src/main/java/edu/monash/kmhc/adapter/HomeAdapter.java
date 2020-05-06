@@ -23,9 +23,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private HashMap<String, PatientModel> patientObservationHashMap ;
     private ArrayList<PatientModel> patients = new ArrayList<>();
     private ArrayList<String> patientIDs = new ArrayList<>();
+    private OnPatientClickListener onPatientClickListener;
 
-    public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap) {
+    public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap,OnPatientClickListener onPatientClickListener) {
         this.patientObservationHashMap = patientObservationHashMap;
+        this.onPatientClickListener = onPatientClickListener;
         patientObservationHashMap.forEach((patientID,patientModel) -> {
             patientIDs.add(patientID);
             patients.add(patientModel);
@@ -41,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.i("HomeAdapter","HomeAdapter - OnCreateViewHolder Called");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview,parent,false);
-        HomeViewHolder viewHolder = new HomeViewHolder(v);
+        HomeViewHolder viewHolder = new HomeViewHolder(v,onPatientClickListener);
         return viewHolder;
     }
 
@@ -57,7 +59,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         System.out.println(observationModel.toString());
 
-
     }
 
 
@@ -66,17 +67,29 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         return patientObservationHashMap.size();
     }
 
-    public class HomeViewHolder extends  RecyclerView.ViewHolder {
-        public TextView patientName;
-        public TextView cholesterolValue;
-        public TextView time;
-        public HomeViewHolder(@NonNull View itemView) {
+    public class HomeViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView patientName;
+        TextView cholesterolValue;
+        TextView time;
+        OnPatientClickListener onPatientClickListener;
+        HomeViewHolder(@NonNull View itemView, OnPatientClickListener onPatientClickListener) {
             super(itemView);
-
+            this.onPatientClickListener = onPatientClickListener;
             patientName = itemView.findViewById(R.id.cv_patientName);
             cholesterolValue = itemView.findViewById(R.id.cv_cholVal);
             time = itemView.findViewById(R.id.cv_time);
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            onPatientClickListener.onPatientClick(getAdapterPosition(),patients.get(getAdapterPosition()));
+        }
+    }
+
+    // click listener for each view holder
+    public interface OnPatientClickListener{
+        void onPatientClick(int position, PatientModel patient);
     }
 }

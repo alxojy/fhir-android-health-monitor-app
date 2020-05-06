@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.hl7.fhir.r4.model.Subscription;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,7 @@ import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.service.repository.ObservationRepositoryFactory;
 import edu.monash.kmhc.service.repository.PatientRepository;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * This class is responsible for providing data that is displayed in the HomeFragment.
@@ -31,6 +34,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     private int frequency;
     private MutableLiveData<String> currentSelected = new MutableLiveData<>() ;
 
+
     public LiveData<String> getCurrentSelected() {
         return currentSelected;
     }
@@ -38,6 +42,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     public void updateCurrentSelected(String currentSelected) {
         this.currentSelected.setValue(currentSelected);
         frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
+        polling();
         System.out.println(frequency);
         System.out.println(currentSelected);
     }
@@ -83,7 +88,6 @@ public class SharedViewModel extends ViewModel implements Poll {
                     // update LiveData and notify observers
                     patientObservations.postValue(poHashMap);
 
-
                     Log.i("SharedViewModel","current polling frequency :" + frequency);
 
                     return patientObservations;
@@ -94,8 +98,9 @@ public class SharedViewModel extends ViewModel implements Poll {
      * Returns all patients monitored by the practitioner
      * @return All patients monitored by the practitioner
      */
-    private ArrayList<PatientModel> getAllPatients() {
-        return patientRepository.getAllPatients();
+   private ArrayList<PatientModel> getAllPatients() {
+        ArrayList<PatientModel> all_patients = patientRepository.getAllPatients();
+        return all_patients;
     }
 
     /**
@@ -110,4 +115,5 @@ public class SharedViewModel extends ViewModel implements Poll {
     private ObservationModel getObservation(String id, ObservationType observationType) {
         return observationRepositoryFactory.getObservationModel(id, observationType);
     }
+
 }

@@ -17,6 +17,8 @@
     <string name="enter_your_password">Enter Your Password</string>
     <string name="server_update_prompt">Update Server Every</string>
     <string name="how_to_use">How to use</string>
+    <string name="monitor_patient">Monitor Patient</string>
+    <string name="stop_monitoring_patient">Stop Monitoring Patient</string>
 
     <string-array name="polling_frequency">
         <item>5 seconds</item>

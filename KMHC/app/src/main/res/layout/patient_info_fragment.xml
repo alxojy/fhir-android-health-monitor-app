@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.PatientInfoFragment">
+    android:background="@color/colorAccent">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        <include
+            android:id="@+id/toolbar"
+            layout = "@layout/toolbar"/>
 
         <ImageView
             android:id="@+id/info_person_icon"
@@ -21,7 +18,7 @@
             app:layout_constraintBottom_toTopOf="@id/info_patientName"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:srcCompat="@drawable/ic_person_24dp">
 
         </ImageView>
@@ -30,12 +27,12 @@
             android:id="@+id/info_patientName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:text="PATIENT NAME"
             android:textAlignment="center"
             android:textColor="@color/colorAccentText"
             android:textSize="25sp"
-            android:text="PATIENT NAME"
-            android:gravity="center_horizontal"
             app:layout_constraintBottom_toTopOf="@+id/info_patientGender"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,17 +47,16 @@
             app:constraint_referenced_ids="info_txt_address,info_txt_bday,info_txt_gender" />
 
 
-
         <TextView
             android:id="@+id/info_txt_bday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Brith Date "
+            android:text="Birth Date "
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/info_txt_gender" />
 
         <TextView
@@ -71,8 +67,8 @@
             android:text="Gender"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/info_patientName" />
 
         <TextView
@@ -83,10 +79,10 @@
             android:text="Address"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_txt_bday" />
-
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/info_txt_bday"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         <TextView
@@ -96,7 +92,8 @@
             android:padding="5dp"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@+id/info_patientAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -111,7 +108,7 @@
             android:padding="5dp"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/info_patientBirthD"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/info_vertical_barrier"
@@ -124,14 +121,21 @@
             android:padding="5dp"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/info_vertical_barrier"
-            app:layout_constraintTop_toTopOf="@id/info_txt_address" />
+            app:layout_constraintTop_toTopOf="@id/info_txt_address"
+            app:layout_constraintVertical_bias="0.0" />
 
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
