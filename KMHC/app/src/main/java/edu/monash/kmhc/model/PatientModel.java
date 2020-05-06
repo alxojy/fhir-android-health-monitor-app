@@ -1,5 +1,7 @@
 package edu.monash.kmhc.model;
 
+import android.text.format.DateFormat;
+
 import org.hl7.fhir.r4.model.Enumerations;
 
 import java.util.Date;
@@ -44,8 +46,8 @@ public class PatientModel {
         return name;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getBirthDate() {
+        return DateFormat.format("yyyy.MM.dd", birthDate).toString();
     }
 
     public String getGender() {

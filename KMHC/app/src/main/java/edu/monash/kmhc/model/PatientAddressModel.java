@@ -33,4 +33,9 @@ public class PatientAddressModel {
     public String getCountry() {
         return country;
     }
+
+    public String getFullAddress() {
+        return  city + " City" + "\n" + state + "," + country;
+    }
+
 }

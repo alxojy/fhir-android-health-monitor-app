@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -26,21 +28,16 @@ public class SettingsFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
     private Spinner mySpinner;
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //setting up the viewmodel
-        sharedViewModel =
-                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
-        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getCurrentSelected().getValue()));
-
-    }
+    Toolbar toolbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        //set up tool bar
+        toolbar = root.findViewById(R.id.toolbar);
+        setUpToolBar();
+
 
         //set up spinner
         mySpinner = (Spinner) root.findViewById(R.id.settings_polling_frequency);
@@ -59,6 +56,17 @@ public class SettingsFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //setting up the viewmodel
+        sharedViewModel =
+                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getCurrentSelected().getValue()));
+
+    }
+
     AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -74,5 +82,11 @@ public class SettingsFragment extends Fragment {
 
         }
     };
+
+    public void setUpToolBar(){
+        toolbar.setTitle("Settings");
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+    }
 
 }
