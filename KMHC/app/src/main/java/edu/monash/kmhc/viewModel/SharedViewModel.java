@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
@@ -64,7 +63,6 @@ public class SharedViewModel extends ViewModel implements Poll {
         setSelectedPatients(new ArrayList<PatientModel>());
 
         frequency = 5000; // default
-        polling();
     }
     /**
      * Store patients and their observations in LiveData so that UI will be notified when there are changes.
@@ -104,8 +102,6 @@ public class SharedViewModel extends ViewModel implements Poll {
                 HashMap < String, PatientModel > patientHashMap = new HashMap<>();
                 // loop through all patients
                 for (PatientModel patient : patientRepository.getAllPatients()) {
-                    patient.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
                     patientHashMap.put(patient.getPatientID(), patient);
                 }
 
@@ -114,6 +110,8 @@ public class SharedViewModel extends ViewModel implements Poll {
                 patients.postValue(patientHashMap);
             }
         });
+
+        polling();
     }
 
     /**
@@ -158,7 +156,6 @@ public class SharedViewModel extends ViewModel implements Poll {
                 // update LiveData and notify observers
                 patientObservations.postValue(poHashMap);
                 Log.d("SharedViewModel2", "patient hash map :" + patientObservations.getValue());
-
 
 
                 Log.d("SharedViewModel2", "current polling frequency :" + frequency);
