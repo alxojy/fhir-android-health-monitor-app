@@ -1,7 +1,6 @@
 package edu.monash.kmhc.service.repository;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
@@ -42,10 +41,11 @@ public class PatientRepository extends FhirService {
         // store patients
         ArrayList<PatientModel> patientModels = new ArrayList<>();
 
-        // search for all encounters (active careteam cases) with the practitioner id
+        // search for all encounters with the practitioner id
         Bundle bundle = client.search().forResource(Encounter.class)
                 .where(Encounter.PRACTITIONER.hasId(practitionerId))
                 .returnBundle(Bundle.class)
+                .count(1000) // not too many searches to prevent overloading the server
                 .execute();
 
         // get all patient references

@@ -36,7 +36,13 @@ public class SharedViewModel extends ViewModel implements Poll {
     private MutableLiveData<ArrayList<PatientModel>> selectedPatients = new MutableLiveData<>();
     private int frequency;
 
-    public SharedViewModel() {
+    private void initShareViewModel(){
+        patientRepository = new PatientRepository(practitionerID);
+        observationRepositoryFactory = new ObservationRepositoryFactory();
+        getAllPatients();
+        setSelectedPatients(new ArrayList<PatientModel>());
+
+        frequency = 5000; // default
     }
 
     public void setPractitionerID(String practitionerID) {
@@ -56,14 +62,6 @@ public class SharedViewModel extends ViewModel implements Poll {
         System.out.println("Shared View Model 2 - " + currentSelected);
     }
 
-    private void initShareViewModel(){
-        patientRepository = new PatientRepository(practitionerID);
-        observationRepositoryFactory = new ObservationRepositoryFactory();
-        getAllPatients();
-        setSelectedPatients(new ArrayList<PatientModel>());
-
-        frequency = 5000; // default
-    }
     /**
      * Store patients and their observations in LiveData so that UI will be notified when there are changes.
      * @return LiveData HashMap of patient and their observations

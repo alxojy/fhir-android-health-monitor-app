@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private Spinner mySpinner;
     private ImageButton backButton;
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -45,7 +45,7 @@ public class SettingsFragment extends Fragment {
         setUpToolBar();
 
         //set up spinner
-        mySpinner = (Spinner) root.findViewById(R.id.settings_polling_frequency);
+        mySpinner = root.findViewById(R.id.settings_polling_frequency);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(),R.array.polling_frequency,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
@@ -80,7 +80,7 @@ public class SettingsFragment extends Fragment {
         }
     };
 
-    public void setUpToolBar(){
+    private void setUpToolBar(){
         TextView title = toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_settings);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -89,6 +89,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity main = (MainActivity) getActivity();
+                //TODO: exception
                 main.findFragment(MainActivity.home_fragment);
             }
         });
