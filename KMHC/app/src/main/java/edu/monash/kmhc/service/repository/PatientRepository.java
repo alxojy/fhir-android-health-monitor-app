@@ -47,7 +47,7 @@ public class PatientRepository extends FhirService {
                 .where(new TokenClientParam("participant.identifier")
                 .exactly().systemAndCode("http://hl7.org/fhir/sid/us-npi", practitionerId))
                 .returnBundle(Bundle.class)
-                .count(1000) // not too many searches to prevent overloading the server
+                .count(100) // not too many searches to prevent overloading the server
                 .execute();
 
         // get all patient references

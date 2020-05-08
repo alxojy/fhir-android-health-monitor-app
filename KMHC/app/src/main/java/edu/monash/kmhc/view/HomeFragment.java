@@ -33,11 +33,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
     private HomeAdapter homeAdapter;
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
 
     /**
-     * This method performs all graphical initialization, assign all view variables and set up the tool bar.
+     * This method performs all graphical initialization,
+     * assign all view variables and set up the tool bar.
      * @return The Main UI view that is created.
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,7 +64,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
      * This observer observes for changes in selected patients' data
      * It updates the UI when there're changes to the data.
      */
-    Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
+    private Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -72,6 +73,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             }
         };
 
+    /**
+     *
+     * @param position
+     * @param patient
+     */
     @Override
     public void onPatientClick(int position, PatientModel patient) {
         // navigate to new fragment
@@ -80,17 +86,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         main.newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
     }
 
-    public void setUpToolBar(){
+    private void setUpToolBar(){
         toolbar.setTitle("Home Page");
         toolbar.inflateMenu(R.menu.home_menu);
 
-        Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                MainActivity main = (MainActivity) getActivity();
-                main.findFragment(MainActivity.select_patients_fragment);
-                return true;
-            }
+        Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
+            MainActivity main = (MainActivity) getActivity();
+            main.findFragment(MainActivity.select_patients_fragment);
+            return true;
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }

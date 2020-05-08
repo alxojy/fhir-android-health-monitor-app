@@ -6,4 +6,5 @@
     <color name="colorRed">#D1322B</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorAccentText">#35375A</color>
+    <color name="colorSelectedPatient">#bedec5</color>
 </resources>

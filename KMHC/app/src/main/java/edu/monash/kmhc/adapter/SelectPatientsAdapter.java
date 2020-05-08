@@ -5,11 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,8 +21,8 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
     private HashMap<String, PatientModel> patientsHashMap;
     private ArrayList<PatientModel> uniquePatients = new ArrayList<>();
     private OnPatientClickListener onPatientClickListener;
-    private ArrayList<PatientModel> selected_patients = new ArrayList<>();
-
+    private ArrayList<PatientModel> selected_patients;
+    private ArrayList<Boolean> patientState = new ArrayList<>();
 
     public SelectPatientsAdapter(HashMap<String, PatientModel> patientsHashMap, OnPatientClickListener onPatientClickListener,ArrayList<PatientModel> selected_patients) {
         this.selected_patients = selected_patients;
@@ -32,6 +31,11 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
         patientsHashMap.forEach((patientID, patientModel) -> {
             if (patientModel != null) {
                 uniquePatients.add(patientModel);
+                if (selected_patients.contains(patientModel)){
+                    patientState.add(true);
+                }else{
+                    patientState.add(false);
+                }
             }
         });
         System.out.println(this.uniquePatients.toString());
@@ -52,10 +56,14 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - OnBind");
+        holder.checkBox.setChecked(patientState.get(position));
+        holder.background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
         holder.patientName.setText(uniquePatients.get(position).getName());
         if (selected_patients.contains(uniquePatients.get(position))){
             holder.checkBox.setChecked(true);
             holder.setCheckboxStatus(true);
+            holder.background.setBackgroundResource(R.drawable.cardv_selected_bg);
+            patientState.set(position,true);
             onPatientClickListener.onPatientClick(holder.checkBox.isChecked(), uniquePatients.get(position));
         }
     }
@@ -67,54 +75,62 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        LinearLayout linearLayout;
         TextView patientName;
         CheckBox checkBox;
         OnPatientClickListener onPatientClickListener;
+        ConstraintLayout background;
         private boolean checkboxStatus = false;
 
 
-        public ViewHolder(@NonNull View itemView, OnPatientClickListener onPatientClickListener) {
+        ViewHolder(@NonNull View itemView, OnPatientClickListener onPatientClickListener) {
             super(itemView);
-            linearLayout = itemView.findViewById(R.id.linear_layout);
             patientName = itemView.findViewById(R.id.all_patient_txt_name);
             checkBox = itemView.findViewById(R.id.checkBox);
+            background = itemView.findViewById(R.id.card_backgroud);
             this.onPatientClickListener = onPatientClickListener;
             itemView.setOnClickListener(this);
-            checkBox.setOnCheckedChangeListener(checkListener);
         }
-        //check box listener
-        CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                changeCheckBoxStatus();
-                onPatientClickListener.onPatientClick(checkBox.isChecked(), uniquePatients.get(getAdapterPosition()));
-            }
-        };
 
-        public boolean getCheckboxStatus() {
+        boolean getCheckboxStatus() {
             return checkboxStatus;
         }
-        public void setCheckboxStatus(boolean checkboxStatus) {
+
+        void setCheckboxStatus(boolean checkboxStatus) {
             this.checkboxStatus = checkboxStatus;
         }
 
-        private void changeCheckBoxStatus(){
+        private void changeCheckBoxStatus(int position){
             if (getCheckboxStatus()) {
+                patientState.set(position,false);
+
+                try {
+                    System.out.println(background);
+                    background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
+                }
+                catch (Exception ie){
+                    System.out.println(ie.getMessage());
+                }
                 checkBox.setChecked(false);
                 setCheckboxStatus(false);
 
-                ;
             } else {
+
+                try {
+                    System.out.println(background);
+                    background.setBackgroundResource(R.drawable.cardv_selected_bg);
+                }
+                catch (Exception ie){
+                    System.out.println(ie.getMessage());
+                }
+
                 checkBox.setChecked(true);
                 setCheckboxStatus(true);
             }
         }
-
         //card view listener
         @Override
         public void onClick(View v) {
-            changeCheckBoxStatus();
+            changeCheckBoxStatus(getAdapterPosition());
             onPatientClickListener.onPatientClick(checkBox.isChecked(), uniquePatients.get(getAdapterPosition()));
         }
     }

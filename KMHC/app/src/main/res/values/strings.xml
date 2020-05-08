@@ -15,6 +15,7 @@
     <string name="how_to_use">How to use</string>
     <string name="edit_patient">Edit</string>
     <string name="start_monitoring">Start</string>
+    <string name="patient_name">Patient Name</string>
 
     <string-array name="polling_frequency">
         <item>5 seconds</item>

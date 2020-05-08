@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_layout"
     android:foreground="?selectableItemBackground"
-    card_view:cardBackgroundColor="#E0E9FF"
+    card_view:cardBackgroundColor="@color/colorAccent"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="3dp"
-    card_view:contentPadding="4dp"
     android:layout_margin="5dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card_backgroud"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
     <TextView
@@ -24,16 +23,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="Patient Name"
+        android:text="@string/patient_name"
         android:textSize="25sp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toStartOf="@id/guideline2"
-        card_view:layout_constraintStart_toEndOf="@id/linear_layout"
+        card_view:layout_constraintStart_toEndOf="@id/guideline"
         card_view:layout_constraintTop_toTopOf="parent"
         card_view:layout_constraintVertical_bias="0.5" />
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/linear_layout"
             card_view:layout_constraintBottom_toBottomOf="parent"
@@ -46,12 +45,20 @@
 
             <CheckBox
                 android:id="@+id/checkBox"
+                android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 />
 
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.04" />
 
 
         <androidx.constraintlayout.widget.Guideline
