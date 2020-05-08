@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -29,12 +28,9 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
  */
 public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
 
-    private HomeFragment thisFrag ;
-    private SharedViewModel sharedViewModel;
+    private HomeFragment thisFrag;
     private RecyclerView recyclerView;
-    private HomeAdapter homeAdapter;
-    Toolbar toolbar;
-
+    private Toolbar toolbar;
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the tool bar.
@@ -43,7 +39,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //set tool bar
@@ -53,7 +49,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         recyclerView = root.findViewById(R.id.home_recycler_view);
 
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
-
         thisFrag = this;
 
         return root;
@@ -63,12 +58,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
      * This observer observes for changes in selected patients' data
      * It updates the UI when there're changes to the data.
      */
-    Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
+    private Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                homeAdapter = new HomeAdapter(patientObservationHashMap,thisFrag);
-                recyclerView.setAdapter(homeAdapter);
+                recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag));
             }
         };
 
@@ -80,7 +74,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         main.newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
     }
 
-    public void setUpToolBar(){
+    private void setUpToolBar(){
         toolbar.setTitle("Home Page");
         toolbar.inflateMenu(R.menu.home_menu);
 

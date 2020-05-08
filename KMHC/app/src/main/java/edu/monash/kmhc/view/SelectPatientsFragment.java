@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private Toolbar toolbar;
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
-    private SelectPatientsAdapter selectPatientsAdapter;
     private ArrayList<PatientModel> selected_patients = new ArrayList<>();
     private TextView title;
     private TextView loadingTextView;
@@ -85,8 +83,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 loadingSpinner.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients);
-                recyclerView.setAdapter(selectPatientsAdapter);
+                recyclerView.setAdapter(new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients));
         }
         }
     };

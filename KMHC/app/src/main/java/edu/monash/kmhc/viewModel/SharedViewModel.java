@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
@@ -144,7 +143,7 @@ public class SharedViewModel extends ViewModel implements Poll {
                     }
                     // patient does not have the observation type
                     catch (Exception e) {
-                        continue;
+                        Log.e("Patient " + patient.getPatientID(), "No observation type");
                     }
                 }
 

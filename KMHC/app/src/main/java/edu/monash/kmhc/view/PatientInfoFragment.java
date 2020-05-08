@@ -29,14 +29,13 @@ import edu.monash.kmhc.viewModel.PatientInfoViewModel;
  */
 public class PatientInfoFragment extends Fragment {
 
-    private PatientInfoViewModel mViewModel;
     private PatientModel patient;
     private ImageButton backButton;
     private TextView name;
     private TextView birthday;
     private TextView gender;
     private TextView address;
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     public PatientInfoFragment(PatientModel patient) {
         this.patient = patient;
@@ -64,7 +63,7 @@ public class PatientInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(PatientInfoViewModel.class);
+        PatientInfoViewModel mViewModel = ViewModelProviders.of(this).get(PatientInfoViewModel.class);
 
         mViewModel.setPatient(patient);
 
@@ -74,7 +73,7 @@ public class PatientInfoFragment extends Fragment {
         address.setText(patient.getAddress().getFullAddress());
     }
 
-    public void setUpToolBar(){
+    private void setUpToolBar(){
         TextView title = toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_patient_info);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);

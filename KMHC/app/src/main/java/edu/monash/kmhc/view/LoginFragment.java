@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.monash.kmhc.MainActivity;
@@ -21,7 +20,6 @@ import edu.monash.kmhc.R;
 public class LoginFragment extends Fragment {
 
     private EditText practitionerID;
-    private Button signInButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,13 +28,13 @@ public class LoginFragment extends Fragment {
 
         practitionerID = root.findViewById(R.id.login_et_pracID);
         practitionerID.setOnKeyListener(pracIDListener);
-        signInButton = root.findViewById(R.id.login_btn_login);
+        Button signInButton = root.findViewById(R.id.login_btn_login);
         signInButton.setOnClickListener(signInButtonListener);
         // Inflate the layout for this fragment
         return root;
     }
 
-    EditText.OnKeyListener pracIDListener = new EditText.OnKeyListener()
+    private EditText.OnKeyListener pracIDListener = new EditText.OnKeyListener()
     {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -49,7 +47,7 @@ public class LoginFragment extends Fragment {
         }
     };
 
-    View.OnClickListener signInButtonListener = new View.OnClickListener() {
+    private View.OnClickListener signInButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (practitionerID.getText().toString().equals("")){
@@ -64,7 +62,7 @@ public class LoginFragment extends Fragment {
         }
     };
 
-    public void goToNextFragment(){
+    private void goToNextFragment(){
         MainActivity main = (MainActivity) getActivity();
         main.newSelectPatientFragment(MainActivity.select_patients_fragment,practitionerID.getText().toString());
     }
