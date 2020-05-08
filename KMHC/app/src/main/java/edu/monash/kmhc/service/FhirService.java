@@ -20,7 +20,7 @@ public class FhirService {
         client = ctx.newRestfulGenericClient(BASE_URL);
 
         // increase timeout
-        ctx.getRestfulClientFactory().setConnectTimeout(12*1000);
-        ctx.getRestfulClientFactory().setSocketTimeout(12*1000);
+        ctx.getRestfulClientFactory().setConnectTimeout(60*1000);
+        ctx.getRestfulClientFactory().setSocketTimeout(60*1000);
     }
 }

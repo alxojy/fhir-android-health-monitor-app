@@ -2,6 +2,7 @@ package edu.monash.kmhc.viewModel;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
@@ -36,11 +38,10 @@ public class SharedViewModel extends ViewModel implements Poll {
     private int frequency;
 
     private void initShareViewModel(){
-        Log.d("share view model","init new" + practitionerID);
         patientRepository = new PatientRepository(practitionerID);
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
-        setSelectedPatients(new ArrayList<PatientModel>());
+        setSelectedPatients(new ArrayList<>());
         frequency = 5000; // default
     }
 
@@ -79,12 +80,8 @@ public class SharedViewModel extends ViewModel implements Poll {
         return patients;
     }
 
-    /**
-     * Returns all patients monitored by the practitioner
-     * @return All patients monitored by the practitioner
-     */
 
-    public void getAllPatients() {
+    private void getAllPatients() {
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
         backgroundThread.start();
@@ -139,10 +136,16 @@ public class SharedViewModel extends ViewModel implements Poll {
 
                 // loop through all patients
                 for (PatientModel patient : getSelectedPatients().getValue()) {
-                    // set new cholesterol observation reading
-                    patient.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                    poHashMap.put(patient.getPatientID(), patient);
+                    try {
+                        // set new cholesterol observation reading
+                        patient.setObservation(ObservationType.CHOLESTEROL,
+                                getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                        poHashMap.put(patient.getPatientID(), patient);
+                    }
+                    // patient does not have the observation type
+                    catch (Exception e) {
+                        continue;
+                    }
                 }
 
                 // update LiveData and notify observers

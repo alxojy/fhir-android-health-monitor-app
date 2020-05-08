@@ -42,12 +42,12 @@ public class PatientRepository extends FhirService {
         // store patients
         ArrayList<PatientModel> patientModels = new ArrayList<>();
 
-        // search for all encounters with the practitioner id
+        // search for all encounters with the practitioner identifier
         Bundle bundle = client.search().forResource(Encounter.class)
                 .where(new TokenClientParam("participant.identifier")
                 .exactly().systemAndCode("http://hl7.org/fhir/sid/us-npi", practitionerId))
                 .returnBundle(Bundle.class)
-                .count(1000) // not too many searches to prevent overloading the server
+                .count(100) // not too many searches to prevent overloading the server
                 .execute();
 
         // get all patient references

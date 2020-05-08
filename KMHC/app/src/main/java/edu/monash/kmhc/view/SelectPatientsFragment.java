@@ -75,7 +75,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         return root;
     }
 
-    Observer<HashMap< String, PatientModel >> patientUpdatedObserver = new Observer< HashMap < String, PatientModel >>() {
+    private Observer<HashMap< String, PatientModel >> patientUpdatedObserver = new Observer< HashMap < String, PatientModel >>() {
         @Override
         public void onChanged( HashMap < String, PatientModel > patientHashMap) {
             if (patientHashMap.size() == 0 ){
@@ -91,7 +91,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         }
     };
 
-    public void setUpToolBar(){
+    private void setUpToolBar(){
         title.setText(R.string.title_patient_selection);
         toolbar.inflateMenu(R.menu.select_patients_menu);
         Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
@@ -100,8 +100,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 if (selected_patients.size()>0) {
                     // save list into view model
                     sharedViewModel.setSelectedPatients(selected_patients);
-                    Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
-                    Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
 
                     // TODO: implement call to home fragment
                     // TODO : move call to activity
