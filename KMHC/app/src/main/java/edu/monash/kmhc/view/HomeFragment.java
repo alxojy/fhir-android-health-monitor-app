@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -37,9 +38,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the tool bar.
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
      * @return The Main UI view that is created.
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,7 +60,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     }
 
     /**
-     * This observer observes for changes in patient
+     * This observer observes for changes in selected patients' data
+     * It updates the UI when there're changes to the data.
      */
     Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override

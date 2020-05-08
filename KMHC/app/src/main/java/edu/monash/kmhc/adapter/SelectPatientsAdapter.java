@@ -36,6 +36,7 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
         });
         System.out.println(this.uniquePatients.toString());
         Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - Constructor Called");
+        Log.i("SelectPatientsAdapter", "patients:"+ uniquePatients.toString());
 
     }
 
