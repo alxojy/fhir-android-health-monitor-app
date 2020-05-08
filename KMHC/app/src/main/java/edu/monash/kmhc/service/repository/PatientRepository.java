@@ -4,18 +4,13 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.HumanName;
-import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Practitioner;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.TokenOrListParam;
 import edu.monash.kmhc.model.PatientAddressModel;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.service.FhirService;
@@ -60,7 +55,6 @@ public class PatientRepository extends FhirService {
                 (((Encounter) entry.getResource()).getSubject()).getReference()));
 
         Bundle patientBundle;
-
 
         // go through each patient reference and get the patient
         for (String id: patientReferences) {
