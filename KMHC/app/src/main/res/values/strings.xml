@@ -5,16 +5,12 @@
     <string name="title_patient_info">Patient Info</string>
     <string name="title_patient_selection">Select Patients</string>
     <string name="prompt_username">User Name / ID</string>
-    <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="kimchi_title">KIMCHI</string>
     <string name="name">Name</string>
-    <string name="forgotten_password">Forgotten Password ?</string>
-    <string name="enter_your_password">Enter Your Password</string>
+    <string name="zero_patients_message">You have 0 patients</string>
     <string name="server_update_prompt">Update Server Every</string>
     <string name="how_to_use">How to use</string>
     <string name="edit_patient">Edit</string>

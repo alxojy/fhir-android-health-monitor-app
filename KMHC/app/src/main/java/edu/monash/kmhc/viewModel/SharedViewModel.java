@@ -36,6 +36,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     private int frequency;
 
     private void initShareViewModel(){
+        Log.d("share view model","init new" + practitionerID);
         patientRepository = new PatientRepository(practitionerID);
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
@@ -66,6 +67,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     }
 
     public void setSelectedPatients(ArrayList<PatientModel> selectedPatientsArray) {
+        Log.d("Shared View Model","Attempting to update to" + selectedPatientsArray);
         selectedPatients.setValue(selectedPatientsArray);
     }
 

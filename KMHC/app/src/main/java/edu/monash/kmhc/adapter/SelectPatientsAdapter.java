@@ -34,6 +34,10 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
                 uniquePatients.add(patientModel);
             }
         });
+        System.out.println(this.uniquePatients.toString());
+        Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - Constructor Called");
+        Log.i("SelectPatientsAdapter", "patients:"+ uniquePatients.toString());
+
     }
 
     @NonNull
@@ -47,6 +51,7 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.i("SelectPatientsAdapter", "SelectPatientsAdapter - OnBind");
         holder.patientName.setText(uniquePatients.get(position).getName());
         if (selected_patients.contains(uniquePatients.get(position))){
             holder.checkBox.setChecked(true);
@@ -99,6 +104,7 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
                 checkBox.setChecked(false);
                 setCheckboxStatus(false);
 
+                ;
             } else {
                 checkBox.setChecked(true);
                 setCheckboxStatus(true);

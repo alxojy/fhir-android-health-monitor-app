@@ -1,6 +1,7 @@
 package edu.monash.kmhc;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -12,6 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.hl7.fhir.r4.model.Enumerations;
+import org.hl7.fhir.r4.model.codesystems.AdministrativeGender;
+
+import java.util.Date;
+import java.util.HashMap;
+
+import edu.monash.kmhc.model.PatientAddressModel;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.view.HomeFragment;
 import edu.monash.kmhc.view.LoginFragment;
@@ -23,15 +31,33 @@ public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
     BottomNavigationView navView;
+    public static final String login_fragment = "login_fragment";
     public static final String home_fragment = "home_fragment";
     public static final String settings_fragment = "settings_fragment";
     public static final String patient_info__fragment = "patient_info_fragment";
     public static final String select_patients_fragment = "select_patients_fragment";
 
+    //private HashMap<String,PatientModel> dummy_Patients = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+        // dummy patient list
+//        PatientModel patientA = new PatientModel("12345","Jess Hew",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientB = new PatientModel("129345","Adam Wang",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientC = new PatientModel("1295","Leon Wang",new Date(2000,07,30),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientD = new PatientModel("1874","Alex Ooi",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientE = new PatientModel("92384","King Tan",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientF = new PatientModel("23874","Yoon",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientG = new PatientModel("19237","Kah Xuan",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientH = new PatientModel("192342","Ian",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+//        PatientModel patientI = new PatientModel("92348","Nicholas",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
+
+
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         navView = findViewById(R.id.nav_view);
@@ -44,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         //init home fragment
-        launchNewFragment(new LoginFragment(),"");
+        launchNewFragment(new LoginFragment(),login_fragment);
         //fragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
         //fragmentManager.beginTransaction().replace(R.id.fragment_container,new HomeFragment(),home_fragment).commit();
 
@@ -65,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
         launchNewFragment(fragment,tag);
     }
     public void newSelectPatientFragment(String tag,String pracID){
+        Fragment prev_fragment = fragmentManager.findFragmentByTag(tag);
+        if (prev_fragment != null ){
+            fragmentManager.beginTransaction().remove(prev_fragment).commit();
+            Log.d("main","prev frag destroyed");
+        }
+
         Fragment fragment = new SelectPatientsFragment(pracID);
         launchNewFragment(fragment,tag);
     }
@@ -78,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
             case settings_fragment:
                 fragment = new SettingsFragment();
                 break;
-//            case select_patients_fragment:
-//                fragment = new SelectPatientsFragment();
         }
         launchNewFragment(fragment,tag);
     }

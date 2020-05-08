@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //set up tool bar
-        toolbar = root.findViewById(R.id.home_toolbar);
+        toolbar = root.findViewById(R.id.settings_toolbar);
         setUpToolBar();
 
         //set up spinner

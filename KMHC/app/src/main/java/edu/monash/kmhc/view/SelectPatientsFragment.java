@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,10 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private SelectPatientsAdapter selectPatientsAdapter;
     private ArrayList<PatientModel> selected_patients = new ArrayList<>();
     private TextView title;
+    private TextView loadingTextView;
+    private ImageButton backButton;
+    private ProgressBar loadingSpinner;
+
 
     public SelectPatientsFragment(String practitionerID) {
         this.practitionerID = practitionerID;
@@ -54,8 +60,13 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
 
         sharedViewModel.setPractitionerID(practitionerID);
 
-        toolbar = root.findViewById(R.id.home_toolbar);
+        toolbar = root.findViewById(R.id.select_patients_toolbar);
+        loadingTextView = root.findViewById(R.id.select_patients_txt_loading);
+        loadingSpinner = root.findViewById(R.id.select_patients_progressBar);
+        loadingSpinner.setVisibility(View.VISIBLE);
+        loadingTextView.setVisibility(View.VISIBLE);
         title = toolbar.findViewById(R.id.toolbar_title);
+        backButton = root.findViewById(R.id.btn_back);
         setUpToolBar();
 
         recyclerView = root.findViewById(R.id.select_patients_recycler_view);
@@ -67,9 +78,16 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     Observer<HashMap< String, PatientModel >> patientUpdatedObserver = new Observer< HashMap < String, PatientModel >>() {
         @Override
         public void onChanged( HashMap < String, PatientModel > patientHashMap) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients);
-            recyclerView.setAdapter(selectPatientsAdapter);
+            if (patientHashMap.size() == 0 ){
+                loadingTextView.setText(R.string.zero_patients_message);
+            }
+            else{
+                loadingSpinner.setVisibility(View.GONE);
+                loadingTextView.setVisibility(View.GONE);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients);
+                recyclerView.setAdapter(selectPatientsAdapter);
+        }
         }
     };
 
@@ -82,6 +100,8 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 if (selected_patients.size()>0) {
                     // save list into view model
                     sharedViewModel.setSelectedPatients(selected_patients);
+                    Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
+                    Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
 
                     // TODO: implement call to home fragment
                     // TODO : move call to activity
@@ -98,6 +118,16 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
             }
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity main = (MainActivity) getActivity();
+                //TODO: exception
+                main.findFragment(MainActivity.login_fragment);
+            }
+
+    });
     }
 
     private void updateToolbar(){

@@ -48,7 +48,7 @@ public class PatientInfoFragment extends Fragment {
         View root = inflater.inflate(R.layout.patient_info_fragment, container, false);
 
         //set up toolbar
-        toolbar = root.findViewById(R.id.home_toolbar);
+        toolbar = root.findViewById(R.id.patient_info_toolbar);
         backButton = root.findViewById(R.id.btn_back);
         setUpToolBar();
 
