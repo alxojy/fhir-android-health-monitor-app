@@ -24,6 +24,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private ArrayList<PatientModel> patients = new ArrayList<>();
     private ArrayList<String> patientIDs = new ArrayList<>();
     private OnPatientClickListener onPatientClickListener;
+    private float average_value;
 
     public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap,OnPatientClickListener onPatientClickListener) {
         this.patientObservationHashMap = patientObservationHashMap;
@@ -33,9 +34,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             patientIDs.add(patientID);
             patients.add(patientModel);
         });
+
         Log.d("HomeAdapter " , "monitoring" + patients.toString());
         Log.d("HomeAdapter" , patientIDs.toString());
         Log.d("HomeAdapter", "HomeAdapter - Constructor Called");
+
+        calculateAverage();
 
     }
 
@@ -57,14 +61,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
         String date = observationModel.getDateTime();
         holder.patientName.setText(patients.get(position).getName());
+
+        if (Float.parseFloat(observationModel.getValue()) > average_value ){
+            Log.d("home adpater", "current average :"+ average_value);
+            holder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
+            holder.patientName.setTextColor(R.color.colorRed);
+        }
         holder.cholesterolValue.setText(cholStat);
         holder.time.setText(date);
-
-        System.out.println(observationModel.toString());
-
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -96,5 +101,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     // click listener for each view holder
     public interface OnPatientClickListener {
         void onPatientClick(int position, PatientModel patient);
+    }
+
+    private void calculateAverage(){
+        float total = 0;
+        for( PatientModel p : patients){
+            total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
+        }
+        average_value = total/patients.size();
     }
 }

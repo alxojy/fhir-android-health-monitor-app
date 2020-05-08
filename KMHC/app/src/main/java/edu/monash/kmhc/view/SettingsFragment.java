@@ -31,7 +31,6 @@ public class SettingsFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
     private Spinner mySpinner;
-    private ImageButton backButton;
     private Toolbar toolbar;
 
 
@@ -41,7 +40,6 @@ public class SettingsFragment extends Fragment {
 
         //set up tool bar
         toolbar = root.findViewById(R.id.home_toolbar);
-        backButton = root.findViewById(R.id.btn_back);
         setUpToolBar();
 
         //set up spinner
@@ -81,18 +79,9 @@ public class SettingsFragment extends Fragment {
     };
 
     private void setUpToolBar(){
-        TextView title = toolbar.findViewById(R.id.toolbar_title);
-        title.setText(R.string.title_settings);
+        toolbar.setTitle(R.string.title_settings);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity main = (MainActivity) getActivity();
-                //TODO: exception
-                main.findFragment(MainActivity.home_fragment);
-            }
-        });
     }
 
 }

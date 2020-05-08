@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/cardv_red_bg"
+            android:background="@drawable/cardv_purple_bg"
             android:padding="9dp"
             android:text="Cholesterol 33 mg/dL"
             android:textColor="#FEFFFD"

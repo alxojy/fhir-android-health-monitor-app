@@ -46,53 +46,14 @@
         android:layout_height="45dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
-        app:layout_constraintBottom_toTopOf="@id/login_tv_password"
+        android:maxLines="1"
+        android:imeOptions="actionGo"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@id/login_btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.543"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_tv_username" />
-
-    <TextView
-        android:id="@+id/login_tv_password"
-        android:layout_width="376dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/prompt_password"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/login_et_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_et_pracID" />
-
-    <EditText
-        android:id="@+id/login_et_password"
-        android:layout_width="376dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/enter_your_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.543"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_tv_password" />
-
-    <TextView
-        android:id="@+id/login_tv_forgotpw"
-        android:layout_width="376dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/forgotten_password"
-        android:textAlignment="viewEnd"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_et_password"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/login_tv_username"/>
 
     <Button
         android:id="@+id/login_btn_login"
@@ -111,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_tv_forgotpw" />
+        app:layout_constraintTop_toBottomOf="@+id/login_et_pracID" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
