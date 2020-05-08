@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.service.repository.ObservationRepositoryFactory;
 import edu.monash.kmhc.service.repository.PatientRepository;
+//TODO: comment this classss
 
 /**
  * This class is responsible for providing data that is displayed in the HomeFragment.
@@ -24,11 +26,11 @@ import edu.monash.kmhc.service.repository.PatientRepository;
  * provides its own implementation for polling the server.
  */
 public class SharedViewModel extends ViewModel implements Poll {
+
     // for polling
     private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
     // to get all the patients under practitioner
     private MutableLiveData<HashMap<String, PatientModel>> patients = new MutableLiveData<>();
-
     private String practitionerID = "";
     private PatientRepository patientRepository;
     private ObservationRepositoryFactory observationRepositoryFactory;
@@ -36,12 +38,24 @@ public class SharedViewModel extends ViewModel implements Poll {
     private MutableLiveData<ArrayList<PatientModel>> selectedPatients = new MutableLiveData<>();
     private int frequency;
 
+    private ArrayList<Integer> counters = new ArrayList<>();
+    private int pointer = 0;
+
+
     private void initShareViewModel(){
+        Log.d("Shared View Model" ," initialising Shared View Model");
         patientRepository = new PatientRepository(practitionerID);
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
         setSelectedPatients(new ArrayList<>());
-        frequency = 5000; // default
+        frequency = 10000; // default
+
+        // TODO: Remove this
+        counters.add(0);
+        counters.add(0);
+        counters.add(0);
+        counters.add(0);
+        counters.add(0);
     }
 
     public void setPractitionerID(String practitionerID) {
@@ -68,7 +82,14 @@ public class SharedViewModel extends ViewModel implements Poll {
 
     public void setSelectedPatients(ArrayList<PatientModel> selectedPatientsArray) {
         Log.d("Shared View Model","Attempting to update to" + selectedPatientsArray);
-        selectedPatients.setValue(selectedPatientsArray);
+        // TODO: delete try catch and remove pointer
+        try {
+            selectedPatients.setValue(selectedPatientsArray);
+            pointer ++;
+        }
+        catch(Exception ie) {
+            System.out.println(ie.getMessage());
+        }
     }
 
     private LiveData<ArrayList<PatientModel>> getSelectedPatients() {
@@ -86,19 +107,16 @@ public class SharedViewModel extends ViewModel implements Poll {
         backgroundThread.start();
         Handler timer = new Handler(backgroundThread.getLooper());
 
-        timer.post(new Runnable() {
-            @Override
-            public void run() {
-                HashMap < String, PatientModel > patientHashMap = new HashMap<>();
-                // loop through all patients
-                for (PatientModel patient : patientRepository.getAllPatients()) {
-                    patientHashMap.put(patient.getPatientID(), patient);
-                }
-
-                // update LiveData and notify observers
-                // used by select patient
-                patients.postValue(patientHashMap);
+        timer.post(() -> {
+            HashMap < String, PatientModel > patientHashMap = new HashMap<>();
+            // loop through all patients
+            for (PatientModel patient : patientRepository.getAllPatients()) {
+                patientHashMap.put(patient.getPatientID(), patient);
             }
+
+            // update LiveData and notify observers
+            // used by select patient
+            patients.postValue(patientHashMap);
         });
 
         polling();
@@ -128,28 +146,40 @@ public class SharedViewModel extends ViewModel implements Poll {
         backgroundThread.start();
         Handler timer = new Handler(backgroundThread.getLooper());
 
+
+        // TODO: remove try catch and counter
         timer.post(new Runnable() {
             @Override
             public void run() {
-                HashMap < String, PatientModel > poHashMap = new HashMap<>();
+                try {
+                    Log.d("SHared View Model", "Polling new round" +  counters);
+                    counters.set(pointer,counters.get(pointer)+1);
+                    HashMap<String, PatientModel> poHashMap = new HashMap<>();
 
-                // loop through all patients
-                for (PatientModel patient : getSelectedPatients().getValue()) {
-                    try {
-                        // set new cholesterol observation reading
-                        patient.setObservation(ObservationType.CHOLESTEROL,
-                                getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                        poHashMap.put(patient.getPatientID(), patient);
+                    // loop through all patients
+                    for (PatientModel patient : getSelectedPatients().getValue()) {
+                        try {
+                            // set new cholesterol observation reading
+                            patient.setObservation(ObservationType.CHOLESTEROL,
+                                    getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                            poHashMap.put(patient.getPatientID(), patient);
+                        }
+                        // patient does not have the observation type
+                        catch (Exception e) {
+                            Log.e("Patient " + patient.getPatientID(), "No observation type");
+                        }
                     }
-                    // patient does not have the observation type
-                    catch (Exception e) {
-                        Log.e("Patient " + patient.getPatientID(), "No observation type");
-                    }
+
+
+                    Log.d("SHared View Model", "Ended Polling");
+
+                    // update LiveData and notify observers
+                    patientObservations.postValue(poHashMap);
+                    timer.postDelayed(this, frequency);
                 }
-
-                // update LiveData and notify observers
-                patientObservations.postValue(poHashMap);
-                timer.postDelayed(this, frequency);
+                catch(Exception ei){
+                    System.out.println(ei.getMessage());
+                }
             }});
     }
 

@@ -2,7 +2,6 @@ package edu.monash.kmhc.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
@@ -21,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
-import edu.monash.kmhc.viewModel.PatientInfoViewModel;
 
 /**
  * This fragment is used to display extra information about the patient.
@@ -37,10 +35,21 @@ public class PatientInfoFragment extends Fragment {
     private TextView address;
     private Toolbar toolbar;
 
+
+    /**
+     * Patient Info Fragment Constructor
+     * @param patient the patient object that should be displayed
+     */
     public PatientInfoFragment(PatientModel patient) {
         this.patient = patient;
     }
 
+
+    /**
+     * This method performs all graphical initialization,
+     * assign all view variables and set up the tool bar.
+     * @return The PatientInfo UI view that is created.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -60,30 +69,35 @@ public class PatientInfoFragment extends Fragment {
         return root;
     }
 
+    /**
+     * This method updates the UI component to display the patient's data
+     * IE : display patient name , gender, birthday and address
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        PatientInfoViewModel mViewModel = ViewModelProviders.of(this).get(PatientInfoViewModel.class);
-
-        mViewModel.setPatient(patient);
-
         name.setText(patient.getName());
         birthday.setText(patient.getBirthDate());
         gender.setText(StringUtils.capitalize(patient.getGender().toLowerCase()));
         address.setText(patient.getAddress().getFullAddress());
     }
 
+    /**
+     * This method is responsible to set up the tool bar in the PatientInfoFragment
+     * It performs the following
+     *
+     * 1. Set the title
+     * 2. Inflate the menu , and assign a back button listener
+     *   - When the back Button is click , the app should navigate back to HomeFragment
+     */
     private void setUpToolBar(){
         TextView title = toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_patient_info);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity main = (MainActivity) getActivity();
-                main.findFragment(MainActivity.home_fragment);
-            }
+        backButton.setOnClickListener(v -> {
+            MainActivity main = (MainActivity) getActivity();
+            main.findFragment(MainActivity.home_fragment);
         });
     }
 

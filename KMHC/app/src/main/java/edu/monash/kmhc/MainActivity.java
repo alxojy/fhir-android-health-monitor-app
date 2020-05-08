@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         navView = findViewById(R.id.nav_view);
-        // TODO: change -> show based on fragment
+
         navView.setVisibility(View.GONE);
 
         //new app bar implementation here
@@ -127,17 +127,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            item -> {
 
-                    if (item.getItemId() == R.id.navigation_home) {
-                        findFragment(home_fragment);
+                if (item.getItemId() == R.id.navigation_home) {
+                    findFragment(home_fragment);
 
-                    } else if (item.getItemId() == R.id.navigation_settings) {
-                        findFragment(settings_fragment);
-                    }
-                    return true;
+                } else if (item.getItemId() == R.id.navigation_settings) {
+                    findFragment(settings_fragment);
                 }
+                return true;
             };
 }

@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,13 +17,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.viewModel.SharedViewModel;
 
 /**
  * This fragment is used to allow users to configure the frequency to update the server.
- * TODO: Selection box to allow users to select frequency (1...60) seconds
  */
 public class SettingsFragment extends Fragment {
 
@@ -34,6 +30,11 @@ public class SettingsFragment extends Fragment {
     private Toolbar toolbar;
 
 
+    /**
+     * This method performs all graphical initialization,
+     * assign all view variables and set up the tool bar.
+     * @return The Settings Screen's UI view that is created.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -42,7 +43,7 @@ public class SettingsFragment extends Fragment {
         toolbar = root.findViewById(R.id.settings_toolbar);
         setUpToolBar();
 
-        //set up spinner
+        //set up spinner (drop down list)
         mySpinner = root.findViewById(R.id.settings_polling_frequency);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(),R.array.polling_frequency,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -51,6 +52,11 @@ public class SettingsFragment extends Fragment {
 
         return root;
     }
+
+    /**
+     * This method links the fragment will the shared view model class.
+     * This allow the settings fragment sync and display the current frequency selected.
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -58,10 +64,17 @@ public class SettingsFragment extends Fragment {
         sharedViewModel =
                 ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
+        // set the drop down list to display current frequency
         mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
 
     }
 
+    /**
+     * This is a OnItemSelectedListener that gets triggered when the user selects a new frequency
+     *
+     * When the user changes the frequency , it passes the new frequency the the view model
+     * The app will then start polling at the new selected frequency.
+     */
     private AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -78,6 +91,9 @@ public class SettingsFragment extends Fragment {
         }
     };
 
+    /**
+     * This method is sets up the title in the Settings fragment.
+     */
     private void setUpToolBar(){
         toolbar.setTitle(R.string.title_settings);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
