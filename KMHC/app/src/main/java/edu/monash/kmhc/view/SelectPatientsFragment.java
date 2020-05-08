@@ -82,8 +82,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 if (selected_patients.size()>0) {
                     // save list into view model
                     sharedViewModel.setSelectedPatients(selected_patients);
-                    Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
-                    Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
 
                     // TODO: implement call to home fragment
                     // TODO : move call to activity
@@ -100,7 +98,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
             }
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
-
     }
 
     private void updateToolbar(){
@@ -118,8 +115,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         else if (!checked){
             selected_patients.remove(patient);
         }
-        Log.d("Select Patient Fragment", "checked : " + checked + "|  patient " + patient);
-        Log.d("Select Patient Fragment", "add/ remove patient"+ selected_patients);
         updateToolbar();
     }
 }

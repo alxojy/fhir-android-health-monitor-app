@@ -33,10 +33,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             patientIDs.add(patientID);
             patients.add(patientModel);
         });
-        Log.d("HomeAdapter " , "monitoring" + patients.toString());
-        Log.d("HomeAdapter" , patientIDs.toString());
-        Log.d("HomeAdapter", "HomeAdapter - Constructor Called");
-
     }
 
     @NonNull
@@ -50,19 +46,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-        Log.d("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
         ObservationModel observationModel = patients.get(position).getObservationReading(ObservationType.CHOLESTEROL);
-        Log.d("HomeAdapter", "observationModel " + observationModel);
 
         String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
         String date = observationModel.getDateTime();
         holder.patientName.setText(patients.get(position).getName());
         holder.cholesterolValue.setText(cholStat);
         holder.time.setText(date);
-
-        System.out.println(observationModel.toString());
-
-
     }
 
 

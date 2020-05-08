@@ -25,12 +25,4 @@ public class CholesterolObservationModel extends ObservationModel {
 
     @Override
     public String getDateTime() { return observation.getEffectiveDateTimeType().asStringValue(); }
-
-    //debug purpose to be removed later.
-    @Override
-    public String toString() {
-        return "CholesterolObservationModel{" +
-                "observation=" + observation +
-                '}';
-    }
 }

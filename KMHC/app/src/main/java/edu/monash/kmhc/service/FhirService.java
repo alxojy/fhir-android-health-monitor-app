@@ -18,5 +18,9 @@ public class FhirService {
         // Server url
         String BASE_URL = "https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/";
         client = ctx.newRestfulGenericClient(BASE_URL);
+
+        // increase timeout
+        ctx.getRestfulClientFactory().setConnectTimeout(12*1000);
+        ctx.getRestfulClientFactory().setSocketTimeout(12*1000);
     }
 }

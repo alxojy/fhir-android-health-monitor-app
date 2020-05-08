@@ -2,7 +2,6 @@ package edu.monash.kmhc.viewModel;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -41,7 +40,6 @@ public class SharedViewModel extends ViewModel implements Poll {
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
         setSelectedPatients(new ArrayList<PatientModel>());
-
         frequency = 5000; // default
     }
 
@@ -57,9 +55,6 @@ public class SharedViewModel extends ViewModel implements Poll {
     public void updateCurrentSelected(String currentSelected) {
         this.selectedFrequency.setValue(currentSelected);
         frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
-        //debug purpose
-        System.out.println("Shared View Model 2 - " + frequency);
-        System.out.println("Shared View Model 2 - " + currentSelected);
     }
 
     /**
@@ -74,7 +69,7 @@ public class SharedViewModel extends ViewModel implements Poll {
         selectedPatients.setValue(selectedPatientsArray);
     }
 
-    public LiveData<ArrayList<PatientModel>> getSelectedPatients() {
+    private LiveData<ArrayList<PatientModel>> getSelectedPatients() {
         return selectedPatients;
     }
 
@@ -92,7 +87,6 @@ public class SharedViewModel extends ViewModel implements Poll {
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
         backgroundThread.start();
         Handler timer = new Handler(backgroundThread.getLooper());
-
 
         timer.post(new Runnable() {
             @Override
@@ -130,7 +124,6 @@ public class SharedViewModel extends ViewModel implements Poll {
      * is updated.
      */
     public void polling() {
-        Log.d("SharedViewModel2", "polling");
 
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
@@ -141,9 +134,8 @@ public class SharedViewModel extends ViewModel implements Poll {
             @Override
             public void run() {
                 HashMap < String, PatientModel > poHashMap = new HashMap<>();
-                // loop through all patients
 
-                Log.d("SharedViewModel2"," selectedPatients: " + getSelectedPatients().getValue());
+                // loop through all patients
                 for (PatientModel patient : getSelectedPatients().getValue()) {
                     // set new cholesterol observation reading
                     patient.setObservation(ObservationType.CHOLESTEROL,
@@ -153,10 +145,6 @@ public class SharedViewModel extends ViewModel implements Poll {
 
                 // update LiveData and notify observers
                 patientObservations.postValue(poHashMap);
-                Log.d("SharedViewModel2", "patient hash map :" + patientObservations.getValue());
-
-
-                Log.d("SharedViewModel2", "current polling frequency :" + frequency);
                 timer.postDelayed(this, frequency);
             }});
     }
