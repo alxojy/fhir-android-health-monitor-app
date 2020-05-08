@@ -23,7 +23,7 @@ import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.viewModel.SharedViewModel;
 
 /**
- * This fragment is used to display the main home screen upon login.
+ * This fragment is used to display the main screen after the health practitioner selected their patients.
  * All patients monitored by the health practitioner will be displayed in this screen.
  */
 public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
@@ -32,9 +32,16 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
     private HomeAdapter homeAdapter;
-
     Toolbar toolbar;
 
+
+    /**
+     * This method performs all graphical initialization, assign all view variables and set up the tool bar.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return The Main UI view that is created.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -54,7 +61,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         return root;
     }
 
-        Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
+    /**
+     * This observer observes for changes in patient
+     */
+    Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -65,7 +75,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     @Override
     public void onPatientClick(int position, PatientModel patient) {
-        // TODO: move fragment call
         // navigate to new fragment
         // pass in the patient
         MainActivity main = (MainActivity) getActivity();
@@ -79,7 +88,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // ToDO: move fragment call
                 MainActivity main = (MainActivity) getActivity();
                 main.findFragment(MainActivity.select_patients_fragment);
                 return true;

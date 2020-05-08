@@ -6,9 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".view.SettingsFragment">
 
-    <include
-        android:id="@+id/home_toolbar"
-        layout = "@layout/toolbar"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="6dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/settings_txt_update"
@@ -25,7 +35,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/home_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/settings_toolbar" />
 
     <Spinner
         android:id="@+id/settings_polling_frequency"
