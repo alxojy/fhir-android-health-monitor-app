@@ -7,4 +7,5 @@ package edu.monash.kmhc.viewModel;
 public interface Poll {
 
     void polling();
+
 }

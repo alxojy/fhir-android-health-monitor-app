@@ -18,7 +18,7 @@ public abstract class ObservationModel {
 
     /**
      * Get the effective DateTime
-     * @return
+     * @return effective date time
      */
     public abstract String getDateTime();
 }

@@ -1,5 +1,6 @@
 package edu.monash.kmhc.adapter;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +49,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("HomeAdapter", "HomeAdapter - OnCreateViewHolder Called");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview, parent, false);
-        HomeViewHolder viewHolder = new HomeViewHolder(v,onPatientClickListener);
-        return viewHolder;
+        return new HomeViewHolder(v,onPatientClickListener);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         Log.d("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
@@ -105,6 +106,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private void calculateAverage(){
         float total = 0;
+        
         for( PatientModel p : patients){
             total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
         }

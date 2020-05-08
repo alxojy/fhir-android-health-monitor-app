@@ -30,21 +30,18 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
 public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
 
     private HomeFragment thisFrag ;
-    private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
-    private HomeAdapter homeAdapter;
-    private Toolbar toolbar;
+    Toolbar toolbar;
 
 
     /**
-     * This method performs all graphical initialization,
-     * assign all view variables and set up the tool bar.
+     * This method performs all graphical initialization, assign all view variables and set up the tool bar.
      * @return The Main UI view that is created.
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //set tool bar
@@ -64,20 +61,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
      * This observer observes for changes in selected patients' data
      * It updates the UI when there're changes to the data.
      */
-    private Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
+    Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
             @Override
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                homeAdapter = new HomeAdapter(patientObservationHashMap,thisFrag);
-                recyclerView.setAdapter(homeAdapter);
+                recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag));
             }
         };
 
-    /**
-     *
-     * @param position
-     * @param patient
-     */
     @Override
     public void onPatientClick(int position, PatientModel patient) {
         // navigate to new fragment
@@ -90,10 +81,13 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         toolbar.setTitle("Home Page");
         toolbar.inflateMenu(R.menu.home_menu);
 
-        Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
-            MainActivity main = (MainActivity) getActivity();
-            main.findFragment(MainActivity.select_patients_fragment);
-            return true;
+        Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                MainActivity main = (MainActivity) getActivity();
+                main.findFragment(MainActivity.select_patients_fragment);
+                return true;
+            }
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }

@@ -65,17 +65,4 @@ public class PatientModel {
     public ObservationModel getObservationReading(ObservationType type) {
         return observationReadings.get(type);
     }
-
-    // debug purpose to be removed later
-    @Override
-    public String toString() {
-        return "PatientModel{" +
-                "patientID='" + patientID + '\'' +
-                ", name='" + name + '\'' +
-                ", birthDate=" + birthDate +
-                ", gender=" + gender +
-                ", address=" + address +
-                ", observationReadings=" + observationReadings +
-                '}';
-    }
 }

@@ -39,9 +39,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private Toolbar toolbar;
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
-    private SelectPatientsAdapter selectPatientsAdapter;
     private ArrayList<PatientModel> selected_patients = new ArrayList<>();
-
     private TextView title;
     private TextView loadingTextView;
     private ImageButton backButton;
@@ -86,8 +84,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 loadingSpinner.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                selectPatientsAdapter = new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients);
-                recyclerView.setAdapter(selectPatientsAdapter);
+                recyclerView.setAdapter( new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients));
         }
         }
     };
@@ -95,32 +92,40 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private void setUpToolBar(){
         title.setText(R.string.title_patient_selection);
         toolbar.inflateMenu(R.menu.select_patients_menu);
-        Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
-            if (selected_patients.size()>0) {
-                // save list into view model
-                sharedViewModel.setSelectedPatients(selected_patients);
-                Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
-                Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
+        Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (selected_patients.size()>0) {
+                    // save list into view model
+                    sharedViewModel.setSelectedPatients(selected_patients);
+                    Log.d("Select Patient Fragement", "begin monitoring :"+ selected_patients);
+                    Log.d("Select Patient Fragement", "Share View Model Status :"+ sharedViewModel.getSelectedPatients().getValue());
 
-                // TODO: implement call to home fragment
-                // TODO : move call to activity
-                MainActivity main = (MainActivity) getActivity();
-                main.findFragment(MainActivity.home_fragment);
+                    // TODO: implement call to home fragment
+                    // TODO : move call to activity
+                    MainActivity main = (MainActivity) getActivity();
+                    main.findFragment(MainActivity.home_fragment);
+                }
+                else{
+                    String message = "Please select AT LEAST 1 patient";
+                    Context context = getContext();
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                return true;
             }
-            else{
-                String message = "Please select AT LEAST 1 patient";
-                Context context = getContext();
-                Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-                toast.show();
-            }
-            return true;
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
 
-        backButton.setOnClickListener(v -> {
-            MainActivity main = (MainActivity) getActivity();
-            main.findFragment(MainActivity.login_fragment);
-        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity main = (MainActivity) getActivity();
+                //TODO: exception
+                main.findFragment(MainActivity.login_fragment);
+            }
+
+    });
     }
 
     private void updateToolbar(){
@@ -130,7 +135,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
 
     @Override
     public void onPatientClick(boolean checked, PatientModel patient) {
-        Log.d("Select Patient Fragment","current state : "+checked + " this is patient : " + patient.toString());
         if (checked) {
             if (!selected_patients.contains(patient)){
             selected_patients.add(patient);

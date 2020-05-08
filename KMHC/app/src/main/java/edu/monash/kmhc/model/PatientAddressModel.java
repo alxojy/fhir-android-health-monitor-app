@@ -22,18 +22,6 @@ public class PatientAddressModel {
         this.country = country;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
     public String getFullAddress() {
         return  city + " City" + "\n" + state + "," + country;
     }

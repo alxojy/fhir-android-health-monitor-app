@@ -37,12 +37,10 @@ public class SharedViewModel extends ViewModel implements Poll {
     private int frequency;
 
     private void initShareViewModel(){
-        Log.d("share view model","init new" + practitionerID);
         patientRepository = new PatientRepository(practitionerID);
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
-        setSelectedPatients(new ArrayList<PatientModel>());
-
+        setSelectedPatients(new ArrayList<>());
         frequency = 5000; // default
     }
 
@@ -58,9 +56,6 @@ public class SharedViewModel extends ViewModel implements Poll {
     public void updateCurrentSelected(String currentSelected) {
         this.selectedFrequency.setValue(currentSelected);
         frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
-        //debug purpose
-        System.out.println("Shared View Model 2 - " + frequency);
-        System.out.println("Shared View Model 2 - " + currentSelected);
     }
 
     /**
@@ -76,7 +71,7 @@ public class SharedViewModel extends ViewModel implements Poll {
         selectedPatients.setValue(selectedPatientsArray);
     }
 
-    public LiveData<ArrayList<PatientModel>> getSelectedPatients() {
+    private LiveData<ArrayList<PatientModel>> getSelectedPatients() {
         return selectedPatients;
     }
 
@@ -84,17 +79,12 @@ public class SharedViewModel extends ViewModel implements Poll {
         return patients;
     }
 
-    /**
-     * Returns all patients monitored by the practitioner
-     * @return All patients monitored by the practitioner
-     */
 
-    public void getAllPatients() {
+    private void getAllPatients() {
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
         backgroundThread.start();
         Handler timer = new Handler(backgroundThread.getLooper());
-
 
         timer.post(new Runnable() {
             @Override
@@ -132,7 +122,6 @@ public class SharedViewModel extends ViewModel implements Poll {
      * is updated.
      */
     public void polling() {
-        Log.d("SharedViewModel2", "polling");
 
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
@@ -143,22 +132,23 @@ public class SharedViewModel extends ViewModel implements Poll {
             @Override
             public void run() {
                 HashMap < String, PatientModel > poHashMap = new HashMap<>();
-                // loop through all patients
 
-                Log.d("SharedViewModel2"," selectedPatients: " + getSelectedPatients().getValue());
+                // loop through all patients
                 for (PatientModel patient : getSelectedPatients().getValue()) {
-                    // set new cholesterol observation reading
-                    patient.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                    poHashMap.put(patient.getPatientID(), patient);
+                    try {
+                        // set new cholesterol observation reading
+                        patient.setObservation(ObservationType.CHOLESTEROL,
+                                getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
+                        poHashMap.put(patient.getPatientID(), patient);
+                    }
+                    // patient does not have the observation type
+                    catch (Exception e) {
+                        Log.e("Patient " + patient.getPatientID(), "No observation type");
+                    }
                 }
 
                 // update LiveData and notify observers
                 patientObservations.postValue(poHashMap);
-                Log.d("SharedViewModel2", "patient hash map :" + patientObservations.getValue());
-
-
-                Log.d("SharedViewModel2", "current polling frequency :" + frequency);
                 timer.postDelayed(this, frequency);
             }});
     }
