@@ -5,19 +5,24 @@ import org.hl7.fhir.r4.model.Observation;
 /**
  * Provides observation for cholesterol values
  */
-public class CholesterolObservationModel extends ObservationModel {
+public class CholesterolObservationModel implements ObservationModel {
 
-    public CholesterolObservationModel(Observation resource) {
-        super(resource);
+    private Observation observation;
+
+    public CholesterolObservationModel(Observation observation) {
+        this.observation = observation;
     }
 
     @Override
-    public double getValue() {
-        return observation.getValueQuantity().getValue().doubleValue();
+    public String getValue() {
+        return observation.getValueQuantity().getValue().toString();
     }
 
     @Override
     public String getUnit() {
         return observation.getValueQuantity().getUnit();
     }
+
+    @Override
+    public String getDateTime() { return observation.getEffectiveDateTimeType().asStringValue(); }
 }

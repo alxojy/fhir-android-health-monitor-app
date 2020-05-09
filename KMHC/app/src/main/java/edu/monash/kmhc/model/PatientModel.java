@@ -1,8 +1,14 @@
 package edu.monash.kmhc.model;
 
+import android.text.format.DateFormat;
+
 import org.hl7.fhir.r4.model.Enumerations;
 
 import java.util.Date;
+import java.util.HashMap;
+
+import edu.monash.kmhc.model.observation.ObservationModel;
+import edu.monash.kmhc.model.observation.ObservationType;
 
 /**
  * Patient model class. Represents a patient in the app.
@@ -14,6 +20,9 @@ public class PatientModel {
     private Date birthDate;
     private Enumerations.AdministrativeGender gender;
     private PatientAddressModel address;
+    // a patient can have more than one type of observation type. use HashMap to store the observation
+    // based on their type
+    private HashMap<ObservationType, ObservationModel> observationReadings;
 
     /**
      * Constructor
@@ -26,6 +35,7 @@ public class PatientModel {
         this.birthDate = birthDate;
         this.gender = gender;
         this.address = address;
+        this.observationReadings = new HashMap<>();
     }
 
     public String getPatientID() {
@@ -36,8 +46,8 @@ public class PatientModel {
         return name;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getBirthDate() {
+        return DateFormat.format("yyyy.MM.dd", birthDate).toString();
     }
 
     public String getGender() {
@@ -46,5 +56,13 @@ public class PatientModel {
 
     public PatientAddressModel getAddress() {
         return address;
+    }
+
+    public void setObservation(ObservationType type, ObservationModel observation) {
+        observationReadings.put(type, observation);
+    }
+
+    public ObservationModel getObservationReading(ObservationType type) {
+        return observationReadings.get(type);
     }
 }

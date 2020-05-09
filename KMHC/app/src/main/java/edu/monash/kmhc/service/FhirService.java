@@ -16,10 +16,11 @@ public class FhirService {
     public FhirService() {
         FhirContext ctx = FhirContext.forR4();
         // Server url
-        String BASE_URL = "https://hapi.fhir.org/baseR4";
+        String BASE_URL = "https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/";
         client = ctx.newRestfulGenericClient(BASE_URL);
-        /* Prevent connection from cutting off */
-        ctx.getRestfulClientFactory().setConnectTimeout(60 * 1000);
-        ctx.getRestfulClientFactory().setSocketTimeout(60 * 1000);
+
+        // increase timeout
+        ctx.getRestfulClientFactory().setConnectTimeout(60*1000);
+        ctx.getRestfulClientFactory().setSocketTimeout(60*1000);
     }
 }

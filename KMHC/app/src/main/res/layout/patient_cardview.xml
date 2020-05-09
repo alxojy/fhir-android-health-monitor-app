@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_layout"
+    android:foreground="?selectableItemBackground"
+    card_view:cardBackgroundColor="#E0E9FF"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="3dp"
+    card_view:contentPadding="4dp"
+    android:layout_margin="5dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/cv_patientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Patient Name"
+            android:textSize="25sp"
+            card_view:layout_constraintBottom_toTopOf="@+id/cv_cholVal"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.56" />
+
+        <TextView
+            android:id="@+id/cv_cholVal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/cardv_purple_bg"
+            android:padding="9dp"
+            android:text="Cholesterol 33 mg/dL"
+            android:textColor="#FEFFFD"
+            android:textSize="15sp"
+
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@id/cv_time"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
+            card_view:layout_constraintVertical_bias="0.56" />
+
+        <TextView
+            android:id="@+id/cv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/cardv_purple_bg"
+            android:padding="9dp"
+            android:text="2005-09-27 48:33+10:00"
+            android:textColor="#FEFFFD"
+            android:textSize="15sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/cv_cholVal"
+            card_view:layout_constraintTop_toTopOf="@id/cv_cholVal"
+            card_view:layout_constraintVertical_bias="0.56" />
+
+        <Button
+            android:id="@+id/cv_nextBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/ic_chevron_right_24dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/guideline2"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.96" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

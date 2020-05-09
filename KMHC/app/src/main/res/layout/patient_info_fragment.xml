@@ -1,13 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.patientInfo.PatientInfoFragment">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        <include
+            android:id="@+id/patient_info_toolbar"
+            layout = "@layout/toolbar"/>
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/info_person_icon"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@id/info_patientName"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/patient_info_toolbar"
+            app:srcCompat="@drawable/ic_person_24dp">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/info_patientName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:text="PATIENT NAME"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccentText"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/info_patientGender"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_person_icon"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/info_vertical_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="info_txt_address,info_txt_bday,info_txt_gender" />
+
+
+        <TextView
+            android:id="@+id/info_txt_bday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Birth Date "
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/info_txt_gender" />
+
+        <TextView
+            android:id="@+id/info_txt_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Gender"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/info_patientName" />
+
+        <TextView
+            android:id="@+id/info_txt_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Address"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/info_txt_bday"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/info_patientBirthD"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@+id/info_patientAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/info_vertical_barrier"
+            app:layout_constraintTop_toTopOf="@id/info_txt_bday"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/info_patientGender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/info_patientBirthD"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/info_vertical_barrier"
+            app:layout_constraintTop_toTopOf="@id/info_txt_gender" />
+
+        <TextView
+            android:id="@+id/info_patientAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/info_vertical_barrier"
+            app:layout_constraintTop_toTopOf="@id/info_txt_address"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
