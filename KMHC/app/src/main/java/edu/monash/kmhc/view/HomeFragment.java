@@ -49,11 +49,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         setUpToolBar();
 
         recyclerView = root.findViewById(R.id.home_recycler_view);
-
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
-
         thisFrag = this;
-
         return root;
     }
 
@@ -82,8 +79,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     @Override
     public void onPatientClick(int position, PatientModel patient) {
-        // navigate to new fragment
-        // pass in the patient
+        // navigate to new fragment - pass in the patient
         MainActivity main = (MainActivity) getActivity();
         Objects.requireNonNull(main).newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
     }

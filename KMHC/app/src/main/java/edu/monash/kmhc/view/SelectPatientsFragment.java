@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,12 +44,11 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private Toolbar toolbar;
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
-    private ArrayList<PatientModel> selected_patients = new ArrayList<>();
+    private ArrayList<PatientModel> selectedPatients = new ArrayList<>();
     private TextView title;
     private TextView loadingTextView;
     private ImageButton backButton;
     private ProgressBar loadingSpinner;
-
 
     /**
      * Constructor
@@ -86,7 +84,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         setUpToolBar();
 
         //update UI when there's new patient under Health Practitioner
-        sharedViewModel.getPatients().observe(getViewLifecycleOwner(),patientUpdatedObserver);
+        sharedViewModel.getAllPatients().observe(getViewLifecycleOwner(),patientUpdatedObserver);
 
         thisFrag = this;
         return root;
@@ -109,7 +107,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 loadingSpinner.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setAdapter( new SelectPatientsAdapter(patientHashMap,thisFrag,selected_patients));
+                recyclerView.setAdapter( new SelectPatientsAdapter(patientHashMap,thisFrag, selectedPatients));
         }
         }
     };
@@ -125,14 +123,13 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      * 3. Assign a back button listener, when the back button is clicked,
      *    it goes back to the login fragment.
      */
-
     private void setUpToolBar(){
         title.setText(R.string.title_patient_selection);
         toolbar.inflateMenu(R.menu.select_patients_menu);
         Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
-            if (selected_patients.size() > 0) {
+            if (selectedPatients.size() > 0) {
                 // save list into view model
-                sharedViewModel.setSelectedPatients(selected_patients);
+                sharedViewModel.setSelectedPatients(selectedPatients);
                 MainActivity main = (MainActivity) getActivity();
                 Objects.requireNonNull(main).findFragment(MainActivity.home_fragment);
             } else {
@@ -156,7 +153,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      * being selected
      */
     private void updateToolbar(){
-        String text = selected_patients.size() + " Patients Selected";
+        String text = selectedPatients.size() + " Patients Selected";
        // Log.d("Select_Patient_Fragment","current sellected patient : " + selected_patients.toString());
         title.setText(text);
     }
@@ -181,7 +178,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     public void onPatientClick(boolean checked, PatientModel patient) {
         PatientModel patientWithSameID = null;
         boolean found = false;
-        for (PatientModel p : selected_patients ){
+        for (PatientModel p : selectedPatients){
             if(p.getPatientID().equals(patient.getPatientID())){
                 found = true;
                 patientWithSameID = p;
@@ -190,13 +187,13 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
         }
         if (checked) {
             if (!found) {
-                selected_patients.add(patient);
+                selectedPatients.add(patient);
             }
         } else if (!checked) {
             if(found){
-                selected_patients.remove(patientWithSameID);
+                selectedPatients.remove(patientWithSameID);
             }else{
-                selected_patients.remove(patient);
+                selectedPatients.remove(patient);
             }
         }
         updateToolbar();

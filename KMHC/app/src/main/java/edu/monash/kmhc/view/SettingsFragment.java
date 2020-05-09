@@ -28,7 +28,7 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
 public class SettingsFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
-    private Spinner mySpinner;
+    private Spinner frequencyOptions;
     private Toolbar toolbar;
 
     /**
@@ -44,11 +44,11 @@ public class SettingsFragment extends Fragment {
         setUpToolBar();
 
         //set up spinner (drop down list)
-        mySpinner = root.findViewById(R.id.settings_polling_frequency);
+        frequencyOptions = root.findViewById(R.id.settings_polling_frequency);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(),R.array.polling_frequency,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mySpinner.setAdapter(adapter);
-        mySpinner.setOnItemSelectedListener(spinnerListener);
+        frequencyOptions.setAdapter(adapter);
+        frequencyOptions.setOnItemSelectedListener(frequencyOptionsListener);
 
         return root;
     }
@@ -65,7 +65,7 @@ public class SettingsFragment extends Fragment {
                 ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
         // set the drop down list to display current frequency
-        mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
+        frequencyOptions.setSelection(((ArrayAdapter) frequencyOptions.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
 
     }
 
@@ -75,7 +75,7 @@ public class SettingsFragment extends Fragment {
      * When the user changes the frequency , it passes the new frequency the the view model
      * The app will then start polling at the new selected frequency.
      */
-    private AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener frequencyOptionsListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String selected = parent.getItemAtPosition(position).toString();

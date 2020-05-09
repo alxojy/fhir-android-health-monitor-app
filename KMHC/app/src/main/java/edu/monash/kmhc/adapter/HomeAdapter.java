@@ -28,7 +28,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private ArrayList<PatientModel> patients = new ArrayList<>();
     private ArrayList<String> patientIDs = new ArrayList<>();
     private OnPatientClickListener onPatientClickListener;
-    private float average_value;
+    private float averageValue;
 
 
     /**
@@ -82,7 +82,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         holder.patientName.setText(patients.get(position).getName());
 
         //if current patients cholesterol value is greater than average
-        if (Float.parseFloat(observationModel.getValue()) > average_value ){
+        if (Float.parseFloat(observationModel.getValue()) > averageValue){
             holder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
             holder.patientName.setTextColor(R.color.colorRed);
         }
@@ -99,6 +99,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public int getItemCount() {
         return patients.size();
+    }
+
+    /**
+     * This method calculate the average cholesterol value
+     */
+    private void calculateAverage() {
+        float total = 0;
+
+        for( PatientModel p : patients){
+            total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
+        }
+        averageValue = total/patients.size();
     }
 
     /**
@@ -144,17 +156,5 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     public interface OnPatientClickListener {
         void onPatientClick(int position, PatientModel patient);
-    }
-
-    /**
-     * This method calculate the average cholesterol value
-     */
-    private void calculateAverage(){
-        float total = 0;
-        
-        for( PatientModel p : patients){
-            total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
-        }
-        average_value = total/patients.size();
     }
 }

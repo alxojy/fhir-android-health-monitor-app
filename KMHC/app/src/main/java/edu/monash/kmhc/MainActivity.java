@@ -37,31 +37,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String patient_info__fragment = "patient_info_fragment";
     public static final String select_patients_fragment = "select_patients_fragment";
 
-    //private HashMap<String,PatientModel> dummy_Patients = new HashMap<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        // dummy patient list
-//        PatientModel patientA = new PatientModel("12345","Jess Hew",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientB = new PatientModel("129345","Adam Wang",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientC = new PatientModel("1295","Leon Wang",new Date(2000,07,30),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientD = new PatientModel("1874","Alex Ooi",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientE = new PatientModel("92384","King Tan",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientF = new PatientModel("23874","Yoon",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientG = new PatientModel("19237","Kah Xuan",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientH = new PatientModel("192342","Ian",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-//        PatientModel patientI = new PatientModel("92348","Nicholas",new Date(2000,07,28),"Female", new PatientAddressModel("KL","Selangor","Malaysia"));
-
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         navView = findViewById(R.id.nav_view);
-
         navView.setVisibility(View.GONE);
 
         //new app bar implementation here
@@ -71,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         //init home fragment
         launchNewFragment(new LoginFragment(),login_fragment);
-        //fragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
-        //fragmentManager.beginTransaction().replace(R.id.fragment_container,new HomeFragment(),home_fragment).commit();
-
 }
     public void findFragment(String tag){
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
