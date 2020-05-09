@@ -17,6 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.Objects;
+
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.viewModel.SharedViewModel;
 
@@ -62,7 +64,7 @@ public class SettingsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //setting up the viewmodel
         sharedViewModel =
-                ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+                ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
         // set the drop down list to display current frequency
         mySpinner.setSelection(((ArrayAdapter) mySpinner.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));
@@ -81,7 +83,7 @@ public class SettingsFragment extends Fragment {
             String selected = parent.getItemAtPosition(position).toString();
             sharedViewModel.updateCurrentSelected(selected);
             Context context = parent.getContext();
-            String message = "Server will now update in every " + selected;
+            String message = "Server will now update in every " + selected + " seconds";
             Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -96,7 +98,7 @@ public class SettingsFragment extends Fragment {
      */
     private void setUpToolBar(){
         toolbar.setTitle(R.string.title_settings);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
 
     }
 

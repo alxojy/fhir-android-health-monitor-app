@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
@@ -36,10 +37,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     private ObservationRepositoryFactory observationRepositoryFactory;
     private MutableLiveData<String> selectedFrequency = new MutableLiveData<>() ;
     private MutableLiveData<ArrayList<PatientModel>> selectedPatients = new MutableLiveData<>();
-    private int frequency;
 
-    private ArrayList<Integer> counters = new ArrayList<>();
-    private int pointer = 0;
 
 
     private void initShareViewModel(){
@@ -48,14 +46,7 @@ public class SharedViewModel extends ViewModel implements Poll {
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();
         setSelectedPatients(new ArrayList<>());
-        frequency = 10000; // default
-
-        // TODO: Remove this
-        counters.add(0);
-        counters.add(0);
-        counters.add(0);
-        counters.add(0);
-        counters.add(0);
+        selectedFrequency.setValue("10");
     }
 
     public void setPractitionerID(String practitionerID) {
@@ -69,7 +60,6 @@ public class SharedViewModel extends ViewModel implements Poll {
 
     public void updateCurrentSelected(String currentSelected) {
         this.selectedFrequency.setValue(currentSelected);
-        frequency = Integer.parseInt(currentSelected.replace(" seconds","")) * 1000;
     }
 
     /**
@@ -81,15 +71,7 @@ public class SharedViewModel extends ViewModel implements Poll {
     }
 
     public void setSelectedPatients(ArrayList<PatientModel> selectedPatientsArray) {
-        Log.d("Shared View Model","Attempting to update to" + selectedPatientsArray);
-        // TODO: delete try catch and remove pointer
-        try {
-            selectedPatients.setValue(selectedPatientsArray);
-            pointer ++;
-        }
-        catch(Exception ie) {
-            System.out.println(ie.getMessage());
-        }
+        selectedPatients.setValue(selectedPatientsArray);
     }
 
     private LiveData<ArrayList<PatientModel>> getSelectedPatients() {
@@ -151,13 +133,10 @@ public class SharedViewModel extends ViewModel implements Poll {
         timer.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Log.d("SHared View Model", "Polling new round" +  counters);
-                    counters.set(pointer,counters.get(pointer)+1);
                     HashMap<String, PatientModel> poHashMap = new HashMap<>();
 
                     // loop through all patients
-                    for (PatientModel patient : getSelectedPatients().getValue()) {
+                    for (PatientModel patient : Objects.requireNonNull(getSelectedPatients().getValue())) {
                         try {
                             // set new cholesterol observation reading
                             patient.setObservation(ObservationType.CHOLESTEROL,
@@ -170,16 +149,10 @@ public class SharedViewModel extends ViewModel implements Poll {
                         }
                     }
 
-
-                    Log.d("SHared View Model", "Ended Polling");
-
                     // update LiveData and notify observers
                     patientObservations.postValue(poHashMap);
-                    timer.postDelayed(this, frequency);
-                }
-                catch(Exception ei){
-                    System.out.println(ei.getMessage());
-                }
+                    timer.postDelayed(this, Integer.parseInt(Objects.requireNonNull(getSelectedFrequency().getValue()))*1000);
+
             }});
     }
 
