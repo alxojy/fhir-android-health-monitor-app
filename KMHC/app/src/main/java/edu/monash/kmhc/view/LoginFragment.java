@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 
@@ -82,6 +84,6 @@ public class LoginFragment extends Fragment {
      */
     private void goToNextFragment(){
         MainActivity main = (MainActivity) getActivity();
-        main.newSelectPatientFragment(MainActivity.select_patients_fragment,practitionerID.getText().toString());
+        Objects.requireNonNull(main).newSelectPatientFragment(MainActivity.select_patients_fragment,practitionerID.getText().toString());
     }
 }

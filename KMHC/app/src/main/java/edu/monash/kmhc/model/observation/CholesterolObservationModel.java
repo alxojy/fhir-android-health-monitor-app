@@ -5,7 +5,7 @@ import org.hl7.fhir.r4.model.Observation;
 /**
  * Provides observation for cholesterol values
  */
-public class CholesterolObservationModel extends ObservationModel {
+public class CholesterolObservationModel implements ObservationModel {
 
     private Observation observation;
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
@@ -32,8 +33,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
-
-
     /**
      * This method performs all graphical initialization,
      * assign all view variables and set up the tool bar.
@@ -50,11 +49,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         setUpToolBar();
 
         recyclerView = root.findViewById(R.id.home_recycler_view);
-
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
-
         thisFrag = this;
-
         return root;
     }
 
@@ -83,10 +79,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     @Override
     public void onPatientClick(int position, PatientModel patient) {
-        // navigate to new fragment
-        // pass in the patient
+        // navigate to new fragment - pass in the patient
         MainActivity main = (MainActivity) getActivity();
-        main.newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
+        Objects.requireNonNull(main).newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
     }
 
     /**
@@ -103,7 +98,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
         Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
             MainActivity main = (MainActivity) getActivity();
-            main.findFragment(MainActivity.select_patients_fragment);
+            Objects.requireNonNull(main).findFragment(MainActivity.select_patients_fragment);
             return true;
         };
         toolbar.setOnMenuItemClickListener(menuItemClickListener);

@@ -3,22 +3,22 @@ package edu.monash.kmhc.model.observation;
 /**
  * Abstract class used by all observations
  */
-public abstract class ObservationModel {
+public interface ObservationModel {
 
     /**
      * Return the Observation value
      * @return double
      */
-    public abstract String getValue();
+    String getValue();
 
     /**
      * Get the unit type for the Observation
      */
-    public abstract String getUnit();
+    String getUnit();
 
     /**
      * Get the effective DateTime
      * @return effective date time
      */
-    public abstract String getDateTime();
+    String getDateTime();
 }

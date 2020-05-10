@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
@@ -43,7 +45,6 @@ public class PatientInfoFragment extends Fragment {
     public PatientInfoFragment(PatientModel patient) {
         this.patient = patient;
     }
-
 
     /**
      * This method performs all graphical initialization,
@@ -93,7 +94,7 @@ public class PatientInfoFragment extends Fragment {
     private void setUpToolBar(){
         TextView title = toolbar.findViewById(R.id.toolbar_title);
         title.setText(R.string.title_patient_info);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
 
         backButton.setOnClickListener(v -> {
             MainActivity main = (MainActivity) getActivity();
