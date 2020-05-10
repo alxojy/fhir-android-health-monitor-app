@@ -1,6 +1,5 @@
 package edu.monash.kmhc.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,20 +15,17 @@ import java.util.HashMap;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 
-
 /**
  * SelectPatientAdapter is the class that is responsible to create recycler view
  * that displays Health Practitioner's patients
  */
+public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.SelectPatientViewHolder> {
 
-public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAdapter.SelectPatientViewHolder> {
-    private HashMap<String, PatientModel> patientsHashMap;
-    private ArrayList<PatientModel> uniquePatients = new ArrayList<>();
+    // select patients adapter on pcl
     private OnPatientClickListener onPatientClickListener;
     private ArrayList<PatientModel> selected_patients;
-
     // A list to remember a patient's state
-    // ( true for selected , otherwise false)
+    // ( true when patient is selected , otherwise false)
     private ArrayList<Boolean> patientState = new ArrayList<>();
 
     /**
@@ -41,10 +36,14 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      * @param onPatientClickListener the listener that is listening to each patient's card clicks
      * @param selected_patients a list of selected patients
      */
-    public SelectPatientsAdapter(HashMap<String, PatientModel> patientsHashMap, OnPatientClickListener onPatientClickListener,ArrayList<PatientModel> selected_patients) {
+    public SelectPatientsAdapter(HashMap<String, PatientModel> patientsHashMap, OnPatientClickListener onPatientClickListener, ArrayList<PatientModel> selected_patients) {
+        super(patientsHashMap);
         this.selected_patients = selected_patients;
         this.onPatientClickListener = onPatientClickListener;
-        this.patientsHashMap = patientsHashMap;
+
+        ArrayList<PatientModel> uniquePatients = new ArrayList<>();
+
+        // loop through the patient hash map to get a list of unique patients
         patientsHashMap.forEach((patientID, patientModel) -> {
             if (patientModel != null) {
                 uniquePatients.add(patientModel);
@@ -55,10 +54,8 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
                 }
             }
         });
-       // Log.d("SelectPatientsAdapter", "SelectPatientsAdapter - Constructor Called");
-       // Log.d("SelectPatientsAdapter", "patients:"+ uniquePatients.toString());
+        setUniquePatients(uniquePatients);
     }
-
 
     /**
      * This method checks if patient is already in the selected patient list.
@@ -86,10 +83,9 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      */
     @NonNull
     @Override
-    public SelectPatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Log.d("SelectPatientsAdapter", "SelectPatientsAdapter - OnCreateViewHolder");
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_patients_cardview, parent, false);
-        return new SelectPatientViewHolder(v, onPatientClickListener);
+        return new SelectPatientsAdapter.SelectPatientViewHolder(v, onPatientClickListener);
     }
 
     /**
@@ -101,24 +97,23 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      * 1. if true -> highlight the patient's card view in green
      * 2. else -> don't highlight the patient's card view
      *
-     * @param holder the reference to the holder that will be used to display the patient's name
+     * @param baseHolder the reference to the holder that will be used to display the patient's name
      * @param position the position of the adapter
      */
-
     @Override
-    public void onBindViewHolder(@NonNull SelectPatientViewHolder holder, int position) {
-        Log.d("SelectPatientsAdapter", "SelectPatientsAdapter - OnBind");
+    public void onBindViewHolder(@NonNull BaseViewHolder baseHolder, int position) {
+        SelectPatientViewHolder holder = (SelectPatientViewHolder) baseHolder;
         holder.checkBox.setChecked(patientState.get(position));
         holder.background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
-        holder.patientName.setText(uniquePatients.get(position).getName());
-        if (isSelectedPatient(uniquePatients.get(position))){
+        holder.patientName.setText(getUniquePatients().get(position).getName());
+        if (isSelectedPatient(getUniquePatients().get(position))){
             holder.checkBox.setChecked(true);
             holder.background.setBackgroundResource(R.drawable.cardv_selected_bg);
             patientState.set(position,true);
-            onPatientClickListener.onPatientClick(holder.checkBox.isChecked(), uniquePatients.get(position));
+            onPatientClickListener.onPatientClick(holder.checkBox.isChecked(), getUniquePatients().get(position));
         }
-    }
 
+    }
 
     /**
      * This method overrides its superclass's method,
@@ -127,9 +122,8 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      */
     @Override
     public int getItemCount() {
-        return uniquePatients.size();
+        return getUniquePatients().size();
     }
-
 
     /**
      * The SelectPatientViewHolder class are objects that holds the reference to the individual
@@ -137,10 +131,10 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      *
      * This class implements View.OnClickListener interface.
      */
-    public class SelectPatientViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SelectPatientViewHolder extends BaseViewHolder{
         TextView patientName;
         CheckBox checkBox; //hidden checkbox
-        OnPatientClickListener onPatientClickListener;
+        SelectPatientsAdapter.OnPatientClickListener onPatientClickListener;
         ConstraintLayout background;
 
         /**
@@ -156,7 +150,6 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
             this.onPatientClickListener = onPatientClickListener;
             itemView.setOnClickListener(this);
         }
-
 
         /**
          * A method to update the invisible check box's status and update the UI
@@ -184,7 +177,7 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
         @Override
         public void onClick(View v) {
             changeCheckBoxStatus(getAdapterPosition());
-            onPatientClickListener.onPatientClick(checkBox.isChecked(), uniquePatients.get(getAdapterPosition()));
+            onPatientClickListener.onPatientClick(checkBox.isChecked(), getUniquePatients().get(getAdapterPosition()));
         }
     }
 
@@ -192,7 +185,6 @@ public class SelectPatientsAdapter extends RecyclerView.Adapter<SelectPatientsAd
      * Class the uses this interface must implement their own onPatientClick method.
      * onPatientClick is handle the events that should happen when a patient's card-view is clicked.
      */
-    // click listener for each view holder
     public interface OnPatientClickListener {
         void onPatientClick(boolean checked, PatientModel patient);
 

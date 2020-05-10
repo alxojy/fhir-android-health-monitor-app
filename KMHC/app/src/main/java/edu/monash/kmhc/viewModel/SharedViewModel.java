@@ -21,16 +21,20 @@ import edu.monash.kmhc.service.repository.PatientRepository;
 //TODO: comment this classss
 
 /**
- * This class is responsible for providing data that is displayed in the HomeFragment.
+ * This class is responsible for providing data that is displayed in the
+ * HomeFragment, Settings Fragment and Select Patient Fragment.
+ *
  * The class also acts as a Subject in the Observer pattern whereby it updates the patientObservations
- * LiveData by polling the server every N seconds with RxJava. It implements the Poll class and
- * provides its own implementation for polling the server.
+ * LiveData by polling the server every N seconds with RxJava.
+ *
+ * It implements the Poll class and provides its own implementation for polling the server.
  */
 public class SharedViewModel extends ViewModel implements Poll {
 
-    // for polling
+    // this stores the list of patients that will be used for polling
     private MutableLiveData<HashMap<String, PatientModel>> patientObservations = new MutableLiveData<>();
-    // to get all the patients under practitioner
+
+    // this stores all the patients treated by practitioner
     private MutableLiveData<HashMap<String, PatientModel>> patients = new MutableLiveData<>();
     private String practitionerID = "";
     private PatientRepository patientRepository;
@@ -38,10 +42,12 @@ public class SharedViewModel extends ViewModel implements Poll {
     private MutableLiveData<String> selectedFrequency = new MutableLiveData<>() ;
     private MutableLiveData<ArrayList<PatientModel>> selectedPatients = new MutableLiveData<>();
 
-
-
+    /**
+     * This mthod initialises the ShareViewModel by
+     * 1. creating a new PatientRepository that contains patients that are
+     * treated by HealthPractitioner
+     */
     private void initShareViewModel(){
-        Log.d("Shared View Model" ," initialising Shared View Model");
         patientRepository = new PatientRepository(practitionerID);
         observationRepositoryFactory = new ObservationRepositoryFactory();
         getAllPatients();

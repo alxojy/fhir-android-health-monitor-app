@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
@@ -67,7 +68,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
         View root = inflater.inflate(R.layout.select_patients_fragment, container, false);
 
@@ -133,6 +134,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 // save list into view model
                 sharedViewModel.setSelectedPatients(selected_patients);
                 MainActivity main = (MainActivity) getActivity();
+                assert main != null;
                 main.findFragment(MainActivity.home_fragment);
             } else {
                 String message = "Please select AT LEAST 1 patient";
@@ -146,6 +148,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
 
         backButton.setOnClickListener(v -> {
             MainActivity main = (MainActivity) getActivity();
+            assert main != null;
             main.findFragment(MainActivity.login_fragment);
         });
     }
@@ -156,7 +159,6 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      */
     private void updateToolbar(){
         String text = selected_patients.size() + " Patients Selected";
-       // Log.d("Select_Patient_Fragment","current sellected patient : " + selected_patients.toString());
         title.setText(text);
     }
 

@@ -94,12 +94,11 @@ public class SettingsFragment extends Fragment {
     };
 
     /**
-     * This method is sets up the title in the Settings fragment.
+     * This method is sets up the tool bar title in the Settings fragment.
      */
     private void setUpToolBar(){
         toolbar.setTitle(R.string.title_settings);
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
-
     }
 
 }

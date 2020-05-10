@@ -7,8 +7,6 @@
     <string name="prompt_username">User Name / ID</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="kimchi_title">KIMCHI</string>
-    <string name="name">Name</string>
     <string name="zero_patients_message">You have 0 patients</string>
     <string name="server_update_prompt">Update Server Every</string>
     <string name="how_to_use">How to use</string>
@@ -16,12 +14,18 @@
     <string name="start_monitoring">Start</string>
     <string name="patient_name">Patient Name</string>
     <string name="settings_highlighted_cholesterol_description">The patient\'s cholesterol value will be highlighted in red if it is greater than average</string>
-    <string name="settings_sample_chol_val">33 mg/dL</string>
+    <string name="settings_sample_cholesterol_val">33 mg/dL</string>
     <string name="settings_highlighted_patient_description">Patient\'s card is highlighted in green.This indicates that this patient is selected.</string>
     <string name="settings_home_button_description">Navigate to monitoring screen.</string>
     <string name="home_button">Home Button</string>
     <string name="settings_edit_description">Click to select patients to monitor.</string>
     <string name="settings_seconds">seconds</string>
+    <string name="patients">Patients</string>
+    <string name="sample_date">2005–09–27 48:33+10:00</string>
+    <string name="info_birth_date">Birth Date</string>
+    <string name="info_gender">Gender</string>
+    <string name="info_address">Address</string>
+    <string name="loading_patients">Loading Patients…</string>
 
     <string-array name="polling_frequency">
         <item>5</item>

@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,33 +20,43 @@ import edu.monash.kmhc.model.observation.ObservationType;
  * HomeAdapter is the class that is responsible to create recycler view
  * that displays Patient's cholesterol value.
  */
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
-
-    private HashMap<String, PatientModel> patientObservationHashMap;
-    private ArrayList<PatientModel> patients = new ArrayList<>();
+public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     private ArrayList<String> patientIDs = new ArrayList<>();
     private OnPatientClickListener onPatientClickListener;
-    private float average_value;
-
+    private float averageValue;
 
     /**
      * The Home Adapter constructor, this initialises the adapter that will be used to update the home fragment UI.
      * @param patientObservationHashMap A hash map that contains all the Patient Models that the practitioner is monitoring
      * @param onPatientClickListener the class that is listening to individual patient card clicks
      */
-    public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap,OnPatientClickListener onPatientClickListener) {
-        this.patientObservationHashMap = patientObservationHashMap;
+    public HomeAdapter(HashMap<String, PatientModel> patientObservationHashMap, OnPatientClickListener onPatientClickListener) {
+        super(patientObservationHashMap);
         this.onPatientClickListener = onPatientClickListener;
 
-        // loop to the hash map to get a list of patients and patient IDs
-        // this is because adapter uses index to access the data, hash-map does not use indexes
-        patientObservationHashMap.forEach((patientID, patientModel) -> {
+        ArrayList<PatientModel> patients = new ArrayList<>();
+
+        getPatientsHashMap().forEach((patientID,patientModel) -> {
             patientIDs.add(patientID);
             patients.add(patientModel);
         });
-        calculateAverage();
+        setUniquePatients(patients);
 
+        calculateAverage();
     }
+
+    /**
+     * This method calculate the average cholesterol value
+     */
+    private void calculateAverage(){
+        float total = 0;
+
+        for( PatientModel p : getUniquePatients()){
+            total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
+        }
+        averageValue = total/getUniquePatients().size();
+    }
+
 
     /**
      * This method overrides its superclass's onCreateViewHolder method
@@ -58,10 +66,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @NonNull
     @Override
-    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Log.d("HomeAdapter", "HomeAdapter - OnCreateViewHolder Called");
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview, parent, false);
-        return new HomeViewHolder(v,onPatientClickListener);
+        return new HomeAdapter.HomeViewHolder(v,onPatientClickListener);
     }
 
     /**
@@ -76,23 +83,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-       // Log.d("HomeAdapter", "HomeAdapter - onBindViewHolder Called");
-        ObservationModel observationModel = patients.get(position).getObservationReading(ObservationType.CHOLESTEROL);
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        HomeViewHolder homeViewHolder = (HomeViewHolder) holder;
+        ObservationModel observationModel = getUniquePatients().get(position).getObservationReading(ObservationType.CHOLESTEROL);
         String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
         String date = observationModel.getDateTime();
-        holder.patientName.setText(patients.get(position).getName());
+        homeViewHolder.patientName.setText(getUniquePatients().get(position).getName());
 
         //if current patients cholesterol value is greater than average
-        if (Float.parseFloat(observationModel.getValue()) > average_value ){
-            //Log.d("home adpater", "current average :"+ average_value);
-            holder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
-            holder.patientName.setTextColor(R.color.colorRed);
+        //highlight cholesterol value in red
+        if (Float.parseFloat(observationModel.getValue()) > averageValue ){
+            homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
+            homeViewHolder.patientName.setTextColor(R.color.colorRed);
         }
-        holder.cholesterolValue.setText(cholStat);
-        holder.time.setText(date);
+        homeViewHolder.cholesterolValue.setText(cholStat);
+        homeViewHolder.time.setText(date);
     }
-
 
     /**
      * This method overrides its superclass's method,
@@ -101,7 +107,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @Override
     public int getItemCount() {
-        return patients.size();
+        return getUniquePatients().size();
     }
 
     /**
@@ -110,7 +116,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      *
      * This class implements View.OnClickListener interface.
      */
-    public class HomeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class HomeViewHolder extends BaseViewHolder {
         TextView patientName;
         TextView cholesterolValue;
         TextView time;
@@ -127,7 +133,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             cholesterolValue = itemView.findViewById(R.id.cv_cholVal);
             time = itemView.findViewById(R.id.cv_time);
             itemView.setOnClickListener(this);
-
         }
 
         /**
@@ -137,10 +142,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
          */
         @Override
         public void onClick(View v) {
-            onPatientClickListener.onPatientClick(getAdapterPosition(), patients.get(getAdapterPosition()));
+            onPatientClickListener.onPatientClick(getAdapterPosition(), getUniquePatients().get(getAdapterPosition()));
+
         }
     }
-
     /**
      * Class the uses this interface must implement their own onPatientClick method.
      * onPatientClick is handle the events that should happen when a patient's card-view is clicked.
@@ -149,15 +154,4 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         void onPatientClick(int position, PatientModel patient);
     }
 
-    /**
-     * This method calculate the average cholesterol value
-     */
-    private void calculateAverage(){
-        float total = 0;
-        
-        for( PatientModel p : patients){
-            total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
-        }
-        average_value = total/patients.size();
-    }
 }

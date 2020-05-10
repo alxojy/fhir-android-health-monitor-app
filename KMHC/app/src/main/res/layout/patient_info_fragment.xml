@@ -19,7 +19,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/patient_info_toolbar"
-            app:srcCompat="@drawable/ic_person_24dp">
+            app:srcCompat="@drawable/ic_person_24dp"
+            android:contentDescription="person icon">
 
         </ImageView>
 
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:paddingBottom="10dp"
-            android:text="PATIENT NAME"
+            android:text="@string/patient_name"
             android:textAlignment="center"
             android:textColor="@color/colorAccentText"
             android:textSize="25sp"
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Birth Date "
+            android:text="@string/info_birth_date"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
@@ -64,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Gender"
+            android:text="@string/info_gender"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
@@ -76,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Address"
+            android:text="@string/info_address"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
