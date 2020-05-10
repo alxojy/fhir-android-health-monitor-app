@@ -3,7 +3,7 @@
 
 # written by 
 # Megan Ooi Jie Yi (30101670)
-# Hew Ye Zea
+# Hew Ye Zea (29035546)
 
 # The purpose of this script is to poll the server to get data regarding patients with cholesterol reading. 
 # The script gets data for every 50 pages and sleeps for 40 seconds to not overload the server. 
@@ -20,7 +20,7 @@ base_url = 'https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/'
 
 # initialise different urls that'll be used
 patients_url = base_url + "Patient/"
-dReport_url = base_url +"DiagnosticReport"
+condition_url = base_url +"Condition"
 observation_url = base_url + "Observation"
 
 # get patients with total cholesterol values 
@@ -28,7 +28,8 @@ observation_url = base_url + "Observation"
 def cholesterol_patients():
 
     # create data frame to store data
-    patient_data = pd.DataFrame(columns=['id', 'Cholesterol', 'Age', 'BMI', 'Blood_Pressure', 'Triglycerides', 'LD_Lipoprotein', 'HD_Lipoprotein'])
+    patient_data = pd.DataFrame(columns=['id', 'Cholesterol', 'Age', 'BMI', 'Diastolic_BP', 'Systolic_BP', 'Smoking', 'Prediabetes',
+    'Diabetes', 'Hypertension', 'Heart_Disease', 'Obesity'])
 
     next_page = True
     next_url = observation_url
@@ -56,7 +57,7 @@ def cholesterol_patients():
         entry = oReports['entry']
         
         patient_arr = [] # use an array to store patient data. data added must follow data frame format            
-        bmi, blood_pressure, triglycerides, ldlc, hdlc = None, None, None, None, None # initialisation
+        patient_age, bmi, diastolic_bp, systolic_bp, smoking = None, None, None, None, None # initialisation
         
         cholesterol = entry[i]['resource']['valueQuantity']['value']
         patient_id = entry[i]['resource']['subject']['reference'][len('Patient/'):]
@@ -86,36 +87,63 @@ def cholesterol_patients():
 
             # blood pressure
             elif o_resource['code']['coding'][0]['code'] == "55284-4":
-                blood_pressure = o_resource['component'][0]['valueQuantity']['value']
+                # diastolic
+                diastolic_bp = o_resource['component'][0]['valueQuantity']['value']
+                # systolic
+                systolic_bp = o_resource['component'][1]['valueQuantity']['value']
 
-            # triglycerides
-            elif o_resource['code']['coding'][0]['code'] == "2571-8":
-                triglycerides = o_resource['valueQuantity']['value']
+            # smoking status
+            elif o_resource['code']['coding'][0]['code'] == "72166-2":
+                smoking = o_resource['valueCodeableConcept']['text']
+        
+        prediabetes, diabetes, hypertension, heart_disease, obesity = None, None, None, None, None
+        conditions =  requests.get(url = condition_url + "?patient=" + patient_id).json()
+        c_entry = conditions['entry']
 
-            # Low Density Lipoprotein Cholesterol
-            elif o_resource['code']['coding'][0]['code'] == "18262-6":
-                ldlc = o_resource['valueQuantity']['value']
+        for c in range(len(c_entry)):
+            c_resource = c_entry[c]['resource']
 
-            # High Density Lipoprotein Cholesterol
-            elif o_resource['code']['coding'][0]['code'] == "2085-9":
-                hdlc = o_resource['valueQuantity']['value']
+            # prediabetes
+            if c_resource['code']['coding'][0]['code'] == '15777000':
+                prediabetes = c_resource['clinicalStatus']['coding'][0]['code']
+            
+            # diabetes
+            elif c_resource['code']['coding'][0]['code'] == '44054006':
+                diabetes = c_resource['clinicalStatus']['coding'][0]['code']
+
+            # hypertension
+            elif c_resource['code']['coding'][0]['code'] == '59621000':
+                hypertension = c_resource['clinicalStatus']['coding'][0]['code']
+
+            # heart disease
+            elif c_resource['code']['coding'][0]['code'] == "53741008":
+                heart_disease = c_resource['clinicalStatus']['coding'][0]['code']
+
+            # obesity
+            elif c_resource['code']['coding'][0]['code'] == "162864005":
+                obesity = c_resource['clinicalStatus']['coding'][0]['code']
 
         # store all information into an array
         patient_arr.append(patient_id)
         patient_arr.append(cholesterol)
         patient_arr.append(patient_age)
         patient_arr.append(bmi)
-        patient_arr.append(blood_pressure)
-        patient_arr.append(triglycerides)
-        patient_arr.append(ldlc)
-        patient_arr.append(hdlc)
+        patient_arr.append(diastolic_bp)
+        patient_arr.append(systolic_bp)
+        patient_arr.append(smoking)
+        patient_arr.append(prediabetes)
+        patient_arr.append(diabetes)
+        patient_arr.append(hypertension)
+        patient_arr.append(heart_disease)
+        patient_arr.append(obesity)
 
-        patient_data.loc[patient_id] = patient_arr # store into data frame
-
+        patient_data.loc[patient_id] = patient_arr
+        
         # every 50 pages, append to csv file and sleep
         if count_page % 50 == 0:
             patient_data.to_csv('patient_data.csv', mode='a', header=False)
-            patient_data = pd.DataFrame(columns=['id', 'Cholesterol', 'Age', 'BMI', 'Blood_Pressure', 'Triglycerides', 'LD_Lipoprotein', 'HD_Lipoprotein'])
+            patient_data = pd.DataFrame(columns=['id', 'Cholesterol', 'Age', 'BMI', 'Diastolic_BP', 'Systolic_BP', 'Smoking', 'Prediabetes',
+            'Diabetes', 'Hypertension', 'Heart_Disease', 'Obesity'])
             time.sleep(40) # sleep for 40s
     
     return patient_data

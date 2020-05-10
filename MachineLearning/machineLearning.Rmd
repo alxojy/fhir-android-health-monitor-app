@@ -1,0 +1,40 @@
+---
+title: "Machine Learning Notebook"
+output: machineLearning
+---
+FIT3077- Assignment 2
+Machine Learning
+Written by Megan Ooi Jie Yi (30101670) & Hew Ye Zea (29035546)
+
+Introduction
+Decision Tree
+The decision tree machine learning algorithm is used as it can handle non linear relationships, variable interactions and support multiple variables in the model. It also supports categorical outcomes, in this case, categorical data of cholesterol levels. 
+
+Import library.
+```{r}
+library(rpart)
+library(rpart.plot)
+```
+
+Read train and test datasets.
+```{r}
+train <- read.csv(file = "train.csv")
+test <- read.csv(file = "test.csv")
+```
+
+Fit a decision tree to the training data set.
+```{r}
+tree.cholesterol = rpart(CholesterolLvl ~ Diabetes + BMILvl + BPLvl + AgeLvl + Smoking, data=train, method="class")
+rpart.plot(tree.cholesterol)
+```
+Predict with test values.
+```{r}
+pred <- predict(tree.cholesterol, test, type="class")
+cm <- table(pred, test$CholesterolLvl) # confusion matrix
+accuracy <- sum(diag(cm))/sum(cm)
+accuracy
+```
+
+The decision tree created has an accuracy of 0.84 based on the confusion matrix. Based on the decision tree, the factors that cause high cholesterol are diabetes, high blood pressure, age group is middle age and BMI level is non obese or overweight.
+
+
