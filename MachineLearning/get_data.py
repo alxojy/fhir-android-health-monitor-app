@@ -34,7 +34,6 @@ def cholesterol_patients():
     next_page = True
     next_url = observation_url
     count_page = 0
-    count_page = 0
 
     # try to get 10k data sets
     while next_page and count_page <= 10000:
