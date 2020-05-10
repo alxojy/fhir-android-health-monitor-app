@@ -17,6 +17,7 @@ import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 
 /**
+ * HomeAdapter class extends from BaseAdapter
  * HomeAdapter is the class that is responsible to create recycler view
  * that displays Patient's cholesterol value.
  */

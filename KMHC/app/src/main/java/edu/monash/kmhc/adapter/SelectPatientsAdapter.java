@@ -16,7 +16,8 @@ import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
 
 /**
- * SelectPatientAdapter is the class that is responsible to create recycler view
+ * SelectPatientsAdapter class extends from BaseAdapter
+ * SelectPatientsAdapter is the class that is responsible to create recycler view
  * that displays Health Practitioner's patients
  */
 public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.SelectPatientViewHolder> {
