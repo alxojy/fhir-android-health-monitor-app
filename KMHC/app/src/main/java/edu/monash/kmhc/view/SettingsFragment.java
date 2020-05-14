@@ -60,6 +60,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         //setting up the viewmodel
         sharedViewModel =
                 ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);

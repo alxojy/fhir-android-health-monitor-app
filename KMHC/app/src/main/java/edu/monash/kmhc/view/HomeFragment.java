@@ -49,6 +49,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         setUpToolBar();
 
         recyclerView = root.findViewById(R.id.home_recycler_view);
+
+        // TODO : SHOW OBSERVER HERE
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
         thisFrag = this;
         return root;
@@ -57,7 +59,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     /**
      * This observer observes for changes in selectedpatients' data
      * ( ie : deselect a selected patient / select new patient )
-     *
      * It updates the UI when there're changes to the data.
      */
     private Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {

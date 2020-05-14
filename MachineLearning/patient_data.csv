@@ -3289,3 +3289,4 @@ index,id,Cholesterol,Age,BMI,Diastolic_BP,Systolic_BP,Smoking,Prediabetes,Diabet
 116101,116101,170.04,44,27.56,75,115,Former smoker,,,,,
 160317,160317,180.24,59,30.42,90.0,116,Former smoker,active,active,active,,
 119891,119891,175.03,38,34.7,88,126,Never smoker,active,,,,active
+1,1,166.23,47,27.46,86,118,Never smoker,,,,,

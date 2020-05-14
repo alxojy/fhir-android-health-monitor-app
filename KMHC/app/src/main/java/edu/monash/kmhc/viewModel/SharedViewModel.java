@@ -173,6 +173,7 @@ public class SharedViewModel extends ViewModel implements Poll {
                 }
 
                 // update LiveData and notify observers
+                // TODO : SHOW POST HERE
                 patientObservations.postValue(poHashMap);
                 timer.postDelayed(this, Integer.parseInt(Objects.requireNonNull(getSelectedFrequency().getValue()))*1000);
             }});

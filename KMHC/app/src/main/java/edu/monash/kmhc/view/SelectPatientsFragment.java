@@ -66,6 +66,8 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+
         sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
         View root = inflater.inflate(R.layout.select_patients_fragment, container, false);
