@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import edu.monash.kmhc.model.PatientModel;
+import edu.monash.kmhc.model.observation.BloodPressureObservationModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.service.repository.ObservationRepositoryFactory;

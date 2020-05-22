@@ -7,12 +7,13 @@ package edu.monash.kmhc.model.observation;
  * only have to be added into this enum.
  */
 public enum ObservationType {
-    CHOLESTEROL;
+    CHOLESTEROL, BLOOD_PRESSURE;
 
     private String observationCode;
 
     static {
         CHOLESTEROL.observationCode = "2093-3";
+        BLOOD_PRESSURE.observationCode = "55284-4";
     }
 
     public String getObservationCode() {
