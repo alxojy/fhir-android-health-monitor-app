@@ -21,7 +21,7 @@ public class BloodPressureObservationModel implements ObservationModel {
 
     @Override
     public String getUnit() {
-        return observation.getValueQuantity().getUnit();
+        return observation.getComponent().get(0).getValueQuantity().getUnit();
     }
 
     @Override
