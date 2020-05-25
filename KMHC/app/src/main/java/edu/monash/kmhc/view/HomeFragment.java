@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        SharedViewModel sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //set tool bar

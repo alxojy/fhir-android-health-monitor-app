@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -14,44 +15,42 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_backgroud"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="94dp">
 
-
-    <TextView
-        android:id="@+id/all_patient_txt_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/patient_name"
-        android:textSize="25sp"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintEnd_toStartOf="@id/guideline2"
-        card_view:layout_constraintStart_toEndOf="@id/guideline"
-        card_view:layout_constraintTop_toTopOf="parent"
-        card_view:layout_constraintVertical_bias="0.5" />
 
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/linear_layout"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintHorizontal_bias="0"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_bias="0.5"
-            >
+            card_view:layout_constraintVertical_bias="0.5">
 
             <CheckBox
                 android:id="@+id/checkBox"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
-                />
+                android:visibility="gone" />
 
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/all_patient_txt_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/patient_name"
+            android:textSize="25sp"
+            card_view:layout_constraintBottom_toBottomOf="@id/linear_layout"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.285" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -60,7 +59,6 @@
             android:orientation="vertical"
             card_view:layout_constraintGuide_percent="0.04" />
 
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
@@ -68,6 +66,34 @@
             android:orientation="vertical"
             card_view:layout_constraintGuide_percent="0.96" />
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cholesterol_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="267dp"
+            android:checkable="true"
+            android:text="@string/cholesterol"
+            card_view:chipIcon="@drawable/cardv_grey_bg"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/all_patient_txt_name" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/blood_pressure_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="100dp"
+            android:checkable="true"
+            android:text="@string/blood_pressure"
+            card_view:chipIcon="@drawable/cardv_grey_bg"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/cholesterol_chip"
+            card_view:layout_constraintTop_toBottomOf="@+id/all_patient_txt_name" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
  * wants to monitor.
  */
 
-public class SelectPatientsFragment extends Fragment implements SelectPatientsAdapter.OnPatientClickListener{
+public class SelectPatientsFragment extends Fragment implements SelectPatientsAdapter.OnPatientClickListener {
 
     private String practitionerID;
     private SelectPatientsFragment thisFrag; // a reference to this fragment
@@ -99,7 +100,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      * It immediately updates the UI to display the patients when the system completes
      * the data fetching process.
      */
-    private Observer<HashMap< String, PatientModel >> patientUpdatedObserver = new Observer< HashMap < String, PatientModel >>() {
+    private Observer<HashMap<String,PatientModel>> patientUpdatedObserver = new Observer<HashMap<String,PatientModel >>() {
         @Override
         public void onChanged( HashMap < String, PatientModel > patientHashMap) {
             if (patientHashMap.size() == 0 ){

@@ -23,6 +23,7 @@ public class PatientModel {
     // a patient can have more than one type of observation type. use HashMap to store the observation
     // based on their type
     private HashMap<ObservationType, ObservationModel> observationReadings;
+    private HashMap<ObservationType, Boolean> isMonitored;
 
     /**
      * Constructor
@@ -36,6 +37,8 @@ public class PatientModel {
         this.gender = gender;
         this.address = address;
         this.observationReadings = new HashMap<>();
+        this.isMonitored = new HashMap<>();
+        initialiseMonitoredObservations();
     }
 
     public String getPatientID() {
@@ -64,5 +67,19 @@ public class PatientModel {
 
     public ObservationModel getObservationReading(ObservationType type) {
         return observationReadings.get(type);
+    }
+
+    public void monitorObservation(ObservationType type, Boolean check) {
+        isMonitored.put(type, check);
+    }
+
+    public Boolean isObservationMonitored(ObservationType type) {
+        return isMonitored.get(type);
+    }
+
+    private void initialiseMonitoredObservations() {
+        for (ObservationType type: ObservationType.values()) {
+            monitorObservation(type, false);
+        }
     }
 }
