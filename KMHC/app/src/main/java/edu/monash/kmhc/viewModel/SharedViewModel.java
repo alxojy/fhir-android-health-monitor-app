@@ -162,18 +162,25 @@ public class SharedViewModel extends ViewModel implements Poll {
         timer.post(new Runnable() {
             @Override
             public void run() {
-                    HashMap<String, PatientModel> poHashMap = new HashMap<>();
+                HashMap<String, PatientModel> poHashMap = new HashMap<>();
 
-                    // loop through all patients
-                for (PatientModel patientModel : Objects.requireNonNull(selectedPatients.getValue())) {
+                // loop through all patients
+                for (PatientModel patientModel: Objects.requireNonNull(selectedPatients.getValue())) {
+                    System.out.println("polling");
+                    System.out.println(patientModel.getName());
+                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
+                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
                     // set new cholesterol observation reading
                     patientModel.setObservation(ObservationType.CHOLESTEROL,
                             getObservation(patientModel.getPatientID(), ObservationType.CHOLESTEROL));
                     poHashMap.put(patientModel.getPatientID(), patientModel);
+                    System.out.println("hashmap");
+                    System.out.println(patientModel.getName());
+                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
+                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
                 }
 
                 // update LiveData and notify observers
-                // TODO : SHOW POST HERE
                 patientObservations.postValue(poHashMap);
                 timer.postDelayed(this, Integer.parseInt(Objects.requireNonNull(getSelectedFrequency().getValue()))*1000);
             }});

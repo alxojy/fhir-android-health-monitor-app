@@ -4,6 +4,7 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Observation;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import edu.monash.kmhc.model.observation.BloodPressureObservationModel;
 import edu.monash.kmhc.model.observation.CholesterolObservationModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
@@ -42,6 +43,8 @@ public class ObservationRepositoryFactory extends FhirService {
         switch (type) {
             case CHOLESTEROL:
                 return createCholesterolModel(patientId);
+            case BLOOD_PRESSURE:
+                return createBloodPressureModel(patientId);
             default:
                 throw new IllegalArgumentException("Observation type invalid");
         }
@@ -49,5 +52,9 @@ public class ObservationRepositoryFactory extends FhirService {
 
     private CholesterolObservationModel createCholesterolModel(String patientId) {
         return new CholesterolObservationModel(getObservation(patientId, ObservationType.CHOLESTEROL.getObservationCode()));
+    }
+
+    private BloodPressureObservationModel createBloodPressureModel(String patientId) {
+        return new BloodPressureObservationModel(getObservation(patientId, ObservationType.BLOOD_PRESSURE.getObservationCode()));
     }
 }

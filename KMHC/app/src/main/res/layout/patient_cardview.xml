@@ -24,7 +24,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:text="@string/patient_name"
-            android:textSize="25sp"
+            android:textSize="20sp"
             card_view:layout_constraintBottom_toTopOf="@+id/cv_cholVal"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/guideline"

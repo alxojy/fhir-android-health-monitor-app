@@ -63,7 +63,7 @@ public class SettingsFragment extends Fragment {
 
         //setting up the viewmodel
         sharedViewModel =
-                ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+                ViewModelProviders.of(requireActivity()).get(SharedViewModel.class);
 
         // set the drop down list to display current frequency
         frequencyOptions.setSelection(((ArrayAdapter) frequencyOptions.getAdapter()).getPosition(sharedViewModel.getSelectedFrequency().getValue()));

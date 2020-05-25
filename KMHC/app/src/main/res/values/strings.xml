@@ -4,7 +4,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_patient_info">Patient Info</string>
     <string name="title_patient_selection">Select Patients</string>
-    <string name="prompt_username">User Name / ID</string>
+    <string name="prompt_username">Identifier</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="zero_patients_message">You have 0 patients</string>
@@ -26,6 +26,8 @@
     <string name="info_gender">Gender</string>
     <string name="info_address">Address</string>
     <string name="loading_patients">Loading Patients…</string>
+    <string name="cholesterol">cholesterol</string>
+    <string name="blood_pressure">blood pressure</string>
 
     <string-array name="polling_frequency">
         <item>5</item>

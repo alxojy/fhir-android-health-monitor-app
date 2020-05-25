@@ -7,4 +7,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorAccentText">#35375A</color>
     <color name="colorSelectedPatient">#bedec5</color>
+    <color name="unselected">#8c92ac</color>
 </resources>
