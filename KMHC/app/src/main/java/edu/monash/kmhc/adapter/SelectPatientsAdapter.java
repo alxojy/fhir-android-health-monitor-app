@@ -55,7 +55,7 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
 
                 PatientModel selectedPatient = isSelectedPatient(patientModel);
                 if (selectedPatient != null) {
-                    uniquePatients.add(patientModel);
+                    uniquePatients.add(selectedPatient);
                     patientState.add(true);
                 }
                 else {
@@ -115,6 +115,7 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
         holder.background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
         holder.patientName.setText(getUniquePatients().get(position).getName());
         PatientModel patient = getUniquePatients().get(position);
+        System.out.println("SelectPatientsAdapter");
         System.out.println(patient.getName());
         System.out.println(patient.isObservationMonitored(ObservationType.CHOLESTEROL));
         System.out.println(patient.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
@@ -249,6 +250,5 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
      */
     public interface OnPatientClickListener {
         void onPatientClick(boolean checked, PatientModel patient);
-
     }
 }

@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
         recyclerView = root.findViewById(R.id.home_recycler_view);
 
-        // TODO : SHOW OBSERVER HERE
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
         thisFrag = this;
         return root;

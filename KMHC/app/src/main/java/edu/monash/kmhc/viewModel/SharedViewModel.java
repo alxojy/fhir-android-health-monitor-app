@@ -118,7 +118,6 @@ public class SharedViewModel extends ViewModel implements Poll {
      * This method is to fetch all patients that are treated by Health Practitioner
      * from the patient repository.
      */
-
     private void fetchAllPatients() {
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
@@ -166,18 +165,10 @@ public class SharedViewModel extends ViewModel implements Poll {
 
                 // loop through all patients
                 for (PatientModel patientModel: Objects.requireNonNull(selectedPatients.getValue())) {
-                    System.out.println("polling");
-                    System.out.println(patientModel.getName());
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
                     // set new cholesterol observation reading
                     patientModel.setObservation(ObservationType.CHOLESTEROL,
                             getObservation(patientModel.getPatientID(), ObservationType.CHOLESTEROL));
                     poHashMap.put(patientModel.getPatientID(), patientModel);
-                    System.out.println("hashmap");
-                    System.out.println(patientModel.getName());
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
                 }
 
                 // update LiveData and notify observers
