@@ -175,6 +175,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         TextView bpTime;
         TextView systolicBP;
         TextView diastolicBP;
+        TextView titleCholVal;
+        TextView titleBP;
         OnPatientClickListener onPatientClickListener;
 
         /**
@@ -190,6 +192,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             bpTime = itemView.findViewById(R.id.cv_bp_time);
             systolicBP = itemView.findViewById(R.id.cv_systolicbp);
             diastolicBP = itemView.findViewById(R.id.cv_diastolicbp);
+            titleCholVal = itemView.findViewById(R.id.cv_title_cholVal);
+            titleBP = itemView.findViewById(R.id.cv_title_bpVal);
             itemView.setOnClickListener(this);
         }
 
@@ -209,14 +213,21 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             systolicBP.setVisibility(View.GONE);
             diastolicBP.setVisibility(View.GONE);
             bpTime.setVisibility(View.GONE);
+            titleCholVal.setVisibility(View.GONE);
+            titleBP.setVisibility(View.GONE);
+
+
+
         }
 
         private void showCholestrolViews(){
+            titleCholVal.setVisibility(View.VISIBLE);
             cholesterolValue.setVisibility(View.VISIBLE);
             cholTime.setVisibility(View.VISIBLE);
         }
 
         private void showBPView(){
+            titleBP.setVisibility(View.VISIBLE);
             systolicBP.setVisibility(View.VISIBLE);
             diastolicBP.setVisibility(View.VISIBLE);
             bpTime.setVisibility(View.VISIBLE);
