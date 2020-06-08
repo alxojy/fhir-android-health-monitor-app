@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_19dp">
+
+    <EditText
+        android:id="@+id/x_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/x_prompt"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:autofillHints="@string/x_prompt" />
+
+    <EditText
+        android:id="@+id/y_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/y_prompt"
+        android:autofillHints="@string/y_prompt"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:layout_below="@id/x_input"
+        android:layout_alignParentStart="true"/>
+
+</RelativeLayout>

@@ -10,7 +10,11 @@
     <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
         <item name="colorAccent">@color/colorAccentText</item>
         <item name="android:textColorSecondary">@color/colorAccentText</item>
+    </style>
 
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@color/colorPrimary</item>
+        <item name="buttonBarPositiveButtonStyle">@color/colorPrimary</item>
     </style>
 
 </resources>

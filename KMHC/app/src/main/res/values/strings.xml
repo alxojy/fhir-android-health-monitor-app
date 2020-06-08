@@ -28,6 +28,11 @@
     <string name="loading_patients">Loading Patients…</string>
     <string name="cholesterol">cholesterol</string>
     <string name="blood_pressure">blood pressure</string>
+    <string name="sample_systolic_bp">141 mmHg</string>
+    <string name="sample_diastolic_bp">60 mmHg</string>
+    <string name="x_prompt">Enter the x value</string>
+    <string name="y_prompt">Enter the y value</string>
+    <string name="edit_x_y_values">Edit X,Y values</string>
 
     <string-array name="polling_frequency">
         <item>5</item>
