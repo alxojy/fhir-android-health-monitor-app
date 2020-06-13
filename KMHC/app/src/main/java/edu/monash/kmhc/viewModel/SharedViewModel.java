@@ -129,10 +129,11 @@ public class SharedViewModel extends ViewModel implements Poll {
             // loop through all patients
             for (PatientModel patient : patientRepository.getAllPatients()) {
                 try {
-                    // set new cholesterol observation reading
-                    patient.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                    patientHashMap.put(patient.getPatientID(), patient);
+                    // only show patients with cholesterol and bp values
+                    for (ObservationType type: ObservationType.values()) {
+                        patient.setObservation(type, getObservation(patient.getPatientID(), type));
+                        patientHashMap.put(patient.getPatientID(), patient);
+                    }
                 }
                 // patient does not have the observation type
                 catch (Exception e) {
@@ -163,12 +164,14 @@ public class SharedViewModel extends ViewModel implements Poll {
             public void run() {
                 HashMap<String, PatientModel> poHashMap = new HashMap<>();
 
-                // loop through all patients
+                // loop through all patients. update observations if observation is selected to be monitored
                 for (PatientModel patientModel: Objects.requireNonNull(selectedPatients.getValue())) {
-                    // set new cholesterol observation reading
-                    patientModel.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patientModel.getPatientID(), ObservationType.CHOLESTEROL));
-                    poHashMap.put(patientModel.getPatientID(), patientModel);
+                    for (ObservationType type: ObservationType.values()) {
+                        if (patientModel.isObservationMonitored(type)) {
+                            patientModel.setObservation(type, getObservation(patientModel.getPatientID(), type));
+                            poHashMap.put(patientModel.getPatientID(), patientModel);
+                        }
+                    }
                 }
 
                 // update LiveData and notify observers

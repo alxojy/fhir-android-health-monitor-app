@@ -51,8 +51,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         calculateAverage();
         this.x = x;
         this.y = y;
-        System.out.println("home adapter callled");
-        System.out.println(getUniquePatients());
     }
 
     /**
@@ -77,7 +75,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        System.out.println("on create callled");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview, parent, false);
         return new HomeAdapter.HomeViewHolder(v,onPatientClickListener);
     }
