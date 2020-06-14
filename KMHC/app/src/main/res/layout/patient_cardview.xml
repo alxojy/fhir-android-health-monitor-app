@@ -16,12 +16,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <Button
+            android:id="@+id/cv_nextBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/ic_chevron_right_24dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/guideline2"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.5" />
+
+
 
         <TextView
             android:id="@+id/cv_patientName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:text="@string/patient_name"
             android:textSize="20sp"
@@ -29,6 +43,20 @@
             card_view:layout_constraintStart_toEndOf="@id/guideline"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_bias="0.56" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.96" />
 
         <TextView
             android:id="@+id/cv_title_cholVal"
@@ -43,32 +71,33 @@
             card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
             card_view:layout_constraintVertical_bias="0.56" />
 
-        <TextView
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/cv_cholVal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/cardv_purple_bg"
+            android:layout_marginBottom="20dp"
             android:padding="9dp"
             android:text="@string/settings_sample_cholesterol_val"
             android:textColor="#FEFFFD"
             android:textSize="15sp"
+            card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/cv_chol_time"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_title_cholVal"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
             card_view:layout_constraintVertical_bias="0.0" />
 
-        <TextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/cv_chol_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/cardv_purple_bg"
             android:padding="9dp"
             android:text="@string/sample_date"
             android:textColor="#FEFFFD"
             android:textSize="15sp"
+            card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/cv_cholVal"
@@ -87,81 +116,57 @@
             card_view:layout_constraintTop_toBottomOf="@id/cv_cholVal"
             card_view:layout_constraintVertical_bias="0.56" />
 
-        <TextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/cv_bp_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/cardv_purple_bg"
             android:padding="9dp"
             android:text="@string/sample_date"
             android:textColor="#FEFFFD"
             android:textSize="15sp"
+            card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/cv_systolicbp"
             card_view:layout_constraintTop_toTopOf="@id/cv_systolicbp"
             card_view:layout_constraintVertical_bias="0.0" />
 
-        <TextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/cv_systolicbp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/cardv_purple_bg"
             android:padding="9dp"
             android:text="@string/sample_systolic_bp"
             android:textColor="#FEFFFD"
             android:textSize="15sp"
+            card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/cv_bp_time"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_title_bpVal"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_cholVal"
             card_view:layout_constraintVertical_bias="0.0" />
 
-        <TextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/cv_diastolicbp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/cardv_purple_bg"
             android:padding="9dp"
             android:text="@string/sample_diastolic_bp"
             android:textColor="#FEFFFD"
             android:textSize="15sp"
+            card_view:chipBackgroundColor="@color/colorReading"
+
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/cv_bp_time"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
             card_view:layout_constraintTop_toBottomOf="@id/cv_systolicbp"
             card_view:layout_constraintVertical_bias="0.56" />
 
-        <Button
-            android:id="@+id/cv_nextBtn"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@android:color/transparent"
-            android:drawableEnd="@drawable/ic_chevron_right_24dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@id/guideline2"
-            card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_bias="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            card_view:layout_constraintGuide_percent="0.04" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            card_view:layout_constraintGuide_percent="0.96" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
