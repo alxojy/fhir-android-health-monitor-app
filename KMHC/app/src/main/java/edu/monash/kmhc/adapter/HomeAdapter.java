@@ -215,9 +215,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             bpTime.setVisibility(View.GONE);
             titleCholVal.setVisibility(View.GONE);
             titleBP.setVisibility(View.GONE);
-
-
-
         }
 
         private void showCholestrolViews(){
