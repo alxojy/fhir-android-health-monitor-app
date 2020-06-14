@@ -83,4 +83,12 @@ public class ObservationRepositoryFactory extends FhirService {
         return latestReadings;
     }
 
+    public ArrayList<BloodPressureObservationModel> getLatestBloodPressureReadings(String patientId, int n) {
+        ArrayList<BloodPressureObservationModel> bpReadings = new ArrayList<>();
+        for (Observation observation: getLatestObservationReadings(patientId, ObservationType.BLOOD_PRESSURE.getObservationCode(), n)) {
+            bpReadings.add(new BloodPressureObservationModel(observation));
+        }
+        return bpReadings;
+    }
+
 }

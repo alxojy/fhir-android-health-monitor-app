@@ -1,7 +1,6 @@
 package edu.monash.kmhc.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.chip.Chip;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +30,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     private float averageCholValue;
     private int x;
     private int y;
+    private final int HIGH_BP = 140;
 
     /**
      * The Home Adapter constructor, this initialises the adapter that will be used to update the home fragment UI.
@@ -79,7 +77,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_cardview, parent, false);
-        return new HomeAdapter.HomeViewHolder(v,onPatientClickListener);
+        return new HomeAdapter.HomeViewHolder(v, onPatientClickListener);
     }
 
     /**
@@ -107,14 +105,13 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
 
         // if the current patient cholesterol value is being  monitored
         if (cholMonitored) {
-            homeViewHolder.showCholestrolViews();
+            homeViewHolder.showCholesterolViews();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
-            String cholStat = "Cholesterol: " + observationModel.getValue() + " " + observationModel.getUnit();
+            String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
 
             //if current patients cholesterol value is greater than average
             //highlight cholesterol value in red
             if (Float.parseFloat(observationModel.getValue()) > averageCholValue){
-                //homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
                 homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
                 homeViewHolder.patientName.setTextColor(R.color.colorRed);
             }
@@ -125,28 +122,27 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             BloodPressureObservationModel observationModel = (BloodPressureObservationModel) getObservationModel(ObservationType.BLOOD_PRESSURE,position);
             if ( observationModel != null) {
                 homeViewHolder.showBPView();
-                String systolicBP = "Systolic: " + observationModel.getSystolic() + " " + observationModel.getUnit();
-                String diastolicBP = "Diastolic: " + observationModel.getDiastolic() + " " + observationModel.getUnit();
+                String systolicBP = observationModel.getSystolic() + " " + observationModel.getUnit();
+                String diastolicBP = observationModel.getDiastolic() + " " + observationModel.getUnit();
 
                 //if current patients BP value is greater than x/y
                 if (x > 0 && Float.parseFloat(observationModel.getSystolic()) > x) {
-                    homeViewHolder.systolicBP.setBackgroundResource(R.drawable.cardv_red_bg);
+                    homeViewHolder.systolicBP.setChipBackgroundColorResource(R.color.colorBlue);
                     homeViewHolder.patientName.setTextColor(R.color.colorRed);
                 }
-                if (y > 0 && Float.parseFloat(observationModel.getDiastolic()) > y){
-                    homeViewHolder.diastolicBP.setBackgroundResource(R.drawable.cardv_red_bg);
+                if (y > 0 && Float.parseFloat(observationModel.getDiastolic()) > y) {
+                    homeViewHolder.diastolicBP.setChipBackgroundColorResource(R.color.colorBlue);
                     homeViewHolder.patientName.setTextColor(R.color.colorRed);
+                }
+                if (Float.parseFloat(observationModel.getSystolic()) > HIGH_BP) {
+                    homeViewHolder.showLatestSystolicChips();
                 }
 
                 homeViewHolder.systolicBP.setText(systolicBP);
                 homeViewHolder.diastolicBP.setText(diastolicBP);
                 homeViewHolder.bpTime.setText(observationModel.getDateTime());
             }
-            else{
-                System.out.println(getUniquePatients().get(position).getName() + " has no BP value");
-            }
         }
-        System.out.println("on bind view holder callled");
     }
 
     private ObservationModel getObservationModel(ObservationType type, int position){
@@ -176,6 +172,9 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         Chip bpTime;
         Chip systolicBP;
         Chip diastolicBP;
+        Chip showLatestSystolic;
+        Chip showSystolicGraph;
+        TextView latestSystolicReadings;
         OnPatientClickListener onPatientClickListener;
 
         /**
@@ -191,7 +190,16 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             bpTime = itemView.findViewById(R.id.cv_bp_time);
             systolicBP = itemView.findViewById(R.id.cv_systolicbp);
             diastolicBP = itemView.findViewById(R.id.cv_diastolicbp);
+            showLatestSystolic = itemView.findViewById(R.id.cv_n_latest_systolic);
+            showSystolicGraph = itemView.findViewById(R.id.cv_systolic_graph);
+            latestSystolicReadings = itemView.findViewById(R.id.txt_show_n_latest_systolic);
             itemView.setOnClickListener(this);
+            showLatestSystolic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showLatestSystolicReadings(getAdapterPosition());
+                }
+            });
         }
 
         /**
@@ -210,17 +218,39 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             systolicBP.setVisibility(View.GONE);
             diastolicBP.setVisibility(View.GONE);
             bpTime.setVisibility(View.GONE);
+            showLatestSystolic.setVisibility(View.GONE);
+            showSystolicGraph.setVisibility(View.GONE);
+            latestSystolicReadings.setVisibility(View.GONE);
         }
 
-        private void showCholestrolViews(){
+        private void showCholesterolViews(){
             cholesterolValue.setVisibility(View.VISIBLE);
             cholTime.setVisibility(View.VISIBLE);
         }
 
-        private void showBPView(){
+        private void showBPView() {
             systolicBP.setVisibility(View.VISIBLE);
             diastolicBP.setVisibility(View.VISIBLE);
             bpTime.setVisibility(View.VISIBLE);
+        }
+
+        private void showLatestSystolicChips() {
+            showLatestSystolic.setVisibility(View.VISIBLE);
+            showSystolicGraph.setVisibility(View.VISIBLE);
+        }
+
+        private void showLatestSystolicReadings(int position) {
+            if (showLatestSystolic.isChecked()) {
+                StringBuilder latestReadings = new StringBuilder();
+                for (BloodPressureObservationModel reading: getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE)) {
+                    latestReadings.append(reading.getSystolic()).append(" ").append(reading.getDateTime()).append("\t");
+                }
+                latestSystolicReadings.setText(latestReadings);
+                latestSystolicReadings.setVisibility(View.VISIBLE);
+            }
+            else {
+                latestSystolicReadings.setVisibility(View.GONE);
+            }
         }
     }
     /**

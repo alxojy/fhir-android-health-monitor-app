@@ -44,7 +44,7 @@ public class SharedViewModel extends ViewModel implements Poll {
         observationRepositoryFactory = new ObservationRepositoryFactory();
         fetchAllPatients();
         setSelectedPatients(new ArrayList<>());
-        selectedFrequency.setValue("10");
+        selectedFrequency.setValue("60");
     }
 
     /**
@@ -134,6 +134,8 @@ public class SharedViewModel extends ViewModel implements Poll {
                         patient.setObservation(type, getObservation(patient.getPatientID(), type));
                         patientHashMap.put(patient.getPatientID(), patient);
                     }
+                    patient.addLatestBPReadings(observationRepositoryFactory.getLatestBloodPressureReadings(patient.getPatientID(),5));
+
                 }
                 // patient does not have the observation type
                 catch (Exception e) {
@@ -170,6 +172,9 @@ public class SharedViewModel extends ViewModel implements Poll {
                         if (patientModel.isObservationMonitored(type)) {
                             patientModel.setObservation(type, getObservation(patientModel.getPatientID(), type));
                             poHashMap.put(patientModel.getPatientID(), patientModel);
+                            if (type == ObservationType.BLOOD_PRESSURE) {
+                                patientModel.addLatestBPReadings(observationRepositoryFactory.getLatestBloodPressureReadings(patientModel.getPatientID(),5));
+                            }
                         }
                     }
                 }

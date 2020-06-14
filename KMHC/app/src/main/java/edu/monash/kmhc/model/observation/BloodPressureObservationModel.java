@@ -15,9 +15,9 @@ public class BloodPressureObservationModel implements ObservationModel {
         return observation.getValueQuantity().getValue().toString();
     }
 
-    public String getSystolic() { return observation.getComponent().get(0).getValueQuantity().getValue().toString(); }
+    public String getSystolic() { return observation.getComponent().get(1).getValueQuantity().getValue().toString(); }
 
-    public String getDiastolic() { return observation.getComponent().get(1).getValueQuantity().getValue().toString(); }
+    public String getDiastolic() { return observation.getComponent().get(0).getValueQuantity().getValue().toString(); }
 
     @Override
     public String getUnit() {

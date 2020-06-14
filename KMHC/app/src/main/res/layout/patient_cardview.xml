@@ -44,6 +44,19 @@
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_bias="0.56" />
 
+        <TextView
+            android:id="@+id/txt_show_n_latest_systolic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#DFDFDF"
+            android:text="@string/sample_latest_n_readings"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_systolic_graph" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -75,7 +88,7 @@
             android:id="@+id/cv_chol_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="165dp"
+            android:layout_marginStart="100dp"
             android:layout_marginTop="10dp"
             android:text="@string/sample_date"
             android:textColor="#FFFFFF"
@@ -101,7 +114,7 @@
             android:id="@+id/cv_bp_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="165dp"
+            android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
             android:text="@string/sample_date"
             android:textColor="#FFFFFF"
@@ -122,6 +135,29 @@
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/cv_systolicbp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cv_n_latest_systolic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:checkable="true"
+            android:text="@string/show_latest_n_readings"
+            card_view:chipIcon="@drawable/cardv_purple_bg"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_diastolicbp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cv_systolic_graph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/show_systolic_graph"
+            card_view:chipIcon="@drawable/cardv_purple_bg"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_n_latest_systolic" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
