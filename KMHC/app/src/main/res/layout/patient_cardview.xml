@@ -85,7 +85,7 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/cv_chol_time"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_title_cholVal"
             card_view:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.chip.Chip
@@ -145,7 +145,7 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/cv_bp_time"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_cholVal"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_title_bpVal"
             card_view:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.chip.Chip
