@@ -1,6 +1,7 @@
 package edu.monash.kmhc.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.chip.Chip;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,13 +108,14 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
 
         // if the current patient cholesterol value is being  monitored
         if (cholMonitored) {
-            homeViewHolder.showCholesterolViews();
+            homeViewHolder.showCholestrolViews();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
             String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
 
             //if current patients cholesterol value is greater than average
             //highlight cholesterol value in red
             if (Float.parseFloat(observationModel.getValue()) > averageCholValue){
+                //homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
                 homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
                 homeViewHolder.patientName.setTextColor(R.color.colorRed);
             }
@@ -142,7 +146,11 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
                 homeViewHolder.diastolicBP.setText(diastolicBP);
                 homeViewHolder.bpTime.setText(observationModel.getDateTime());
             }
+            else{
+                System.out.println(getUniquePatients().get(position).getName() + " has no BP value");
+            }
         }
+        System.out.println("on bind view holder callled");
     }
 
     private ObservationModel getObservationModel(ObservationType type, int position){
@@ -172,6 +180,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         Chip bpTime;
         Chip systolicBP;
         Chip diastolicBP;
+        Chip titleCholVal;
+        Chip titleBP;
         Chip showLatestSystolic;
         Chip showSystolicGraph;
         TextView latestSystolicReadings;
@@ -218,17 +228,18 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             systolicBP.setVisibility(View.GONE);
             diastolicBP.setVisibility(View.GONE);
             bpTime.setVisibility(View.GONE);
-            showLatestSystolic.setVisibility(View.GONE);
-            showSystolicGraph.setVisibility(View.GONE);
-            latestSystolicReadings.setVisibility(View.GONE);
+            titleCholVal.setVisibility(View.GONE);
+            titleBP.setVisibility(View.GONE);
         }
 
-        private void showCholesterolViews(){
+        private void showCholestrolViews(){
+            titleCholVal.setVisibility(View.VISIBLE);
             cholesterolValue.setVisibility(View.VISIBLE);
             cholTime.setVisibility(View.VISIBLE);
         }
 
-        private void showBPView() {
+        private void showBPView(){
+            titleBP.setVisibility(View.VISIBLE);
             systolicBP.setVisibility(View.VISIBLE);
             diastolicBP.setVisibility(View.VISIBLE);
             bpTime.setVisibility(View.VISIBLE);

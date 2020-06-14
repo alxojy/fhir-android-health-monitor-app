@@ -36,6 +36,8 @@
     <string name="show_systolic_graph">Show systolic blood pressure graph</string>
     <string name="show_latest_n_readings">Show (up to) latest 5 systolic readings</string>
     <string name="sample_latest_n_readings">122 (2015–06–11 10:06), 134 (2015–06-12 11:36), 156 (2015-06-13 18:33), 141 (2015-06-14 11:06)</string>
+    <string name="cholesterol_value">Cholesterol Observation</string>
+    <string name="blood_pressure_observations">Blood Pressure Observations</string>
 
     <string-array name="polling_frequency">
         <item>5</item>

@@ -71,6 +71,20 @@
             android:orientation="vertical"
             card_view:layout_constraintGuide_percent="0.96" />
 
+        <TextView
+            android:id="@+id/cv_title_cholVal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/cholesterol_value"
+            android:textSize="15sp"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
+            card_view:layout_constraintVertical_bias="0.56" />
+
+
         <com.google.android.material.chip.Chip
             android:id="@+id/cv_cholVal"
             android:layout_width="wrap_content"
@@ -88,12 +102,26 @@
             android:id="@+id/cv_chol_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="165dp"
             android:layout_marginTop="10dp"
             android:text="@string/sample_date"
-            android:textColor="#FFFFFF"
+            android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/cv_cholVal"
+            card_view:layout_constraintTop_toTopOf="@id/cv_cholVal"
+            card_view:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/cv_title_bpVal"
+            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/blood_pressure_observations"
+            android:textSize="15sp"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
             card_view:layout_constraintTop_toBottomOf="@+id/cv_patientName" />
 
@@ -104,7 +132,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/sample_systolic_bp"
-            android:textColor="#FFFFFF"
+            android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -114,10 +142,10 @@
             android:id="@+id/cv_bp_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="165dp"
             android:layout_marginTop="8dp"
             android:text="@string/sample_date"
-            android:textColor="#FFFFFF"
+            android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
@@ -130,7 +158,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/sample_diastolic_bp"
-            android:textColor="#FFFFFF"
+            android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toStartOf="parent"
