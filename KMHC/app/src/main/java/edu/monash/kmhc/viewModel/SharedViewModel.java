@@ -44,7 +44,7 @@ public class SharedViewModel extends ViewModel implements Poll {
         observationRepositoryFactory = new ObservationRepositoryFactory();
         fetchAllPatients();
         setSelectedPatients(new ArrayList<>());
-        selectedFrequency.setValue("60");
+        selectedFrequency.setValue("10");
     }
 
     /**

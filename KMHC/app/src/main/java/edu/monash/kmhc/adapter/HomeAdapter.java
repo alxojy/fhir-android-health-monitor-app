@@ -1,7 +1,6 @@
 package edu.monash.kmhc.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.google.android.material.chip.Chip;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,14 +106,13 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
 
         // if the current patient cholesterol value is being  monitored
         if (cholMonitored) {
-            homeViewHolder.showCholestrolViews();
+            homeViewHolder.showCholesterolViews();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
             String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
 
             //if current patients cholesterol value is greater than average
             //highlight cholesterol value in red
             if (Float.parseFloat(observationModel.getValue()) > averageCholValue){
-                //homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
                 homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
                 homeViewHolder.patientName.setTextColor(R.color.colorRed);
             }
@@ -146,11 +143,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
                 homeViewHolder.diastolicBP.setText(diastolicBP);
                 homeViewHolder.bpTime.setText(observationModel.getDateTime());
             }
-            else{
-                System.out.println(getUniquePatients().get(position).getName() + " has no BP value");
-            }
         }
-        System.out.println("on bind view holder callled");
     }
 
     private ObservationModel getObservationModel(ObservationType type, int position){
@@ -180,11 +173,12 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         Chip bpTime;
         Chip systolicBP;
         Chip diastolicBP;
-        Chip titleCholVal;
-        Chip titleBP;
+        TextView titleCholVal;
+        TextView titleBP;
         Chip showLatestSystolic;
         Chip showSystolicGraph;
         TextView latestSystolicReadings;
+        LineChart latestSystolicGraph;
         OnPatientClickListener onPatientClickListener;
 
         /**
@@ -200,16 +194,14 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             bpTime = itemView.findViewById(R.id.cv_bp_time);
             systolicBP = itemView.findViewById(R.id.cv_systolicbp);
             diastolicBP = itemView.findViewById(R.id.cv_diastolicbp);
+            titleCholVal = itemView.findViewById(R.id.cv_title_cholVal);
+            titleBP = itemView.findViewById(R.id.cv_title_bpVal);
             showLatestSystolic = itemView.findViewById(R.id.cv_n_latest_systolic);
             showSystolicGraph = itemView.findViewById(R.id.cv_systolic_graph);
             latestSystolicReadings = itemView.findViewById(R.id.txt_show_n_latest_systolic);
+            latestSystolicGraph = itemView.findViewById(R.id.linechart);
             itemView.setOnClickListener(this);
-            showLatestSystolic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showLatestSystolicReadings(getAdapterPosition());
-                }
-            });
+            showLatestSystolic.setOnClickListener(view -> showLatestSystolicReadings(getAdapterPosition()));
         }
 
         /**
@@ -228,11 +220,15 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             systolicBP.setVisibility(View.GONE);
             diastolicBP.setVisibility(View.GONE);
             bpTime.setVisibility(View.GONE);
+            showLatestSystolic.setVisibility(View.GONE);
+            latestSystolicReadings.setVisibility(View.GONE);
+            showSystolicGraph.setVisibility(View.GONE);
             titleCholVal.setVisibility(View.GONE);
             titleBP.setVisibility(View.GONE);
+            latestSystolicGraph.setVisibility(View.GONE);
         }
 
-        private void showCholestrolViews(){
+        private void showCholesterolViews(){
             titleCholVal.setVisibility(View.VISIBLE);
             cholesterolValue.setVisibility(View.VISIBLE);
             cholTime.setVisibility(View.VISIBLE);
@@ -261,6 +257,15 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             }
             else {
                 latestSystolicReadings.setVisibility(View.GONE);
+            }
+        }
+
+        private void showLatestSystolicGraph(int position) {
+            if (showSystolicGraph.isChecked()) {
+                latestSystolicGraph.setVisibility(View.VISIBLE);
+            }
+            else {
+                latestSystolicGraph.setVisibility(View.GONE);
             }
         }
     }

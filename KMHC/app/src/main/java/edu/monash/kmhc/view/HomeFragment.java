@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,7 +49,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
         recyclerView = root.findViewById(R.id.home_recycler_view); // recyclerview for list of patients
-        barChart = new ObservationBarChart(root, R.id.barchart); // bar chart for total cholesterol
+        barChart = new ObservationBarChart(root, R.id.linechart); // bar chart for total cholesterol
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
         thisFrag = this;
         return root;
@@ -66,7 +65,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag,0,0));
-                new ObservationBarChart(root, R.id.barchart).plotBarChart(patientObservationHashMap);
+                new ObservationBarChart(root, R.id.linechart).plotBarChart(patientObservationHashMap);
             }
         };
 

@@ -65,7 +65,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barchart"
+            android:id="@+id/linechart"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginTop="0dp"
@@ -88,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barchart"
+            app:layout_constraintTop_toBottomOf="@id/linechart"
             app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
