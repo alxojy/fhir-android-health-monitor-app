@@ -14,7 +14,7 @@
     <string name="start_monitoring">Start</string>
     <string name="patient_name">Patient Name</string>
     <string name="settings_highlighted_cholesterol_description">The patient\'s cholesterol value will be highlighted in red if it is greater than average</string>
-    <string name="settings_sample_cholesterol_val">33 mg/dL</string>
+    <string name="settings_sample_cholesterol_val">Cholesterol: 33 mg/dL</string>
     <string name="settings_highlighted_patient_description">Patient\'s card is highlighted in green.This indicates that this patient is selected.</string>
     <string name="settings_home_button_description">Navigate to monitoring screen.</string>
     <string name="home_button">Home Button</string>
@@ -28,8 +28,8 @@
     <string name="loading_patients">Loading Patients…</string>
     <string name="cholesterol">cholesterol</string>
     <string name="blood_pressure">blood pressure</string>
-    <string name="sample_systolic_bp">141 mmHg</string>
-    <string name="sample_diastolic_bp">60 mmHg</string>
+    <string name="sample_systolic_bp">Systolic: 141 mmHg</string>
+    <string name="sample_diastolic_bp">Diastolic: 60 mmHg</string>
     <string name="x_prompt">Enter the x value</string>
     <string name="y_prompt">Enter the y value</string>
     <string name="edit_x_y_values">Edit X,Y values</string>

@@ -1,12 +1,15 @@
 package edu.monash.kmhc.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.material.chip.Chip;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -56,7 +59,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     /**
      * This method calculate the average cholesterol value
      */
-    private void calculateAverage(){
+    private void calculateAverage() {
         float total = 0;
 
         for( PatientModel p : getUniquePatients()){
@@ -106,12 +109,13 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         if (cholMonitored) {
             homeViewHolder.showCholestrolViews();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
-            String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
+            String cholStat = "Cholesterol: " + observationModel.getValue() + " " + observationModel.getUnit();
 
             //if current patients cholesterol value is greater than average
             //highlight cholesterol value in red
             if (Float.parseFloat(observationModel.getValue()) > averageCholValue){
-                homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
+                //homeViewHolder.cholesterolValue.setBackgroundResource(R.drawable.cardv_red_bg);
+                homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
                 homeViewHolder.patientName.setTextColor(R.color.colorRed);
             }
             homeViewHolder.cholesterolValue.setText(cholStat);
@@ -121,11 +125,11 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             BloodPressureObservationModel observationModel = (BloodPressureObservationModel) getObservationModel(ObservationType.BLOOD_PRESSURE,position);
             if ( observationModel != null) {
                 homeViewHolder.showBPView();
-                String systolicBP = observationModel.getSystolic() + " " + observationModel.getUnit();
-                String diastolicBP = observationModel.getDiastolic() + " " + observationModel.getUnit();
+                String systolicBP = "Systolic: " + observationModel.getSystolic() + " " + observationModel.getUnit();
+                String diastolicBP = "Diastolic: " + observationModel.getDiastolic() + " " + observationModel.getUnit();
 
                 //if current patients BP value is greater than x/y
-                if (x > 0 && Float.parseFloat(observationModel.getSystolic()) > x){
+                if (x > 0 && Float.parseFloat(observationModel.getSystolic()) > x) {
                     homeViewHolder.systolicBP.setBackgroundResource(R.drawable.cardv_red_bg);
                     homeViewHolder.patientName.setTextColor(R.color.colorRed);
                 }
@@ -167,11 +171,11 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      */
     public class HomeViewHolder extends BaseViewHolder {
         TextView patientName;
-        TextView cholesterolValue;
-        TextView cholTime;
-        TextView bpTime;
-        TextView systolicBP;
-        TextView diastolicBP;
+        Chip cholesterolValue;
+        Chip cholTime;
+        Chip bpTime;
+        Chip systolicBP;
+        Chip diastolicBP;
         OnPatientClickListener onPatientClickListener;
 
         /**

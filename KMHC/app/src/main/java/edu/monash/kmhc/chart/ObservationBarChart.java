@@ -18,14 +18,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import edu.monash.kmhc.model.PatientModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 
-public class BarChartKMHC {
+public class ObservationBarChart {
 
     private com.github.mikephil.charting.charts.BarChart barChart;
-    private View view;
 
-    public BarChartKMHC(View view, int id) {
+    public ObservationBarChart(View view, int id) {
         this.barChart = view.findViewById(id);
-        this.view = view;
     }
 
     public void plotBarChart(HashMap<String, PatientModel> patientObservationHashMap) {
@@ -51,12 +49,12 @@ public class BarChartKMHC {
         });
 
         BarData data = new BarData(Collections.singletonList("Total Cholesterol mg/dL"), dataBars);
+        barChart.notifyDataSetChanged();
         barChart.setData(data);
         barChart.setDragEnabled(true); // on by default
         barChart.setVisibleXRangeMinimum(patientName.size()%6);
         barChart.setVisibleXRangeMaximum(5);
         barChart.getLegend().setWordWrapEnabled(true);
-        barChart.notifyDataSetChanged();
         barChart.invalidate();
     }
 }
