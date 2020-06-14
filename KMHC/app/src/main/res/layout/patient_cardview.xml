@@ -15,7 +15,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="677dp">
+        android:layout_height="wrap_content">
 
 
         <Button
@@ -62,13 +62,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"
             android:text="@string/cholesterol_value"
             android:textSize="15sp"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName"
-            card_view:layout_constraintVertical_bias="0.56" />
+            card_view:layout_constraintTop_toBottomOf="@id/cv_patientName" />
 
         <TextView
             android:id="@+id/cv_title_bpVal"
@@ -101,6 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_show_n_latest_systolic" />
 
@@ -127,12 +126,10 @@
             android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
-            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
-            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintHorizontal_bias="0.297"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toTopOf="@id/cv_title_cholVal"
-            card_view:layout_constraintVertical_bias="0.07" />
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_title_cholVal" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cv_systolicbp"

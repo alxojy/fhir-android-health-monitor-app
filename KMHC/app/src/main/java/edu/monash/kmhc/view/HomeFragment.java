@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag,0,0));
-                new ObservationBarChart(root, R.id.linechart).plotBarChart(patientObservationHashMap);
+                barChart.plotBarChart(patientObservationHashMap);
             }
         };
 
