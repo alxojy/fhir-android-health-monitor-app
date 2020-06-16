@@ -2,12 +2,10 @@ package edu.monash.kmhc.model.observation;
 
 import org.hl7.fhir.r4.model.Observation;
 
-public class BloodPressureObservationModel implements ObservationModel {
-
-    private Observation observation;
+public class BloodPressureObservationModel extends ObservationModel {
 
     public BloodPressureObservationModel(Observation observation) {
-        this.observation = observation;
+        super(observation);
     }
 
     @Override

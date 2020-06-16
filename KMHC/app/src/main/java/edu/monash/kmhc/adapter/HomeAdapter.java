@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.DefaultXAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.chip.Chip;
 
@@ -38,7 +41,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     private float averageCholesterolValue;
     private int x;
     private int y;
-    private final int HIGH_SYSTOLIC_READING = 140;
 
     /**
      * The Home Adapter constructor, this initialises the adapter that will be used to update the home fragment UI.
@@ -88,11 +90,10 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     }
 
     /**
-     * This method overrides its superclass's onBindViewHolder method
-     * This method is used to update the contents of the HomeViewHolder to reflect the patient
-     * at the given position.
+     * This method overrides its superclass's onBindViewHolder methodv and update the contents of the
+     * HomeViewHolder to reflect the patient at the given position.
      *
-     * This method also highlights the patient if his/her cholesterol value is higher
+     * This method also highlights the patient if his/her cholesterol/ bp value is higher
      * than the average cholesterol value.
      * @param holder the homeViewHolder that will hold patient[position]'s data
      * @param position the current UI adapter position
@@ -141,7 +142,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
                     homeViewHolder.diastolicBP.setChipBackgroundColorResource(R.color.colorBlue);
                     homeViewHolder.patientName.setTextColor(R.color.colorRed);
                 }
-                if (Float.parseFloat(observationModel.getSystolic()) > HIGH_SYSTOLIC_READING) {
+                // high systolic reading
+                if (Float.parseFloat(observationModel.getSystolic()) > 140) {
                     homeViewHolder.showLatestSystolicChips();
                 }
 
@@ -292,17 +294,19 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         private void showLatestSystolicGraph(int position) {
             if (showSystolicGraph.isChecked()) {
                 ArrayList<Entry> entries = new ArrayList<Entry>();
+                ArrayList<String> xAxis = new ArrayList<>();
                 LineChart systolicGraph = itemView.findViewById(R.id.barchart);
 
                 for (int i = 0; i < getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).size(); i++) {
                     entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).get(i).getSystolic()), i));
+                    xAxis.add(String.valueOf(i));
                 }
 
-                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineDataSet dataSet = new LineDataSet(entries, "Systolic readings");
                 dataSet.setCircleColor(Color.BLUE);
-                LineData lineData = new LineData();
-                lineData.addDataSet(dataSet);
-                systolicGraph.setHorizontalScrollBarEnabled(true);
+                dataSet.setDrawCircles(true);
+                dataSet.setColor(Color.BLUE);
+                LineData lineData = new LineData(xAxis, dataSet);
                 systolicGraph.setData(lineData);
                 systolicGraph.invalidate();
                 latestSystolicGraph.setVisibility(View.VISIBLE);
