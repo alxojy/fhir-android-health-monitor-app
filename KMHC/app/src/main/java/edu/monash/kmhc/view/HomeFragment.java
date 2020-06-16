@@ -1,5 +1,6 @@
 package edu.monash.kmhc.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +14,25 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.monash.kmhc.MainActivity;
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.adapter.HomeAdapter;
-import edu.monash.kmhc.chart.ObservationBarChart;
 import edu.monash.kmhc.model.PatientModel;
+import edu.monash.kmhc.model.observation.ObservationType;
 import edu.monash.kmhc.viewModel.SharedViewModel;
 
 /**
@@ -33,7 +45,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private HomeFragment thisFrag ;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
-    private ObservationBarChart barChart;
+    private BarChart barChart;
     private View root;
 
     /**
@@ -49,7 +61,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
         recyclerView = root.findViewById(R.id.home_recycler_view); // recyclerview for list of patients
-        barChart = new ObservationBarChart(root, R.id.linechart); // bar chart for total cholesterol
+        barChart = root.findViewById(R.id.barchart); // bar chart for total cholesterol
         sharedViewModel.getAllPatientObservations().observe(getViewLifecycleOwner(), patientUpdatedObserver);
         thisFrag = this;
         return root;
@@ -65,7 +77,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag,0,0));
-                barChart.plotBarChart(patientObservationHashMap);
+                plotBarChart(patientObservationHashMap);
             }
         };
 
@@ -106,6 +118,35 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         };
 
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
+    }
+
+    private void plotBarChart(HashMap<String, PatientModel> patientObservationHashMap) {
+        List<IBarDataSet> dataBars = new ArrayList<IBarDataSet>();
+        AtomicInteger i = new AtomicInteger();
+        ArrayList<Integer> colours = new ArrayList<Integer>(
+                Arrays.asList(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW,
+                        Color.CYAN, Color.MAGENTA, Color.GRAY, Color.BLACK
+                ));
+
+        patientObservationHashMap.forEach((patientId, patientModel) -> {
+            if (patientModel.isObservationMonitored(ObservationType.CHOLESTEROL)) {
+                float patientCholVal = Float.parseFloat(patientModel.getObservationReading(ObservationType.CHOLESTEROL).getValue());
+                ArrayList<BarEntry> barEntries = new ArrayList<>();
+                barEntries.add(new BarEntry(patientCholVal,0));
+                BarDataSet dataset = new BarDataSet(barEntries,patientModel.getName());
+                dataset.setColor(colours.get(i.intValue() % colours.size()));
+                dataBars.add(dataset);
+                i.getAndIncrement();
+            }
+        });
+
+        BarData data = new BarData(Collections.singletonList("Total Cholesterol mg/dL"), dataBars);
+        barChart.notifyDataSetChanged();
+        barChart.setData(data);
+        barChart.setDragEnabled(true); // on by default
+        barChart.setVisibleXRangeMaximum(5);
+        barChart.getLegend().setWordWrapEnabled(true);
+        barChart.invalidate();
     }
 
 }

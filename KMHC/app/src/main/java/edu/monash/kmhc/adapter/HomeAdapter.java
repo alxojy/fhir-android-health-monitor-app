@@ -1,6 +1,7 @@
 package edu.monash.kmhc.adapter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import edu.monash.kmhc.R;
@@ -30,7 +38,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     private float averageCholesterolValue;
     private int x;
     private int y;
-    private final int HIGH_SYSTOLIC_READING = 140; 
+    private final int HIGH_SYSTOLIC_READING = 140;
 
     /**
      * The Home Adapter constructor, this initialises the adapter that will be used to update the home fragment UI.
@@ -197,7 +205,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             showLatestSystolic = itemView.findViewById(R.id.cv_n_latest_systolic); // selection chip to show latest 5 systolic readings
             showSystolicGraph = itemView.findViewById(R.id.cv_systolic_graph); // selection chip to show systolic graph
             latestSystolicReadings = itemView.findViewById(R.id.txt_show_n_latest_systolic); // text view with 5 latest systolic readings
-            latestSystolicGraph = itemView.findViewById(R.id.linechart); // line graph to show systolic graph
+            latestSystolicGraph = itemView.findViewById(R.id.barchart); // line graph to show systolic graph
             itemView.setOnClickListener(this);
             showLatestSystolic.setOnClickListener(view -> showLatestSystolicReadings(getAdapterPosition()));
             showSystolicGraph.setOnClickListener(view -> showLatestSystolicGraph(getAdapterPosition()));
@@ -283,6 +291,20 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
          */
         private void showLatestSystolicGraph(int position) {
             if (showSystolicGraph.isChecked()) {
+                ArrayList<Entry> entries = new ArrayList<Entry>();
+                LineChart systolicGraph = itemView.findViewById(R.id.barchart);
+
+                for (int i = 0; i < getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).size(); i++) {
+                    entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).get(i).getSystolic()), i));
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setCircleColor(Color.BLUE);
+                LineData lineData = new LineData();
+                lineData.addDataSet(dataSet);
+                systolicGraph.setHorizontalScrollBarEnabled(true);
+                systolicGraph.setData(lineData);
+                systolicGraph.invalidate();
                 latestSystolicGraph.setVisibility(View.VISIBLE);
             }
             else {
