@@ -1,5 +1,6 @@
 package edu.monash.kmhc.view;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private BarChart barChart;
     private int x = 90;
     private int y = 140;
-    private View root;
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the toolbar.
@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
                              ViewGroup container, Bundle savedInstanceState) {
 
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel.class);
-        root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
         //set tool bar
         toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
@@ -139,8 +139,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
                 dialog.dismiss();
                 x = Integer.parseInt(xInput.getText().toString());
                 y = Integer.parseInt(yInput.getText().toString());
-                System.out.println(x);
-                System.out.println(y);
             }
         });
 

@@ -48,7 +48,7 @@
             android:id="@+id/txt_show_n_latest_systolic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:background="#DFDFDF"
             android:text="@string/sample_latest_n_readings"
