@@ -46,11 +46,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
 
         ArrayList<PatientModel> patients = new ArrayList<>();
 
-        getPatientsHashMap().forEach((patientID,patientModel) -> {
-            patients.add(patientModel);
-        });
+        getPatientsHashMap().forEach((patientID,patientModel) -> patients.add(patientModel));
         setUniquePatients(patients);
-
         calculateAverage();
         this.x = x;
         this.y = y;
@@ -61,7 +58,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      */
     private void calculateAverage() {
         float total = 0;
-
         for( PatientModel p: getUniquePatients()){
             total += Float.parseFloat(p.getObservationReading(ObservationType.CHOLESTEROL).getValue());
         }
@@ -91,29 +87,32 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      * @param holder the homeViewHolder that will hold patient[position]'s data
      * @param position the current UI adapter position
      */
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         HomeViewHolder homeViewHolder = (HomeViewHolder) holder;
-        boolean cholesterolMonitored = getUniquePatients().get(position).isObservationMonitored(ObservationType.CHOLESTEROL) ;
+        boolean cholMonitored = getUniquePatients().get(position).isObservationMonitored(ObservationType.CHOLESTEROL) ;
         boolean bpMonitored = getUniquePatients().get(position).isObservationMonitored(ObservationType.BLOOD_PRESSURE);
 
         // set patients name
         homeViewHolder.patientName.setText(getUniquePatients().get(position).getName());
 
         // hide all view holders
-        homeViewHolder.hideAllViews();
+        homeViewHolder.hideAllTextView();
 
         // if the current patient cholesterol value is being  monitored
-        if (cholesterolMonitored) {
-            ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
-            bindCholesterolPatients(homeViewHolder,observationModel);
+        if (cholMonitored) {
             homeViewHolder.showCholesterolViews();
+            ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
+            bindCholPatients(homeViewHolder,observationModel);
+
         }
         if (bpMonitored) {
             BloodPressureObservationModel observationModel = (BloodPressureObservationModel) getObservationModel(ObservationType.BLOOD_PRESSURE,position);
             if ( observationModel != null) {
-                bindBPPatients(homeViewHolder,observationModel);
                 homeViewHolder.showBPView();
+                bindBPPatients(homeViewHolder,observationModel);
+
             }
         }
     }
@@ -133,15 +132,15 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     }
 
     @SuppressLint("ResourceAsColor")
-    private void bindCholesterolPatients(HomeViewHolder homeViewHolder, ObservationModel observationModel){
-        String cholesterolStat = observationModel.getValue() + " " + observationModel.getUnit();
+    private void bindCholPatients(HomeViewHolder homeViewHolder, ObservationModel observationModel){
+        String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
+
         //if current patients cholesterol value is greater than average
         //highlight cholesterol value in red
         if (Float.parseFloat(observationModel.getValue()) > averageCholesterolValue){
             homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
-            homeViewHolder.patientName.setTextColor(R.color.colorRed);
         }
-        homeViewHolder.cholesterolValue.setText(cholesterolStat);
+        homeViewHolder.cholesterolValue.setText(cholStat);
         homeViewHolder.cholesterolTime.setText(observationModel.getDateTime());
     }
 
@@ -153,12 +152,10 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         //if current patients systolic BP value is greater than x ( highlight in blue )
         if (Float.parseFloat(observationModel.getSystolic()) > x) {
             homeViewHolder.systolicBP.setChipBackgroundColorResource(R.color.colorBlue);
-            homeViewHolder.patientName.setTextColor(R.color.colorRed);
         }
         //if current patients diastolic BP value is greater than y
         if (Float.parseFloat(observationModel.getDiastolic()) > y) {
             homeViewHolder.diastolicBP.setChipBackgroundColorResource(R.color.colorBlue);
-            homeViewHolder.patientName.setTextColor(R.color.colorRed);
         }
         // high systolic reading
         if (Float.parseFloat(observationModel.getSystolic()) > x) {
@@ -176,8 +173,23 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      * This class implements View.OnClickListener interface.
      */
     public class HomeViewHolder extends BaseViewHolder {
-        TextView patientName, titleCholesterol, titleBP, latestSystolicReadings, titleSystolic, titleDiastolic;
-        Chip cholesterolValue, cholesterolTime, bpTime, systolicBP, diastolicBP, showLatestSystolic, showSystolicGraph;
+        // titles
+        TextView titleCholesterol;
+        TextView titleBP;
+        TextView titleSystolic;
+        TextView titleDiastolic;
+
+        // data
+        TextView patientName;
+        Chip cholesterolValue;
+        Chip cholesterolTime;
+        Chip bpTime;
+        Chip systolicBP;
+        Chip diastolicBP;
+
+        Chip showLatestSystolic;
+        Chip showSystolicGraph;
+        TextView latestSystolicReadings;
         LineChart latestSystolicGraph;
         OnPatientClickListener onPatientClickListener;
 
@@ -208,6 +220,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             showSystolicGraph = itemView.findViewById(R.id.cv_systolic_graph); // selection chip to show systolic graph
             latestSystolicReadings = itemView.findViewById(R.id.txt_show_n_latest_systolic); // text view with 5 latest systolic readings
             latestSystolicGraph = itemView.findViewById(R.id.barchart); // line graph to show systolic graph
+
             itemView.setOnClickListener(this);
             showLatestSystolic.setOnClickListener(view -> showLatestSystolicReadings(getAdapterPosition()));
             showSystolicGraph.setOnClickListener(view -> showLatestSystolicGraph(getAdapterPosition()));
@@ -227,7 +240,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
          * This method is called every time the view holder gets assigned to a new set of data.
          * It hides all the text view in the view holder.
          */
-        private void hideAllViews(){
+        private void hideAllTextView(){
             cholesterolValue.setVisibility(View.GONE);
             cholesterolTime.setVisibility(View.GONE);
             systolicBP.setVisibility(View.GONE);
@@ -255,19 +268,22 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             titleCholesterol.setVisibility(View.VISIBLE);
             cholesterolValue.setVisibility(View.VISIBLE);
             cholesterolTime.setVisibility(View.VISIBLE);
+
         }
 
         /**
          * This method is called when the practitioner chooses to monitor bp values. Bp values of the
          * patient will be displayed
          */
-        private void showBPView() {
+        private void showBPView(){
             // reset the colour of the chips
             systolicBP.setChipBackgroundColorResource(R.color.colorReading);
             diastolicBP.setChipBackgroundColorResource(R.color.colorReading);
             bpTime.setChipBackgroundColorResource(R.color.colorReading);
 
             titleBP.setVisibility(View.VISIBLE);
+            titleSystolic.setVisibility(View.VISIBLE);
+            titleDiastolic.setVisibility(View.VISIBLE);
             systolicBP.setVisibility(View.VISIBLE);
             diastolicBP.setVisibility(View.VISIBLE);
             bpTime.setVisibility(View.VISIBLE);
@@ -291,7 +307,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         private void showLatestSystolicReadings(int position) {
             if (showLatestSystolic.isChecked()) {
                 StringBuilder latestReadings = new StringBuilder();
-                for (BloodPressureObservationModel reading: getUniquePatients().get(position).getLatestBPReadings()) {
+                for (BloodPressureObservationModel reading: getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE)) {
                     latestReadings.append(reading.getSystolic()).append(" ").append(reading.getDateTime()).append("\t");
                 }
                 latestSystolicReadings.setText(latestReadings);
@@ -308,12 +324,12 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
          */
         private void showLatestSystolicGraph(int position) {
             if (showSystolicGraph.isChecked()) {
-                ArrayList<Entry> entries = new ArrayList<Entry>();
+                ArrayList<Entry> entries = new ArrayList<>();
                 ArrayList<String> xAxis = new ArrayList<>();
                 LineChart systolicGraph = itemView.findViewById(R.id.barchart);
 
-                for (int i = 0; i < getUniquePatients().get(position).getLatestBPReadings().size(); i++) {
-                    entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestBPReadings().get(i).getSystolic()), i));
+                for (int i = 0; i < getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).size(); i++) {
+                    entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).get(i).getSystolic()), i));
                     xAxis.add(String.valueOf(i));
                 }
 
