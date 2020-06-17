@@ -160,7 +160,7 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
      *
      * This class implements View.OnClickListener interface.
      */
-    public class SelectPatientViewHolder extends BaseViewHolder{
+    public class SelectPatientViewHolder extends BaseViewHolder {
         private TextView patientName;
         private CheckBox checkBox; //hidden checkbox
         private SelectPatientsAdapter.OnPatientClickListener onPatientClickListener;

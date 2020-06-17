@@ -46,7 +46,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private BarChart barChart;
-    private View root;
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the toolbar.
@@ -56,7 +55,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
                              ViewGroup container, Bundle savedInstanceState) {
 
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel.class);
-        root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
         //set tool bar
         toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();

@@ -7,7 +7,7 @@ import org.hl7.fhir.r4.model.Observation;
  */
 public abstract class ObservationModel {
 
-    Observation observation;
+    protected Observation observation;
 
     ObservationModel(Observation observation) {
         this.observation = observation;

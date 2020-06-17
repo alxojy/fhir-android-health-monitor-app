@@ -93,7 +93,7 @@ public class PatientModel {
         latestBPReadings = readings;
     }
 
-    public ArrayList<BloodPressureObservationModel> getLatestReadings(ObservationType type) {
+    public ArrayList<BloodPressureObservationModel> getLatestBPReadings() {
         return latestBPReadings;
     }
 }
