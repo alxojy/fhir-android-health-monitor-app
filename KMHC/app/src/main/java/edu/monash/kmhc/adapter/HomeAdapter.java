@@ -91,7 +91,6 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      * @param holder the homeViewHolder that will hold patient[position]'s data
      * @param position the current UI adapter position
      */
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         HomeViewHolder homeViewHolder = (HomeViewHolder) holder;
@@ -106,48 +105,20 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
 
         // if the current patient cholesterol value is being  monitored
         if (cholMonitored) {
-            homeViewHolder.showCholesterolView();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
-            String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
-
-            //if current patients cholesterol value is greater than average
-            //highlight cholesterol value in red
-            if (Float.parseFloat(observationModel.getValue()) > averageCholesterolValue){
-                homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
-                homeViewHolder.patientName.setTextColor(R.color.colorRed);
-            }
-            homeViewHolder.cholesterolValue.setText(cholStat);
-            homeViewHolder.cholesterolTime.setText(observationModel.getDateTime());
+            bindCholPatients(homeViewHolder,observationModel);
+            homeViewHolder.showCholesterolViews();
         }
         if (bpMonitored) {
             BloodPressureObservationModel observationModel = (BloodPressureObservationModel) getObservationModel(ObservationType.BLOOD_PRESSURE,position);
             if ( observationModel != null) {
+                bindBPPatients(homeViewHolder,observationModel);
                 homeViewHolder.showBPView();
-                String systolicBP = observationModel.getSystolic() + " " + observationModel.getUnit();
-                String diastolicBP = observationModel.getDiastolic() + " " + observationModel.getUnit();
-
-                //if current patients BP value is greater than x/y
-                if (x > 0 && Float.parseFloat(observationModel.getSystolic()) > x) {
-                    homeViewHolder.systolicBP.setChipBackgroundColorResource(R.color.colorBlue);
-                    homeViewHolder.patientName.setTextColor(R.color.colorRed);
-                }
-                if (y > 0 && Float.parseFloat(observationModel.getDiastolic()) > y) {
-                    homeViewHolder.diastolicBP.setChipBackgroundColorResource(R.color.colorBlue);
-                    homeViewHolder.patientName.setTextColor(R.color.colorRed);
-                }
-                // high systolic reading
-                if (Float.parseFloat(observationModel.getSystolic()) > 140) {
-                    homeViewHolder.showLatestSystolicChips();
-                }
-
-                homeViewHolder.systolicBP.setText(systolicBP);
-                homeViewHolder.diastolicBP.setText(diastolicBP);
-                homeViewHolder.bpTime.setText(observationModel.getDateTime());
             }
         }
     }
 
-    private ObservationModel getObservationModel(ObservationType type, int position) {
+    private ObservationModel getObservationModel(ObservationType type, int position){
         return getUniquePatients().get(position).getObservationReading(type);
     }
 
@@ -161,6 +132,43 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         return getUniquePatients().size();
     }
 
+    @SuppressLint("ResourceAsColor")
+    private void bindCholPatients(HomeViewHolder homeViewHolder, ObservationModel observationModel){
+        String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
+        //if current patients cholesterol value is greater than average
+        //highlight cholesterol value in red
+        if (Float.parseFloat(observationModel.getValue()) > averageCholesterolValue){
+            homeViewHolder.cholesterolValue.setChipBackgroundColorResource(R.color.colorRed);
+            homeViewHolder.patientName.setTextColor(R.color.colorRed);
+        }
+        homeViewHolder.cholesterolValue.setText(cholStat);
+        homeViewHolder.cholesterolTime.setText(observationModel.getDateTime());
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void bindBPPatients(HomeViewHolder homeViewHolder, BloodPressureObservationModel observationModel){
+        String systolicBP = observationModel.getSystolic() + " " + observationModel.getUnit();
+        String diastolicBP = observationModel.getDiastolic() + " " + observationModel.getUnit();
+
+        //if current patients systolic BP value is greater than x ( highlight in blue )
+        if (Float.parseFloat(observationModel.getSystolic()) > x) {
+            homeViewHolder.systolicBP.setChipBackgroundColorResource(R.color.colorBlue);
+            homeViewHolder.patientName.setTextColor(R.color.colorRed);
+        }
+        //if current patients diastolic BP value is greater than y
+        if (Float.parseFloat(observationModel.getDiastolic()) > y) {
+            homeViewHolder.diastolicBP.setChipBackgroundColorResource(R.color.colorBlue);
+            homeViewHolder.patientName.setTextColor(R.color.colorRed);
+        }
+        // high systolic reading
+        if (Float.parseFloat(observationModel.getSystolic()) > x) {
+            homeViewHolder.showLatestSystolicChips();
+        }
+        homeViewHolder.systolicBP.setText(systolicBP);
+        homeViewHolder.diastolicBP.setText(diastolicBP);
+        homeViewHolder.bpTime.setText(observationModel.getDateTime());
+    }
+
     /**
      * The HomeViewHolder class are objects that holds the reference to the individual
      * card views that is reused to display different sets of data in the recycler view.
@@ -168,7 +176,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      * This class implements View.OnClickListener interface.
      */
     public class HomeViewHolder extends BaseViewHolder {
-        TextView patientName, titleCholesterol, titleBP, latestSystolicReadings;
+        TextView patientName, titleCholesterol, titleBP, latestSystolicReadings, titleSystolic, titleDiastolic;
         Chip cholesterolValue, cholesterolTime, bpTime, systolicBP, diastolicBP, showLatestSystolic, showSystolicGraph;
         LineChart latestSystolicGraph;
         OnPatientClickListener onPatientClickListener;
@@ -180,14 +188,22 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         HomeViewHolder(@NonNull View itemView, OnPatientClickListener onPatientClickListener) {
             super(itemView);
             this.onPatientClickListener = onPatientClickListener;
-            patientName = itemView.findViewById(R.id.cv_patientName);
-            cholesterolValue = itemView.findViewById(R.id.cv_cholVal);
-            cholesterolTime = itemView.findViewById(R.id.cv_chol_time);
+            patientName = itemView.findViewById(R.id.cv_patientName); // to display patient name
+
+            // titles
+            titleCholesterol = itemView.findViewById(R.id.cv_title_cholVal); // title for cholesterol value
+            titleBP = itemView.findViewById(R.id.cv_title_bpVal); // title for bp values
+            titleSystolic = itemView.findViewById(R.id.cv_title_systolicVal); // title for systolic bp
+            titleDiastolic = itemView.findViewById(R.id.cv_title_diastolicVal); // title for diastolic bp
+
+            // data
+            cholesterolValue = itemView.findViewById(R.id.cv_cholVal); // to display cholesterol value
+            cholesterolTime = itemView.findViewById(R.id.cv_chol_time); // to display cholesterol time
             bpTime = itemView.findViewById(R.id.cv_bp_time);
             systolicBP = itemView.findViewById(R.id.cv_systolicbp);
             diastolicBP = itemView.findViewById(R.id.cv_diastolicbp);
-            titleCholesterol = itemView.findViewById(R.id.cv_title_cholVal); // title for cholesterol value
-            titleBP = itemView.findViewById(R.id.cv_title_bpVal); // title for bp values
+
+            // readings and graphs
             showLatestSystolic = itemView.findViewById(R.id.cv_n_latest_systolic); // selection chip to show latest 5 systolic readings
             showSystolicGraph = itemView.findViewById(R.id.cv_systolic_graph); // selection chip to show systolic graph
             latestSystolicReadings = itemView.findViewById(R.id.txt_show_n_latest_systolic); // text view with 5 latest systolic readings
@@ -207,7 +223,11 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             onPatientClickListener.onPatientClick(getAdapterPosition(), getUniquePatients().get(getAdapterPosition()));
         }
 
-        private void hideAllViews() {
+        /**
+         * This method is called every time the view holder gets assigned to a new set of data.
+         * It hides all the text view in the view holder.
+         */
+        private void hideAllViews(){
             cholesterolValue.setVisibility(View.GONE);
             cholesterolTime.setVisibility(View.GONE);
             systolicBP.setVisibility(View.GONE);
@@ -218,6 +238,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
             showSystolicGraph.setVisibility(View.GONE);
             titleCholesterol.setVisibility(View.GONE);
             titleBP.setVisibility(View.GONE);
+            titleSystolic.setVisibility(View.GONE);
+            titleDiastolic.setVisibility(View.GONE);
             latestSystolicGraph.setVisibility(View.GONE);
         }
 
@@ -225,7 +247,11 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
          * This method is called when the practitioner chooses to monitor cholesterol values.
          * Cholesterol value of the patient will be displayed
          */
-        private void showCholesterolView() {
+        private void showCholesterolViews(){
+            // reset the colour of the chips
+            cholesterolValue.setChipBackgroundColorResource(R.color.colorReading);
+            cholesterolTime.setChipBackgroundColorResource(R.color.colorReading);
+
             titleCholesterol.setVisibility(View.VISIBLE);
             cholesterolValue.setVisibility(View.VISIBLE);
             cholesterolTime.setVisibility(View.VISIBLE);
@@ -235,7 +261,12 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
          * This method is called when the practitioner chooses to monitor bp values. Bp values of the
          * patient will be displayed
          */
-        private void showBPView() {
+        private void showBPView(){
+            // reset the colour of the chips
+            systolicBP.setChipBackgroundColorResource(R.color.colorReading);
+            diastolicBP.setChipBackgroundColorResource(R.color.colorReading);
+            bpTime.setChipBackgroundColorResource(R.color.colorReading);
+
             titleBP.setVisibility(View.VISIBLE);
             systolicBP.setVisibility(View.VISIBLE);
             diastolicBP.setVisibility(View.VISIBLE);
