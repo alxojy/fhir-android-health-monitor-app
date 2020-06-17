@@ -307,7 +307,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         private void showLatestSystolicReadings(int position) {
             if (showLatestSystolic.isChecked()) {
                 StringBuilder latestReadings = new StringBuilder();
-                for (BloodPressureObservationModel reading: getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE)) {
+                for (BloodPressureObservationModel reading: getUniquePatients().get(position).getLatestBPReadings()) {
                     latestReadings.append(reading.getSystolic()).append(" ").append(reading.getDateTime()).append("\t");
                 }
                 latestSystolicReadings.setText(latestReadings);
@@ -328,8 +328,8 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
                 ArrayList<String> xAxis = new ArrayList<>();
                 LineChart systolicGraph = itemView.findViewById(R.id.barchart);
 
-                for (int i = 0; i < getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).size(); i++) {
-                    entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestReadings(ObservationType.BLOOD_PRESSURE).get(i).getSystolic()), i));
+                for (int i = 0; i < getUniquePatients().get(position).getLatestBPReadings().size(); i++) {
+                    entries.add(new Entry(Float.parseFloat(getUniquePatients().get(position).getLatestBPReadings().get(i).getSystolic()), i));
                     xAxis.add(String.valueOf(i));
                 }
 
