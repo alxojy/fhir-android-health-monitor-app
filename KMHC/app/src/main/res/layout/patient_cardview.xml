@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/cholesterol_value"
-            android:textSize="15sp"
+            android:textSize="16sp"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
             card_view:layout_constraintTop_toBottomOf="@id/cv_patientName" />
@@ -74,10 +74,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/blood_pressure_observations"
-            android:textSize="15sp"
+            android:textSize="16sp"
             card_view:layout_constraintEnd_toStartOf="@id/guideline2"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
             card_view:layout_constraintTop_toBottomOf="@id/cv_cholVal" />
+
+        <TextView
+            android:id="@+id/cv_title_systolicVal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/systolic_value"
+            android:textSize="13sp"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_title_bpVal" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -136,39 +146,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:text="@string/sample_systolic_bp"
             android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toStartOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_title_bpVal" />
+            card_view:layout_constraintTop_toBottomOf="@id/cv_title_systolicVal" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cv_bp_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
-            android:layout_marginTop="8dp"
             android:text="@string/sample_date"
             android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toEndOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@id/cv_title_bpVal" />
+            card_view:layout_constraintTop_toTopOf="@id/cv_systolicbp" />
+
+        <TextView
+            android:id="@+id/cv_title_diastolicVal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/diastolic_value"
+            android:textSize="13sp"
+            card_view:layout_constraintEnd_toStartOf="@id/guideline2"
+            card_view:layout_constraintStart_toEndOf="@id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@id/cv_systolicbp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cv_diastolicbp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:text="@string/sample_diastolic_bp"
             android:textColor="#FEFFFD"
             android:textSize="12sp"
             card_view:chipBackgroundColor="@color/colorReading"
             card_view:layout_constraintStart_toStartOf="@id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@+id/cv_systolicbp" />
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_title_diastolicVal" />
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cv_n_latest_systolic"

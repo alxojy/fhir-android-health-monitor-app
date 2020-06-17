@@ -1,12 +1,15 @@
 package edu.monash.kmhc.view;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -42,14 +45,17 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
  */
 public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
 
-    private HomeFragment thisFrag ;
+    private HomeFragment thisFrag;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private BarChart barChart;
+    private int x = 90;
+    private int y = 140;
     private View root;
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the toolbar.
+     *
      * @return The Main UI view that is created.
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -73,13 +79,13 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
      * It updates the UI when there're changes to the data.
      */
     private Observer<HashMap<String, PatientModel>> patientUpdatedObserver = new Observer<HashMap<String, PatientModel>>() {
-            @Override
-            public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap,thisFrag,0,0));
-                plotBarChart(patientObservationHashMap);
-            }
-        };
+        @Override
+        public void onChanged(HashMap<String, PatientModel> patientObservationHashMap) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(new HomeAdapter(patientObservationHashMap, thisFrag, x, y));
+            plotBarChart(patientObservationHashMap);
+        }
+    };
 
     /**
      * This method is called when a patient's card-view is specifically clicked
@@ -87,25 +93,25 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
      * - PatientInfoFragment displays a patient's detail info ( name , gender etc)
      *
      * @param position position of the patient
-     * @param patient the patient to display
+     * @param patient  the patient to display
      */
 
     @Override
     public void onPatientClick(int position, PatientModel patient) {
         // navigate to new fragment - pass in the patient
         MainActivity main = (MainActivity) getActivity();
-        Objects.requireNonNull(main).newPatientInfoFragment(MainActivity.patient_info__fragment,patient);
+        Objects.requireNonNull(main).newPatientInfoFragment(MainActivity.patient_info__fragment, patient);
     }
 
     /**
      * This method is responsible to set up the tool bar in the HomeFragment
      * It performs the following
-     *
+     * <p>
      * 1. Set the title
      * 2. Inflate the menu , and assign OnMenuItemClickListener
-     *   - When the Edit Button is click , the app should navigate back to SelectPatientFragment
+     * - When the Edit Button is click , the app should navigate back to SelectPatientFragment
      */
-    private void setUpToolBar(){
+    private void setUpToolBar() {
         toolbar.setTitle("Home Page");
         toolbar.inflateMenu(R.menu.home_menu);
 
@@ -113,42 +119,88 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             if (item.getItemId() == R.id.menu_patient_edit) {
                 MainActivity main = (MainActivity) getActivity();
                 Objects.requireNonNull(main).findFragment(MainActivity.select_patients_fragment);
+            } else if (item.getItemId() == R.id.menu_edit_x_y) {
+                launchDialog();
             }
+
             return true;
         };
 
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }
 
+    private void launchDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        builder.setTitle("Enter the x,y value");
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.prompt_x_y_values, (ViewGroup) getView(), false);
+        final EditText xInput = (EditText) viewInflated.findViewById(R.id.x_input);
+        final EditText yInput = (EditText) viewInflated.findViewById(R.id.y_input);
+        builder.setView(viewInflated);
+
+        builder.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                x = Integer.parseInt(xInput.getText().toString());
+                y = Integer.parseInt(yInput.getText().toString());
+                System.out.println(x);
+                System.out.println(y);
+            }
+        });
+
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+
     private void plotBarChart(HashMap<String, PatientModel> patientObservationHashMap) {
+        boolean hasValidPatient = false; // false when none of the selected patients have cholesterol data observations
         List<IBarDataSet> dataBars = new ArrayList<IBarDataSet>();
         AtomicInteger i = new AtomicInteger();
+
+        // a list of colours for the bar chart
         ArrayList<Integer> colours = new ArrayList<Integer>(
                 Arrays.asList(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW,
                         Color.CYAN, Color.MAGENTA, Color.GRAY, Color.BLACK
                 ));
 
+        // loop through the observations hash map
+        // find all patients that has cholesterol data observations
         patientObservationHashMap.forEach((patientId, patientModel) -> {
             if (patientModel.isObservationMonitored(ObservationType.CHOLESTEROL)) {
                 float patientCholVal = Float.parseFloat(patientModel.getObservationReading(ObservationType.CHOLESTEROL).getValue());
                 ArrayList<BarEntry> barEntries = new ArrayList<>();
-                barEntries.add(new BarEntry(patientCholVal,0));
-                BarDataSet dataset = new BarDataSet(barEntries,patientModel.getName());
+                barEntries.add(new BarEntry(patientCholVal, 0));
+                BarDataSet dataset = new BarDataSet(barEntries, patientModel.getName());
                 dataset.setColor(colours.get(i.intValue() % colours.size()));
                 dataBars.add(dataset);
                 i.getAndIncrement();
             }
         });
 
-        BarData data = new BarData(Collections.singletonList("Total Cholesterol mg/dL"), dataBars);
-        barChart.notifyDataSetChanged();
-        barChart.setData(data);
-        barChart.setDragEnabled(true); // on by default
-        barChart.setVisibleXRangeMaximum(5);
-        barChart.getLegend().setWordWrapEnabled(true);
-        barChart.invalidate();
-    }
+        if (i.intValue() > 0) {
+            hasValidPatient = true;
+        }
 
+        // update the bar chart
+        if (hasValidPatient) {
+            BarData data = new BarData(Collections.singletonList("Total Cholesterol mg/dL"), dataBars);
+            barChart.notifyDataSetChanged();
+            barChart.setData(data);
+            barChart.setDragEnabled(true); // on by default
+            barChart.setVisibleXRangeMaximum(5);
+            barChart.getLegend().setWordWrapEnabled(true);
+            barChart.invalidate();
+        } else {
+            barChart.setVisibility(View.INVISIBLE); // hide bar chart if no patients has cholesterol observations
+        }
+    }
 }
 
 
