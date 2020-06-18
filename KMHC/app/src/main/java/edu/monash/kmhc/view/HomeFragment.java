@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     }
 
     private void launchDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()), R.style.AlertDialogTheme);
         builder.setTitle("Enter the x,y value");
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.prompt_x_y_values, (ViewGroup) getView(), false);
         final EditText xInput = (EditText) viewInflated.findViewById(R.id.x_input);
