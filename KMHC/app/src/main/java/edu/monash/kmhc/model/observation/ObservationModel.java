@@ -1,24 +1,32 @@
 package edu.monash.kmhc.model.observation;
 
+import org.hl7.fhir.r4.model.Observation;
+
 /**
  * Abstract class used by all observations
  */
-public interface ObservationModel {
+public abstract class ObservationModel {
+
+    protected Observation observation;
+
+    ObservationModel(Observation observation) {
+        this.observation = observation;
+    }
 
     /**
      * Return the Observation value
      * @return double
      */
-    String getValue();
+    public abstract String getValue();
 
     /**
      * Get the unit type for the Observation
      */
-    String getUnit();
+    public abstract String getUnit();
 
     /**
      * Get the effective DateTime
      * @return effective date time
      */
-    String getDateTime();
+    public abstract String getDateTime();
 }
