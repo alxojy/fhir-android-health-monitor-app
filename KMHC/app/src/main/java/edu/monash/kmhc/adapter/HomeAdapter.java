@@ -104,7 +104,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
         if (cholMonitored) {
             homeViewHolder.showCholesterolViews();
             ObservationModel observationModel = getObservationModel(ObservationType.CHOLESTEROL,position);
-            bindCholPatients(homeViewHolder,observationModel);
+            bindCholesterolPatients(homeViewHolder,observationModel);
 
         }
         if (bpMonitored) {
@@ -132,7 +132,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     }
 
     @SuppressLint("ResourceAsColor")
-    private void bindCholPatients(HomeViewHolder homeViewHolder, ObservationModel observationModel){
+    private void bindCholesterolPatients(HomeViewHolder homeViewHolder, ObservationModel observationModel){
         String cholStat = observationModel.getValue() + " " + observationModel.getUnit();
 
         //if current patients cholesterol value is greater than average
