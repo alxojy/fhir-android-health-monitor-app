@@ -6,7 +6,7 @@
 3. Sync gradle build
 4. Press 'run'
 #### Highlighting
-High cholesterol values - highlighted in red
+High cholesterol values - highlighted in red <br> 
 High blood pressure (systolic & diastolic) values - highlighted in blue 
 
 #### Machine Learning bonus task
