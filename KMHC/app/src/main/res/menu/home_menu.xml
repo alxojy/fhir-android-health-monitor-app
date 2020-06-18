@@ -5,6 +5,12 @@
     tools:showIn = "navigation_view">
 
     <item
+        android:id="@+id/menu_edit_x_y"
+        android:title="@string/edit_x_y_values"
+        android:icon="@drawable/ic_short_text_24dp"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/menu_patient_edit"
         android:title="@string/edit_patient"
         android:icon="@drawable/ic_edit_24dp"

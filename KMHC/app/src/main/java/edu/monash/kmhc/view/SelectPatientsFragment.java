@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -103,7 +102,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
     private Observer<HashMap<String,PatientModel>> patientUpdatedObserver = new Observer<HashMap<String,PatientModel >>() {
         @Override
         public void onChanged( HashMap < String, PatientModel > patientHashMap) {
-            if (patientHashMap.size() == 0 ){
+            if (patientHashMap.size() == 0) {
                 loadingTextView.setText(R.string.zero_patients_message);
             }
             else{
@@ -111,7 +110,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
                 loadingTextView.setVisibility(View.GONE);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter( new SelectPatientsAdapter(patientHashMap,thisFrag, selectedPatients));
-        }
+            }
         }
     };
 
@@ -126,7 +125,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      * 3. Assign a back button listener, when the back button is clicked,
      *    it goes back to the login fragment.
      */
-    private void setUpToolBar(){
+    private void setUpToolBar() {
         title.setText(R.string.title_patient_selection);
         toolbar.inflateMenu(R.menu.select_patients_menu);
         Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
@@ -155,7 +154,7 @@ public class SelectPatientsFragment extends Fragment implements SelectPatientsAd
      * This method updates the tool bar to display the total number of patients that is currently
      * being selected
      */
-    private void updateToolbar(){
+    private void updateToolbar() {
         String text = selectedPatients.size() + " Patients Selected";
        // Log.d("Select_Patient_Fragment","current sellected patient : " + selected_patients.toString());
         title.setText(text);

@@ -3,10 +3,14 @@ package edu.monash.kmhc.model;
 import android.text.format.DateFormat;
 
 import org.hl7.fhir.r4.model.Enumerations;
+import org.hl7.fhir.r4.model.Observation;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import edu.monash.kmhc.model.observation.BloodPressureObservationModel;
 import edu.monash.kmhc.model.observation.ObservationModel;
 import edu.monash.kmhc.model.observation.ObservationType;
 
@@ -24,6 +28,7 @@ public class PatientModel {
     // based on their type
     private HashMap<ObservationType, ObservationModel> observationReadings;
     private HashMap<ObservationType, Boolean> isMonitored;
+    private ArrayList<BloodPressureObservationModel> latestBPReadings;
 
     /**
      * Constructor
@@ -36,8 +41,9 @@ public class PatientModel {
         this.birthDate = birthDate;
         this.gender = gender;
         this.address = address;
-        this.observationReadings = new HashMap<>();
-        this.isMonitored = new HashMap<>();
+        observationReadings = new HashMap<>();
+        isMonitored = new HashMap<>();
+        latestBPReadings = new ArrayList<>();
         initialiseMonitoredObservations();
     }
 
@@ -81,5 +87,13 @@ public class PatientModel {
         for (ObservationType type: ObservationType.values()) {
             monitorObservation(type, false);
         }
+    }
+
+    public void addLatestBPReadings(ArrayList<BloodPressureObservationModel> readings) {
+        latestBPReadings = readings;
+    }
+
+    public ArrayList<BloodPressureObservationModel> getLatestBPReadings() {
+        return latestBPReadings;
     }
 }

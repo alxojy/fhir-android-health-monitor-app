@@ -8,4 +8,5 @@
     <color name="colorAccentText">#35375A</color>
     <color name="colorSelectedPatient">#bedec5</color>
     <color name="unselected">#8c92ac</color>
+    <color name="colorBlue">#1338BE</color>
 </resources>

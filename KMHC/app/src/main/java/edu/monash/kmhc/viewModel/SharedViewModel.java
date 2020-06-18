@@ -118,7 +118,6 @@ public class SharedViewModel extends ViewModel implements Poll {
      * This method is to fetch all patients that are treated by Health Practitioner
      * from the patient repository.
      */
-
     private void fetchAllPatients() {
         // run asynchronous tasks on background thread to prevent network on main exception
         HandlerThread backgroundThread = new HandlerThread("Background Thread");
@@ -130,10 +129,13 @@ public class SharedViewModel extends ViewModel implements Poll {
             // loop through all patients
             for (PatientModel patient : patientRepository.getAllPatients()) {
                 try {
-                    // set new cholesterol observation reading
-                    patient.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patient.getPatientID(), ObservationType.CHOLESTEROL));
-                    patientHashMap.put(patient.getPatientID(), patient);
+                    // only show patients with cholesterol and bp values
+                    for (ObservationType type: ObservationType.values()) {
+                        patient.setObservation(type, getObservation(patient.getPatientID(), type));
+                        patientHashMap.put(patient.getPatientID(), patient);
+                    }
+                    patient.addLatestBPReadings(observationRepositoryFactory.getLatestBloodPressureReadings(patient.getPatientID(),5));
+
                 }
                 // patient does not have the observation type
                 catch (Exception e) {
@@ -164,20 +166,17 @@ public class SharedViewModel extends ViewModel implements Poll {
             public void run() {
                 HashMap<String, PatientModel> poHashMap = new HashMap<>();
 
-                // loop through all patients
+                // loop through all patients. update observations if observation is selected to be monitored
                 for (PatientModel patientModel: Objects.requireNonNull(selectedPatients.getValue())) {
-                    System.out.println("polling");
-                    System.out.println(patientModel.getName());
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
-                    // set new cholesterol observation reading
-                    patientModel.setObservation(ObservationType.CHOLESTEROL,
-                            getObservation(patientModel.getPatientID(), ObservationType.CHOLESTEROL));
-                    poHashMap.put(patientModel.getPatientID(), patientModel);
-                    System.out.println("hashmap");
-                    System.out.println(patientModel.getName());
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.CHOLESTEROL));
-                    System.out.println(patientModel.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
+                    for (ObservationType type: ObservationType.values()) {
+                        if (patientModel.isObservationMonitored(type)) {
+                            patientModel.setObservation(type, getObservation(patientModel.getPatientID(), type));
+                            poHashMap.put(patientModel.getPatientID(), patientModel);
+                            if (type == ObservationType.BLOOD_PRESSURE) {
+                                patientModel.addLatestBPReadings(observationRepositoryFactory.getLatestBloodPressureReadings(patientModel.getPatientID(),5));
+                            }
+                        }
+                    }
                 }
 
                 // update LiveData and notify observers

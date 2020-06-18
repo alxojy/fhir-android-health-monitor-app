@@ -15,6 +15,7 @@ import com.google.android.material.chip.Chip;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import edu.monash.kmhc.R;
 import edu.monash.kmhc.model.PatientModel;
@@ -55,7 +56,7 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
 
                 PatientModel selectedPatient = isSelectedPatient(patientModel);
                 if (selectedPatient != null) {
-                    uniquePatients.add(patientModel);
+                    uniquePatients.add(selectedPatient);
                     patientState.add(true);
                 }
                 else {
@@ -115,9 +116,6 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
         holder.background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
         holder.patientName.setText(getUniquePatients().get(position).getName());
         PatientModel patient = getUniquePatients().get(position);
-        System.out.println(patient.getName());
-        System.out.println(patient.isObservationMonitored(ObservationType.CHOLESTEROL));
-        System.out.println(patient.isObservationMonitored(ObservationType.BLOOD_PRESSURE));
         if (isSelectedPatient(patient) != null){
             holder.checkBox.setChecked(true);
             holder.background.setBackgroundResource(R.drawable.cardv_selected_bg);
@@ -127,14 +125,14 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
             for (ObservationType type: ObservationType.values()) {
                 switch (type) {
                     case CHOLESTEROL:
-                        if (isSelectedPatient(patient).isObservationMonitored(type)) {
+                        if (Objects.requireNonNull(isSelectedPatient(patient)).isObservationMonitored(type)) {
                             holder.cholesterolChip.setChecked(true);
                         }
                         else {
                             holder.cholesterolChip.setChecked(false);
                         }
                     case BLOOD_PRESSURE:
-                        if (isSelectedPatient(patient).isObservationMonitored(type)) {
+                        if (Objects.requireNonNull(isSelectedPatient(patient)).isObservationMonitored(type)) {
                             holder.bloodPressureChip.setChecked(true);
                         }
                         else {
@@ -162,7 +160,7 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
      *
      * This class implements View.OnClickListener interface.
      */
-    public class SelectPatientViewHolder extends BaseViewHolder{
+    public class SelectPatientViewHolder extends BaseViewHolder {
         private TextView patientName;
         private CheckBox checkBox; //hidden checkbox
         private SelectPatientsAdapter.OnPatientClickListener onPatientClickListener;
@@ -188,27 +186,9 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
             bloodPressureChip.setOnClickListener(this);
         }
 
-        /**
-         * A method to update the invisible check box's status and update the UI
-         * @param position the position of the adapter
-         */
-        private void changeCheckBoxStatus(int position){
-            if (checkBox.isChecked()) {
-                patientState.set(position,false);
-                background.setBackgroundResource(R.drawable.cardv_nonselected_bg);
-                checkBox.setChecked(false);
-
-            } else {
-                background.setBackgroundResource(R.drawable.cardv_selected_bg);
-                checkBox.setChecked(true);
-                patientState.set(position,true);
-            }
-        }
-
         private void observationStatus(Chip chip, int position, ObservationType observationType) {
             if (chip.isChecked()) {
                 getUniquePatients().get(position).monitorObservation(observationType, true);
-                System.out.println(position + observationType.getObservationCode() + "check");
                 background.setBackgroundResource(R.drawable.cardv_selected_bg);
                 checkBox.setChecked(true);
                 patientState.set(position,true);
@@ -238,7 +218,6 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
                     observationStatus(bloodPressureChip, getAdapterPosition(), ObservationType.BLOOD_PRESSURE);
                     break;
             }
-            //changeCheckBoxStatus(getAdapterPosition());
             onPatientClickListener.onPatientClick(checkBox.isChecked(), getUniquePatients().get(getAdapterPosition()));
         }
     }
@@ -249,6 +228,5 @@ public class SelectPatientsAdapter extends BaseAdapter<SelectPatientsAdapter.Sel
      */
     public interface OnPatientClickListener {
         void onPatientClick(boolean checked, PatientModel patient);
-
     }
 }

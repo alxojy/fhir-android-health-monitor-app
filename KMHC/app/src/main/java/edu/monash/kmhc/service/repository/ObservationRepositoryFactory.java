@@ -3,6 +3,8 @@ package edu.monash.kmhc.service.repository;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Observation;
 
+import java.util.ArrayList;
+
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import edu.monash.kmhc.model.observation.BloodPressureObservationModel;
 import edu.monash.kmhc.model.observation.CholesterolObservationModel;
@@ -57,4 +59,36 @@ public class ObservationRepositoryFactory extends FhirService {
     private BloodPressureObservationModel createBloodPressureModel(String patientId) {
         return new BloodPressureObservationModel(getObservation(patientId, ObservationType.BLOOD_PRESSURE.getObservationCode()));
     }
+
+    /**
+     * Returns an ArrayList of n latest readings
+     * @param patientId patient id
+     * @param code observation code
+     * @param n latest n readings
+     * @return ArrayList of readings
+     */
+    private ArrayList<Observation> getLatestObservationReadings(String patientId, String code, int n) {
+        ArrayList<Observation> latestReadings = new ArrayList<>();
+        Bundle bundle = client.search()
+                .forResource(Observation.class)
+                .where(Observation.PATIENT.hasId(patientId))
+                .and(Observation.CODE.exactly().code(code))
+                .sort().descending(Observation.DATE)
+                .returnBundle(Bundle.class)
+                .execute();
+
+        for (int i = 0; i < Math.min(n, bundle.getTotal()); i++) {
+            latestReadings.add((Observation) (bundle.getEntry().get(i)).getResource());
+        }
+        return latestReadings;
+    }
+
+    public ArrayList<BloodPressureObservationModel> getLatestBloodPressureReadings(String patientId, int n) {
+        ArrayList<BloodPressureObservationModel> bpReadings = new ArrayList<>();
+        for (Observation observation: getLatestObservationReadings(patientId, ObservationType.BLOOD_PRESSURE.getObservationCode(), n)) {
+            bpReadings.add(new BloodPressureObservationModel(observation));
+        }
+        return bpReadings;
+    }
+
 }
