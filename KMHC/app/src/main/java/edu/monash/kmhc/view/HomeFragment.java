@@ -45,22 +45,24 @@ import edu.monash.kmhc.viewModel.SharedViewModel;
  */
 public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClickListener {
 
-    private HomeFragment thisFrag ;
+    private HomeFragment thisFrag;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private BarChart barChart;
     private int x = 90;
     private int y = 140;
+    private View root;
 
     /**
      * This method performs all graphical initialization, assign all view variables and set up the toolbar.
+     *
      * @return The Main UI view that is created.
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
         //set tool bar
         toolbar = root.findViewById(R.id.home_toolbar);
         setUpToolBar();
@@ -104,10 +106,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
     /**
      * This method is responsible to set up the tool bar in the HomeFragment
      * It performs the following
-     *
+     * <p>
      * 1. Set the title
      * 2. Inflate the menu , and assign OnMenuItemClickListener
-     *   - When the Edit Button is click , the app should navigate back to SelectPatientFragment
+     * - When the Edit Button is click , the app should navigate back to SelectPatientFragment
      */
     private void setUpToolBar() {
         toolbar.setTitle("Home Page");
@@ -120,8 +122,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             } else if (item.getItemId() == R.id.menu_edit_x_y) {
                 launchDialog();
             }
+
             return true;
         };
+
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }
 
@@ -129,25 +133,19 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()), R.style.AlertDialogTheme);
         builder.setTitle("Enter the x,y value");
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.prompt_x_y_values, (ViewGroup) getView(), false);
-        final EditText xInput = (EditText) viewInflated.findViewById(R.id.x_input);
-        final EditText yInput = (EditText) viewInflated.findViewById(R.id.y_input);
+        final EditText xInput = viewInflated.findViewById(R.id.x_input);
+        final EditText yInput = viewInflated.findViewById(R.id.y_input);
         builder.setView(viewInflated);
 
-        builder.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+        builder.setPositiveButton("DONE", (dialog, which) -> {
+            if (xInput.getText().toString().matches("[0-9]+") && yInput.getText().toString().matches("[0-9]+")){
                 x = Integer.parseInt(xInput.getText().toString());
                 y = Integer.parseInt(yInput.getText().toString());
             }
+            dialog.dismiss();
         });
 
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         builder.show();
 
     }
@@ -155,9 +153,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
     private void plotBarChart(HashMap<String, PatientModel> patientObservationHashMap) {
         boolean hasValidPatient = false; // false when none of the selected patients have cholesterol data observations
-        List<IBarDataSet> dataBars = new ArrayList<IBarDataSet>();
+        List<IBarDataSet> dataBars = new ArrayList<>();
         AtomicInteger i = new AtomicInteger();
-        ArrayList<Integer> colours = new ArrayList<Integer>(
+
+        // a list of colours for the bar chart
+        ArrayList<Integer> colours = new ArrayList<>(
                 Arrays.asList(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW,
                         Color.CYAN, Color.MAGENTA, Color.GRAY, Color.BLACK
                 ));
@@ -182,6 +182,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
 
         // update the bar chart
         if (hasValidPatient) {
+            barChart.setVisibility(View.VISIBLE); // hide bar chart if no patients has cholesterol observations
             BarData data = new BarData(Collections.singletonList("Total Cholesterol mg/dL"), dataBars);
             barChart.notifyDataSetChanged();
             barChart.setData(data);
@@ -190,7 +191,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnPatientClick
             barChart.getLegend().setWordWrapEnabled(true);
             barChart.invalidate();
         } else {
-            barChart.setVisibility(View.INVISIBLE); // hide bar chart if no patients has cholesterol observations
+            barChart.setVisibility(View.GONE); // hide bar chart if no patients has cholesterol observations
         }
     }
 }
