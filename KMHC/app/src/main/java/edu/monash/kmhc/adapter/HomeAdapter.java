@@ -79,7 +79,7 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
     }
 
     /**
-     * This method overrides its superclass's onBindViewHolder methodv and update the contents of the
+     * This method overrides its superclass's onBindViewHolder method and update the contents of the
      * HomeViewHolder to reflect the patient at the given position.
      *
      * This method also highlights the patient if his/her cholesterol/ bp value is higher
@@ -174,21 +174,14 @@ public class HomeAdapter extends BaseAdapter<HomeAdapter.HomeViewHolder> {
      */
     public class HomeViewHolder extends BaseViewHolder {
         // titles
-        TextView titleCholesterol;
-        TextView titleBP;
-        TextView titleSystolic;
-        TextView titleDiastolic;
+        TextView titleCholesterol, titleBP, titleSystolic, titleDiastolic;
 
         // data
         TextView patientName;
-        Chip cholesterolValue;
-        Chip cholesterolTime;
-        Chip bpTime;
-        Chip systolicBP;
-        Chip diastolicBP;
+        Chip cholesterolValue, cholesterolTime, bpTime, systolicBP, diastolicBP;
 
-        Chip showLatestSystolic;
-        Chip showSystolicGraph;
+        // functional chips
+        Chip showLatestSystolic, showSystolicGraph;
         TextView latestSystolicReadings;
         LineChart latestSystolicGraph;
         OnPatientClickListener onPatientClickListener;
