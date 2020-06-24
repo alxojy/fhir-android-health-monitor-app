@@ -1,4 +1,4 @@
-# FIT3077 Assignment 2 & 3 Semester 1 2020 - Software Architecture & Design 
+# FIT3077 Assignment 2 & 3 Semester 1 2020 <br> Software Architecture & Design 
 
 The purpose of this assignment is to create an application that assists healthcare practitioners in monitoring patients by using the FHIR server. Our group has decided to create an Android mobile application which uses the ```hapi-fhir-android``` module to support getting data from the FHIR server. We are also required to apply design patterns and principles in our application. 
 
