@@ -8,6 +8,17 @@ Our system applies the MVVM architecture proposed by the Android documentation.
 - Alex O 
 - Hew Ye Zea (Jess)
 
+### Technologies
+- Android Studio
+- ```hapi-fhir-android``` module
+- ```MPAndroidChart``` module
+
+### To run our app
+1. Clone our project
+2. Open android studio, open directory ```project/KMHC```
+3. Sync gradle build
+4. Press 'run'
+
 #### Design principles & patterns 
 Refer to ```project/DesignDocuments```.
 
@@ -18,14 +29,17 @@ Refer to ```project/Video```.
 1. Open directory ```project/MachineLearning```
 2. Open instructions.pdf for instructions on the machine learning task
 
-### To run our app
-1. Clone our project
-2. Open android studio, open directory ```project/KMHC```
-3. Sync gradle build
-4. Press 'run'
-
 ### Screenshots 
 <img src="./Screenshots/login.png" width="30%" height="30%"> <img src="./Screenshots/selecting.png" width="30%" height="30%"> <img src="./Screenshots/homepage.png" width="30%" height="30%"> <img src="./Screenshots/patientcard.png" width="30%" height="30%"> <img src="./Screenshots/patientchart.png" width="30%" height="30%"> <img src="./Screenshots/settings.png" width="30%" height="30%">
+
+### WBA
+#### Assignment 2
+Alex: backend (model, service & viewModel packages), machine learning & design documents. <br>
+Jess: frontend (view, adapter packages & res) & video editing. 
+
+#### Assignment 3
+Alex: patient card graph, observation selection, refactoring backend & design documents. <br>
+Jess: home page bar chart, graph modification, observation highlighting & video editing.
 
 ## Note
 
