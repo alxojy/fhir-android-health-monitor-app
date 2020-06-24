@@ -5,8 +5,8 @@ The purpose of this assignment is to create an application that assists healthca
 Our system applies the MVVM architecture proposed by the Android documentation. 
 
 ### Application creators
-Alex O <br> 
-Hew Ye Zea (Jess)
+- Alex O 
+- Hew Ye Zea (Jess)
 
 #### Design principles & patterns 
 Refer to ```project/DesignDocuments```.
