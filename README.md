@@ -20,12 +20,7 @@ Refer to ```project/Video```.
 2. Open instructions.pdf for instructions on the machine learning task
 
 ### Screenshots 
-![](Screenshots/login.png)
-![](Screenshots/selecting.png)
-![](Screenshots/homepage.png)
-![](Screenshots/patientcard.png)
-![](Screenshots/patientchart.png)
-![](Screenshots/settings.png)
+<img src="./Screenshots/login.png" width="30%" height="30%"> <img src="./Screenshots/selecting.png" width="30%" height="30%"> <img src="./Screenshots/homepage.png" width="30%" height="30%"> <img src="./Screenshots/patientcard.png" width="30%" height="30%"> <img src="./Screenshots/patientchart.png" width="30%" height="30%"> <img src="./Screenshots/settings.png" width="30%" height="30%">
 
 ### To run our app
 1. Clone our project
