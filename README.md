@@ -8,7 +8,7 @@ Our system applies the MVVM architecture proposed by the Android documentation.
 - Alex O 
 - Hew Ye Zea (Jess)
 
-### Technologies
+### Technologies used
 - Android Studio
 - ```hapi-fhir-android``` module
 - ```MPAndroidChart``` module
