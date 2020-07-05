@@ -50,5 +50,5 @@ This repo has been created to share our project and for future students taking t
 Copying or plagiarising code is a serious offence and will result in a breach in the Academic Integrity Policy
 https://www.monash.edu/students/academic/policies/academic-integrity. We will not be held responsible for any of these breaches. 
 
-Assignment 2: 45/45
+Assignment 2: 45/45 <br> 
 Assignment 3: 34/35
